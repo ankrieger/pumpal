@@ -4,10 +4,7 @@ import de.othr.sw.pumpal.entity.util.SingleIdEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Workout extends SingleIdEntity<Long> {
@@ -49,8 +46,8 @@ public class Workout extends SingleIdEntity<Long> {
     @Enumerated(value = EnumType.STRING)
     private Level level;
 
-//    @Transient
-//    private ArrayList<String> tags;
+    @Transient
+    private List<String> tags;
 //    bei initialisierung: tags splitten und in ein Array packen
 
     public Workout() {
@@ -58,7 +55,7 @@ public class Workout extends SingleIdEntity<Long> {
     }
 
     public Workout(Long id, String title, Date date, User author, String description,
-                   Visibility visibility, List<Exercise> exercises, Level level) {  //Tags noch rein: falls != 0 => Splice
+                   Visibility visibility, List<Exercise> exercises, Level level, String tagString) {  //Tags noch rein: falls != 0 => Splice
         this.id = id;
         this.title = title;
         this.date = date;
@@ -67,6 +64,8 @@ public class Workout extends SingleIdEntity<Long> {
         this.visibility = visibility;
         this.exercises = exercises;
         this.level = level;
+        this.tagString = (tagString != null && !tagString.isEmpty()) ? tagString : "";
+        this.tags = new ArrayList<String>(Arrays.asList(this.tagString.split(/*"\\s*,\\s*"*/";")));
     }
 
     public Workout(Long id, String title, Date date, User author, String description,
@@ -79,9 +78,11 @@ public class Workout extends SingleIdEntity<Long> {
         this.description = description;
         this.visibility = visibility;
         this.exercises = exercises;
-        this.tagString = tagString;
         this.comments = comments;
         this.level = level;
+        this.tagString = (tagString != null && !tagString.isEmpty()) ? tagString : "";
+        this.tags = new ArrayList<String>(Arrays.asList(this.tagString.split("\\s*,\\s*")));
+
     }
 
     public Long getId() {
@@ -164,13 +165,14 @@ public class Workout extends SingleIdEntity<Long> {
         this.level = level;
     }
 
-//    public ArrayList<String> getTags() {
-//        return tags;
-//    }
-//
-//    public void setTags(ArrayList<String> tags) {
-//        this.tags = tags;
-//    }
+    public List<String> getTags() {
+        return tags;
+    }
+
+    // do I need this?
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
 
     @Override
     public Long getID() {

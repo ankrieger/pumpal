@@ -8,8 +8,9 @@ import java.util.List;
 @Entity
 public class User extends SingleIdEntity<String> {
     @Id
-    @Column(nullable = false, name = "email")
+    @Column(name = "email")
     private String email;
+
 
     @Column(nullable = false)
     private String password;
@@ -39,10 +40,14 @@ public class User extends SingleIdEntity<String> {
     private List <Workout> savedWorkouts;
 
     @OneToMany(/*fetch = FetchType.EAGER, */mappedBy = "requestingUser") //besseren namen
-    private List<Friendship> friendsOut;  //isActive = False -> ausgehende Anfragen, True -> Freunde
+    private List<Friendship> friendsRequested;  //isActive = False -> ausgehende Anfragen, True -> Freunde
 
     @OneToMany(/*fetch = FetchType.EAGER, */mappedBy = "requestedUser")
-    private List<Friendship> friendsIn;  //isActive = False -> eingehende anfragen, True -> Freunde
+    private List<Friendship> friendRequests;  //isActive = False -> eingehende anfragen, True -> Freunde
+
+//    @Transient
+//    private List<Friendship> friends;
+//    probably better to just use Repository methods to map depending on isActive boolean value
 
 
     public User() {
@@ -58,8 +63,8 @@ public class User extends SingleIdEntity<String> {
     }
 
     public User(String email, String password, String name, String firstName, Address address, AccountType accountType,
-                List<Workout> workouts, List<Workout> savedWorkouts, List<Friendship> friendsOut,
-                List<Friendship> friendsIn) {
+                List<Workout> workouts, List<Workout> savedWorkouts, List<Friendship> friendsRequested,
+                List<Friendship> friendRequests) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -68,8 +73,8 @@ public class User extends SingleIdEntity<String> {
         this.accountType = accountType;
         this.workouts = workouts;
         this.savedWorkouts = savedWorkouts;
-        this.friendsOut = friendsOut;
-        this.friendsIn = friendsIn;
+        this.friendsRequested = friendsRequested;
+        this.friendRequests = friendRequests;
     }
 
 
@@ -138,20 +143,20 @@ public class User extends SingleIdEntity<String> {
         this.savedWorkouts = savedWorkouts;
     }
 
-    public List<Friendship> getFriendsOut() {
-        return friendsOut;
+    public List<Friendship> getFriendsRequested() {
+        return friendsRequested;
     }
 
-    public void setFriendsOut(List<Friendship> friendsOut) {
-        this.friendsOut = friendsOut;
+    public void setFriendsRequested(List<Friendship> friendsRequested) {
+        this.friendsRequested = friendsRequested;
     }
 
-    public List<Friendship> getFriendsIn() {
-        return friendsIn;
+    public List<Friendship> getFriendRequests() {
+        return friendRequests;
     }
 
-    public void setFriendsIn(List<Friendship> friendsIn) {
-        this.friendsIn = friendsIn;
+    public void setFriendRequests(List<Friendship> friendRequests) {
+        this.friendRequests = friendRequests;
     }
 
 
@@ -166,8 +171,8 @@ public class User extends SingleIdEntity<String> {
                 ", accountType=" + accountType +
                 ", workouts=" + workouts +
                 ", savedWorkouts=" + savedWorkouts +
-                ", friendsOut=" + friendsOut +
-                ", friendsIn=" + friendsIn +
+                ", friendsRequested=" + friendsRequested +
+                ", friendRequests=" + friendRequests +
                 '}';
     }
 
