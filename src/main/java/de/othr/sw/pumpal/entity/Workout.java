@@ -49,6 +49,8 @@ public class Workout extends SingleIdEntity<Long> {
     @Transient
     private List<String> tags;
 //    bei initialisierung: tags splitten und in ein Array packen
+    //NEUES ATTRIBUT
+    //private int estDuration;
 
     public Workout() {
 

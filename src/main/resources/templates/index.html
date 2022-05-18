@@ -1,10 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+<head th:replace="partials/header :: header(~{::title})">
+    <title>Welcome to pumpal</title>
 </head>
+
 <body>
+    <div th:replace="partials/header :: navigation"/>
+
+    <div class="pt-4 container">
+        <div class="row pt-5">  <!--  style="background-color: #F08080" -->
+            <div class="pt-5 col-6">
+                <h1>welcome to pumpal!</h1>
+                <p class="pt-4"> test test testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+                    testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+                    testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p>
+            </div>
+            <div class="pt-4 col-6"><img src="../static/img/silhouette.png" th:src="@{img/silhouette.png}" class="img-fluid"></div>
+        </div>
+        <div class="row pt-4">
+            <button class="col-sm btn btn-danger rounded border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">what is pumpal?</button>
+            <button class="col-sm btn btn-danger rounded border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">who is pumpal aiming at?</button>
+            <button class="col-sm btn btn-danger rounded border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">why should i use pumpal?</button>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="collapse multi-collapse" id="collapse1">
+                    <div class="card card-body">
+                        Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="collapse multi-collapse" id="collapse2">
+                    <div class="card card-body">
+                        Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="collapse multi-collapse" id="collapse3">
+                    <div class="card card-body">
+                        Some placeholder content for the third collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3 class="px-5 pt-5">Newly added workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
+        </div>
+        <div class="row">
+            <div class="table-responsive px-5">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th> <!-- nur so einen satz dann mit ...  kleiner einblick nur-->
+                        <th scope="col">Exercises</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Author</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>MarkMarkMarkMarkMarkMarkMarkMark</td>
+                        <td>OttoMarkMarkMarkMarkMarkMarkMark</td>
+                        <td>@mdoMarkMarkMarkMarkMarkMarkMark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
 
 </body>
 </html>

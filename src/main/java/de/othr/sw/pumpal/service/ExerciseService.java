@@ -11,6 +11,8 @@ public interface ExerciseService {
     // auf button "Details" für die optionalen weiteren Infos zur Ausführung (String note), maybe einfach String als Rückgabe?
     Exercise viewExerciseDetails(Long exerciseId);
 
+    int getNumberOfExercises(Long workoutId);
+
     void setNewExercise(Exercise exercise);
 
     void removeExercise(Exercise exercise);

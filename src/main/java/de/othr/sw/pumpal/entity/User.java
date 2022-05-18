@@ -3,6 +3,7 @@ package de.othr.sw.pumpal.entity;
 import de.othr.sw.pumpal.entity.util.SingleIdEntity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,10 @@ public class User extends SingleIdEntity<String> {
 
     @Column(nullable = false)
     private String firstName;
+
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Date dateOfBirth;
 
     @Embedded
     //@Valid
@@ -53,22 +58,30 @@ public class User extends SingleIdEntity<String> {
     public User() {
     }
 
-    public User(String email,
-                String password,
-                String name, String firstName) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.firstName = firstName;
+    public User(AccountType accountType) {
+        this.accountType = accountType;
     }
 
-    public User(String email, String password, String name, String firstName, Address address, AccountType accountType,
-                List<Workout> workouts, List<Workout> savedWorkouts, List<Friendship> friendsRequested,
-                List<Friendship> friendRequests) {
+    public User(String email,
+                String password,
+                String name, String firstName, Date dateOfBirth,
+                Address address) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.firstName = firstName;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+    }
+
+    public User(String email, String password, String name, String firstName,  Date dateOfBirth,
+                Address address, AccountType accountType, List<Workout> workouts, List<Workout> savedWorkouts,
+                List<Friendship> friendsRequested, List<Friendship> friendRequests) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.firstName = firstName;
+        this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.accountType = accountType;
         this.workouts = workouts;
@@ -85,6 +98,14 @@ public class User extends SingleIdEntity<String> {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getPassword() {
@@ -107,7 +128,7 @@ public class User extends SingleIdEntity<String> {
         return firstName;
     }
 
-    public void setFirstname(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -167,6 +188,7 @@ public class User extends SingleIdEntity<String> {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", firstname='" + firstName + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", address=" + address +
                 ", accountType=" + accountType +
                 ", workouts=" + workouts +
