@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<body>
+
+    <div th:fragment="workout_table">
+        <div  th:unless="${#lists.isEmpty(workouts)}" class="table-responsive px-3">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Title</th>          <!-- truncate !-->
+                    <th scope="col">Description</th>    <!-- truncate !-->
+                    <th scope="col">Exercises</th>
+                    <th scope="col">Level</th>
+                    <th scope="col">Author</th>         <!-- truncate !-->
+                    <th scope="col">Published</th>
+                    <th scope="col">Duration (min)</th>
+                    <th scope="col">Saved</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="workout : ${workouts}">  <!-- auch mal ohne label probieren; th in td einbetten -->
+                    <th scope="row"><label th:text="${#strings.abbreviate(workout.title,30)}"></label></th>
+                    <td><label th:text="${#strings.abbreviate(workout.description,45)}"></label></td>
+                    <td><label th:text="${#lists.size(workout.exercises)} ?: '0'"></label></td> <!--get Number of Exercises-->
+                    <td><label th:text="${workout.level} ?: '-'"></label></td>
+                    <td><label th:text="${#strings.abbreviate(workout.author.email,30)}"></label></td>
+                    <td><label th:text="${#dates.format(workout.date, 'dd-MM-yyyy')}"></label></td>
+                    <td><label th:text="${workout.durationInMin} ?: '-'"></label></td>
+                    <td><label th:text="'0'"></label></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

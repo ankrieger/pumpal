@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">>
+
+<head th:replace="partials/header :: header(~{::title})">
+    <title>Create a new workout</title>
+</head>
+
+<body>
+    <div th:replace="partials/header :: navigation"/>
+
+
+    <!-- D82B30 hex red color-->
+    <section class="h-100">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col">
+                    <div class="row">
+
+                        <div class="col-xl-3 pt-5 mt-5">
+                            <img th:src="@{img/undraw_healthy_habit_bh-5-w.svg}" class="img-fluid">
+                        </div>
+
+                        <div class="col-xl-6 px-0">
+                            <div class="p-md-5">
+                                <h3 class="mb-5">Create a new workout</h3>
+
+                                <!-- three sections: 1. pic and infos, 2. form, 3. infos and pic-->
+                                <form th:action="@{/create-workout}" th:object="${workout}" method="post">
+                                    <div class="row mb-3">
+                                        <label for="workTitle" class="col-sm-2 col-form-label">Title:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" th:field="*{title}" class="form-control" id="workTitle">
+                                        </div>
+                                        <p class="alert-warning" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></p>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="workDescription" class="col-sm-2 col-form-label">Description:</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" th:field="*{description}" id="workDescription" rows="3"></textarea>
+                                        </div>
+                                        <p class="alert-warning" th:errors="*{description}" th:if="${#fields.hasErrors('description')}"></p>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="workDuration" class="col-sm-2 col-form-label">Duration in min:</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" th:field="*{durationInMin}" min="1" max="480" class="form-control" id="workDuration">
+                                        </div>
+                                    </div>
+
+                                    <!-- TODO: Thymeleaf enumeration dropdown list -->
+                                    <div class="row mb-3">
+                                        <label for="level" class="col-sm-2 col-form-label">Level:</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-select" th:field="*{level}" aria-label="level" id="level">
+                                                <option th:each="level : ${T(de.othr.sw.pumpal.entity.Level).values()}"
+                                                        th:value="${level}"
+                                                        th:text="${level}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- static or dynamically? Maybe static because not every enumeration state is displayed as radio!-->
+<!--                                    <fieldset class="row mb-3">-->
+<!--                                        <legend class="col-form-label col-sm-2 pt-0">Visibility:</legend>-->
+<!--                                        <div class="col-sm-10">-->
+<!--                                            <div class="form-check">-->
+<!--                                                <input class="form-check-input" type="radio" name="radiosVisibility" id="radioVisibilityPrivate" value="option1" checked>-->
+<!--                                                <label class="form-check-label" for="radioVisibilityPrivate">-->
+<!--                                                    Private-->
+<!--                                                </label>-->
+<!--                                            </div>-->
+<!--                                            <div class="form-check">-->
+<!--                                                <input class="form-check-input" type="radio" name="radiosVisibility" id="radioVisibilityPublic" value="option2">-->
+<!--                                                <label class="form-check-label" for="radioVisibilityPublic">-->
+<!--                                                    Public-->
+<!--                                                </label>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </fieldset>-->
+
+                                    <!-- Experiment: Display Enum as Radio Group in Thymeleaf-->
+                                    <fieldset class="row mb-3">
+                                        <legend class="col-form-label col-sm-2 pt-0">Visibility:</legend>
+                                        <div class="col-sm-10">
+                                            <div class="form-check" th:each="visibility : ${T(de.othr.sw.pumpal.entity.Visibility).values()}">
+                                                <input class="form-check-input" type="radio" th:field="*{visibility}" th:value="${visibility}">
+                                                <label class="form-check-label" th:text="${visibility}" th:for="${visibility}">
+                                                    Private
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+
+<!--                                    <div class="row mb-3">-->
+<!--                                        <div class="col-sm-10 offset-sm-2">-->
+<!--                                            <div class="form-check form-switch">-->
+<!--                                                &lt;!&ndash; Switch für Friends visibility: disabled, when public; enabled, when private&ndash;&gt;-->
+<!--                                                &lt;!&ndash; TODO: als model attribut übergeben; if checked + private -> Visibility auf friends setzen&ndash;&gt;-->
+<!--                                                <input class="form-check-input" type="checkbox" role="switch" id="switchVisibilityFriends" disabled>-->
+<!--                                                <label class="form-check-label" for="switchVisibilityFriends">Friends</label>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+
+                                    <button type="submit" class="btn btn-danger">Save workout</button>
+                                        <button type="reset" class="btn btn-light">Reset all</button>
+
+                                </form>
+
+
+                                <!-- TODO: Add Exercises (extra form?) -->
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 pt-5 mt-5">
+                            <img th:src="@{img/undraw_healthy_habit_bh-5-w.svg}" class="img-fluid">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

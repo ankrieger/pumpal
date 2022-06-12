@@ -4,6 +4,7 @@ import de.othr.sw.pumpal.entity.util.SingleIdEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
@@ -14,17 +15,19 @@ public class Workout extends SingleIdEntity<Long> {
     private Long id;
 
     @Column(nullable = false)
+    @Size(min = 3, max = 60, message = "Your workout's title must be between 3 and 60 characters long")
     private String title;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date date;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "email", name="user_id", nullable = false)
+    @JoinColumn(referencedColumnName = "email", name="user_id"  /*, nullable = false*/)
     private User author;
 
     @Column(nullable = false)
+    @Size(min = 2, max = 350, message = "Your surname must be between 2 and 350 characters long")
     private String description;
 
     @Enumerated(value = EnumType.STRING)
@@ -49,8 +52,9 @@ public class Workout extends SingleIdEntity<Long> {
     @Transient
     private List<String> tags;
 //    bei initialisierung: tags splitten und in ein Array packen
-    //NEUES ATTRIBUT
-    //private int estDuration;
+
+
+    private Integer durationInMin;
 
     public Workout() {
 
@@ -71,7 +75,7 @@ public class Workout extends SingleIdEntity<Long> {
     }
 
     public Workout(Long id, String title, Date date, User author, String description,
-                   Visibility visibility, List<Exercise> exercises, String tagString,
+                   Visibility visibility, List<Exercise> exercises, String tagString, Integer durationInMin,
                    List<Comment> comments, Level level) {
         this.id = id;
         this.title = title;
@@ -84,6 +88,7 @@ public class Workout extends SingleIdEntity<Long> {
         this.level = level;
         this.tagString = (tagString != null && !tagString.isEmpty()) ? tagString : "";
         this.tags = new ArrayList<String>(Arrays.asList(this.tagString.split("\\s*,\\s*")));
+        this.durationInMin = durationInMin;
 
     }
 
@@ -159,6 +164,22 @@ public class Workout extends SingleIdEntity<Long> {
         this.comments = comments;
     }
 
+    public List<User> getSavedBy() {
+        return savedBy;
+    }
+
+    public void setSavedBy(List<User> savedBy) {
+        this.savedBy = savedBy;
+    }
+
+    public Integer getDurationInMin() {
+        return durationInMin;
+    }
+
+    public void setDurationInMin(Integer durationInMin) {
+        this.durationInMin = durationInMin;
+    }
+
     public Level getLevel() {
         return level;
     }
@@ -191,6 +212,7 @@ public class Workout extends SingleIdEntity<Long> {
                 ", description='" + description + '\'' +
                 ", exercises=" + exercises +
                 ", tagString='" + tagString + '\'' +
+                ", durationInMin='" + durationInMin + '\'' +
                 ", comments=" + comments +
                 ", level=" + level +
                 ", visibility=" + visibility +

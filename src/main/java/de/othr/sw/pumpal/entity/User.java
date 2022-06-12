@@ -1,33 +1,40 @@
 package de.othr.sw.pumpal.entity;
 
 import de.othr.sw.pumpal.entity.util.SingleIdEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 @Entity
 public class User extends SingleIdEntity<String> {
     @Id
     @Column(name = "email")
+    @Email(message = "An email address requires an @")
     private String email;
 
-
-    @Column(nullable = false)
+//    @Column(nullable = false)
+    @Size(min = 5, message = "Your password must be at least 5 characters long")
     private String password;
 
-    @Column(nullable = false)
+    @Size(min = 2, max = 35, message = "Your surname must be between 2 and 35 characters long")
+//    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Size(min = 2, max = 35, message = "Your firstname must be between 2 and 35 characters long")
+//    @Column(nullable = false)
     private String firstName;
 
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date dateOfBirth;
+//    //@Temporal(TemporalType.DATE)
+//    @DateTimeFormat(pattern = "dd.MM.yyyy")
+//    @Column(nullable = false)
+//    private Date dateOfBirth;
 
     @Embedded
-    //@Valid
+    @Valid
     private Address address;
 
     @Enumerated(EnumType.STRING)
@@ -58,30 +65,32 @@ public class User extends SingleIdEntity<String> {
     public User() {
     }
 
-    public User(AccountType accountType) {
+
+    public User (AccountType accountType) {
         this.accountType = accountType;
     }
 
     public User(String email,
                 String password,
-                String name, String firstName, Date dateOfBirth,
+                String name,
+                String firstName,
+                AccountType accountType,
                 Address address) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.firstName = firstName;
-        this.dateOfBirth = dateOfBirth;
+        this.accountType = accountType;
         this.address = address;
     }
 
-    public User(String email, String password, String name, String firstName,  Date dateOfBirth,
+    public User(String email, String password, String name, String firstName,
                 Address address, AccountType accountType, List<Workout> workouts, List<Workout> savedWorkouts,
                 List<Friendship> friendsRequested, List<Friendship> friendRequests) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.firstName = firstName;
-        this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.accountType = accountType;
         this.workouts = workouts;
@@ -98,14 +107,6 @@ public class User extends SingleIdEntity<String> {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
     }
 
     public String getPassword() {
@@ -188,7 +189,6 @@ public class User extends SingleIdEntity<String> {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", firstname='" + firstName + '\'' +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", address=" + address +
                 ", accountType=" + accountType +
                 ", workouts=" + workouts +

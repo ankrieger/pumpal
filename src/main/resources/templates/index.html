@@ -9,14 +9,29 @@
     <div th:replace="partials/header :: navigation"/>
 
     <div class="pt-4 container">
-        <div class="row pt-5">  <!--  style="background-color: #F08080" -->
-            <div class="pt-5 col-6">
+
+        <!-- Successfully logged in alert-->
+        <div th:if="${param.success}" class="pt-5 mt-5">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg>
+                You have succesfully logged in.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+
+
+
+        <div class="row py-4">  <!--  style="background-color: #F08080" -->
+            <div class="pt-5 col-xl-6">
+
                 <h1>welcome to pumpal!</h1>
                 <p class="pt-4"> test test testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
                     testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
                     testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p>
             </div>
-            <div class="pt-4 col-6"><img src="../static/img/silhouette.png" th:src="@{img/silhouette.png}" class="img-fluid"></div>
+            <div class="pt-5 col-xl-6"><img th:src="@{img/undraw_personal_trainer_re_cnua.svg}" class="img-fluid"></div>
         </div>
         <div class="row pt-4">
             <button class="col-sm btn btn-danger rounded border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">what is pumpal?</button>
@@ -47,49 +62,10 @@
             </div>
         </div>
         <div class="row">
-            <h3 class="px-5 pt-5">Newly added workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
+            <h3 class="px-4 pt-5 pb-4">Newly added workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
         </div>
         <div class="row">
-            <div class="table-responsive px-5">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Description</th> <!-- nur so einen satz dann mit ...  kleiner einblick nur-->
-                        <th scope="col">Exercises</th>
-                        <th scope="col">Level</th>
-                        <th scope="col">Duration</th>
-                        <th scope="col">Author</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>MarkMarkMarkMarkMarkMarkMarkMark</td>
-                        <td>OttoMarkMarkMarkMarkMarkMarkMark</td>
-                        <td>@mdoMarkMarkMarkMarkMarkMarkMark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <div th:replace="partials/workout-table :: workout_table"/>
         </div>
     </div>
 
