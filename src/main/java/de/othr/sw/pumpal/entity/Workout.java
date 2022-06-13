@@ -157,7 +157,7 @@ public class Workout extends SingleIdEntity<Long> {
     }
 
     public List<Comment> getComments() {
-        return comments;
+        return Collections.unmodifiableList(comments);
     }
 
     public void setComments(List<Comment> comments) {

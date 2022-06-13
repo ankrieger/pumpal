@@ -2,15 +2,19 @@ package de.othr.sw.pumpal.entity;
 
 import de.othr.sw.pumpal.entity.util.SingleIdEntity;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Entity
-public class User extends SingleIdEntity<String> {
+public class User extends SingleIdEntity<String> implements UserDetails {
     @Id
     @Column(name = "email")
     @Email(message = "An email address requires an @")
@@ -181,6 +185,37 @@ public class User extends SingleIdEntity<String> {
         this.friendRequests = friendRequests;
     }
 
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.createAuthorityList(this.accountType.name());
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     @Override
     public String toString() {

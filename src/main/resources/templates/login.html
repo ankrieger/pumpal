@@ -14,17 +14,6 @@
         <div class="container-fluid">
             <div class="row">
 
-                <!-- Alert Section  -->
-                <!-- moved Login Success to be displayed on Index Page-->
-<!--                <div th:if="${param.success}">-->
-<!--                    <div class="alert alert-success alert-dismissible fade show" role="alert">-->
-<!--                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">-->
-<!--                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>-->
-<!--                        </svg>-->
-<!--                            You have succesfully logged in.-->
-<!--                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-<!--                    </div>-->
-<!--                </div>-->
 
                 <div th:if="${param.error}">
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -39,24 +28,24 @@
 
                 <!-- Image Section -->
                 <div class="col-xl-6 px-4">
-                    <img th:src="@{img/undraw_working_out_re_nhkg.svg}" class="img-fluid">
+                    <img th:src="@{images/undraw_working_out_re_nhkg.svg}" class="img-fluid">
                 </div>
 
 
                 <!-- Login Form Section-->
                 <div class="col-xl-6">
                     <div class="d-flex align-items-center ps-4">
-                        <form th:action="@{/login}" th:object="${user}" method="post">
+                        <form th:action="@{/login}" method="post">
 
                             <h3 class="mb-3 pb-3">Log in</h3>
 
                             <div class="mb-4">
-                                <input type="email" id="logEmail" th:field="*{email}" class="form-control form-control-lg">
+                                <input type="email" id="logEmail" name="username" class="form-control form-control-lg">
                                 <label class="form-label" for="logEmail">Email address</label>
                             </div>
 
                             <div class="mb-4">
-                                <input type="password" id="logPassword" th:field="*{password}" class="form-control form-control-lg">
+                                <input type="password" id="logPassword" name="password" class="form-control form-control-lg">
                                 <label class="form-label" for="logPassword">Password</label>
                             </div>
 

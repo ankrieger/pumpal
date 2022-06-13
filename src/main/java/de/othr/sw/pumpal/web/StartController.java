@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.sql.Array;
@@ -45,9 +45,7 @@ public class StartController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST) // th:action="@{/login}"
-    public String doLogin(@ModelAttribute("user") User user) {
-        //TODO: check if user exists: either return login?success or login?error
-        System.out.println(user);
+    public String doLogin() {
         return "redirect:index?success";
     }
 
@@ -63,26 +61,11 @@ public class StartController {
     public String doRegister(@Valid User user, BindingResult result) {
         System.out.println(user);
         if (result.hasErrors()) {
-            return "registration";
+            return "redirect:registration?error";
         }
         userService.registerUser(user);
-        return "index";
+        return "redirect:index";
     }
 
-    @RequestMapping(value = "/create-workout", method = RequestMethod.GET)
-    public String createNewWorkout(Model model) {
-        model.addAttribute("workout", new Workout()); //Vorbelegung probieren mit visibility!
-        return "create-workout";
-    }
 
-    @RequestMapping(value = "/create-workout", method = RequestMethod.POST)
-    public  String doCreateWorkout(@Valid Workout workout, BindingResult result) {
-        System.out.println(workout);
-        if (result.hasErrors()) {
-            return "create-workout";
-        }
-        System.out.println(workout);
-        workoutService.saveWorkout(workout, userService.getUserByEmail("testo@othr.de"));
-        return "redirect:index?success";
-    }
 }
