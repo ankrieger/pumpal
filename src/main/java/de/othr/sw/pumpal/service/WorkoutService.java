@@ -1,9 +1,7 @@
 package de.othr.sw.pumpal.service;
 
-import de.othr.sw.pumpal.entity.Level;
-import de.othr.sw.pumpal.entity.User;
-import de.othr.sw.pumpal.entity.Visibility;
-import de.othr.sw.pumpal.entity.Workout;
+import de.othr.sw.pumpal.entity.*;
+import org.springframework.data.domain.Page;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +9,13 @@ import java.util.List;
 public interface WorkoutService {
     //sowohl für eigene workouts als auch für die anderer user als methode
     List<Workout> getAllWorkoutsOfUser(User user); //oder String Email; nicht vergessen entsprechend visibility!
+
+    List<Workout> getAllWorkoutsVisible(); //ergo alle Public vorerst; später: auch FRIENDS + Freund
+
+    Page<Workout> findWorkoutPage(int pageNumber);
+
+    //List<Workout> getAllVisibleWorkoutsForUser(List<User> friends);
+    // findAllVisibilitiesInAndAuthorIn -> nichtmal Original User notwendig
 
     List<Workout> getNewestWorkouts(Collection<Visibility> visibilities);  //auf startpage, noch vor dem einloggen angezeigt, so 5 Titel + Descprition -> bei Klick auf Titel zu Einloggen weitergeleitet
 

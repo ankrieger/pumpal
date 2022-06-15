@@ -73,10 +73,16 @@
             </div>
         </div>
         <div class="row">
-            <h3 class="px-4 pt-5 pb-4">Newly added workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
-        </div>
-        <div class="row">
-            <div th:replace="partials/workout-table :: workout_table"/>
+            <h3 class="px-4 pt-5 pb-3">Newly added workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
+            <div class="d-flex justify-content-md-end mb-5 pt-3">
+                <a href="/workout" class="mb-0 me-4">Show all</a>
+            </div>
+        <div class="container row mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
+                </div>
+            </div>
         </div>
     </div>
 

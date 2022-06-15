@@ -14,14 +14,14 @@ public interface FriendshipService {
 
     List<Friendship> getAllOutgoingFriendRequestsOfUser(User user);
 
-    void sendFriendRequest(User requesting, User requested); //create inactive Friendship,  maybe auch eine Funktion für Anfrage zurückziehen?
+    String getStatusOfFriendship(User requesting, User requested);
+
+    Friendship sendFriendRequest(User requesting, User requested); //create inactive Friendship,  maybe auch eine Funktion für Anfrage zurückziehen?
 
     void acceptFriendRequest(Friendship friendship); //isActive auf True setzen
 
-    void denyFriendRequest(Friendship friendship); //remove Friendrequest
+    void deleteFriendship(Friendship friendship); //remove Friendship
 
-    void deleteFriend(Friendship friendship); //remove Friendship
-
-
+    Friendship getFriendshipOfUsers(User requesting, User requested);
 
 }

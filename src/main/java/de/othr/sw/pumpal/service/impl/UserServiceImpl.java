@@ -6,10 +6,13 @@ import de.othr.sw.pumpal.repository.UserRepository;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,6 +22,17 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+
+    @Override
+    public List<User> getAllUsers() {
+        return null;
+    }
+
+    @Override
+    public Page<User> findUserPage(int pageNumber) {
+        return null;
+    }
 
     @Override
     public User getUserByEmail(String email) {
@@ -54,4 +68,6 @@ public class UserServiceImpl implements UserService {
                 () -> new UsernameNotFoundException("User with email " + username + " not found")
         );
     }
+
+
 }

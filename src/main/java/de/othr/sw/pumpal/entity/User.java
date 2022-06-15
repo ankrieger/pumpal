@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
@@ -64,6 +65,8 @@ public class User extends SingleIdEntity<String> implements UserDetails {
 //    @Transient
 //    private List<Friendship> friends;
 //    probably better to just use Repository methods to map depending on isActive boolean value
+
+    private String description;
 
 
     public User() {
@@ -153,8 +156,18 @@ public class User extends SingleIdEntity<String> implements UserDetails {
         this.accountType = accountType;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<Workout> getWorkouts() {
-        return workouts;
+        return Collections.unmodifiableList(workouts);
     }
 
     public void setWorkouts(List<Workout> workouts) {
@@ -226,10 +239,10 @@ public class User extends SingleIdEntity<String> implements UserDetails {
                 ", firstname='" + firstName + '\'' +
                 ", address=" + address +
                 ", accountType=" + accountType +
-                ", workouts=" + workouts +
-                ", savedWorkouts=" + savedWorkouts +
-                ", friendsRequested=" + friendsRequested +
-                ", friendRequests=" + friendRequests +
+//                ", workouts=" + workouts +
+//                ", savedWorkouts=" + savedWorkouts +
+//                ", friendsRequested=" + friendsRequested +
+//                ", friendRequests=" + friendRequests +
                 '}';
     }
 

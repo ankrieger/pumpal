@@ -141,7 +141,7 @@ public class Workout extends SingleIdEntity<Long> {
     }
 
     public List<Exercise> getExercises() {
-        return exercises;
+        return Collections.unmodifiableList(exercises);
     }
 
     public void setExercises(List<Exercise> exercises) {
@@ -208,12 +208,12 @@ public class Workout extends SingleIdEntity<Long> {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", date=" + date +
-                ", author=" + author +
+//                ", author=" + author +
                 ", description='" + description + '\'' +
-                ", exercises=" + exercises +
+//                ", exercises=" + exercises +
                 ", tagString='" + tagString + '\'' +
                 ", durationInMin='" + durationInMin + '\'' +
-                ", comments=" + comments +
+//                ", comments=" + comments +
                 ", level=" + level +
                 ", visibility=" + visibility +
                 '}';
