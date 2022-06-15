@@ -21,8 +21,8 @@
             <tr th:each="user : ${users}">  <!-- auch mal ohne label probieren; th in td einbetten -->
                 <th scope="row"><a th:href="@{/profile/{id}(id = ${user.email})}"
                                    th:text="${user.email}"></a></th>
-                <td><label th:text="${user.firstName"></label></td>
-                <td><label th:text="${user.name"></label></td>
+                <td><label th:text="${user.firstName}"></label></td>
+                <td><label th:text="${user.name}"></label></td>
             </tr>
             </tbody>
         </table>

@@ -33,8 +33,12 @@ public class ProfileController {
     public String viewProfile(@AuthenticationPrincipal User user,
                                Model model) {
         model.addAttribute("user", user);
+
         List<Workout> workouts = workoutService.getAllWorkoutsOfUser(user);
+        List<User> friends = friendshipService.getAllFriendsOfUser(user);
+
         model.addAttribute("workouts", workouts);
+        model.addAttribute("friends", friends);
         return "profile";
     }
 
@@ -54,6 +58,8 @@ public class ProfileController {
             return "redirect:";
         }
 
+        // get all friends of user
+
         // Check Friendship status for different HTML Elements, prepare attributes
         boolean friends, friendRequested, friendRequesting;
         friends = friendRequested = friendRequesting = false;
@@ -72,7 +78,11 @@ public class ProfileController {
         model.addAttribute("friendRequesting", friendRequesting);
 
         model.addAttribute("user", user);
+
+        List<User> friends1 = friendshipService.getAllFriendsOfUser(user);
         List<Workout> workouts = workoutService.getAllWorkoutsOfUser(user);
+
+        model.addAttribute("friends", friends1);
         model.addAttribute("workouts", workouts);
         return "profile";
     }
@@ -120,12 +130,13 @@ public class ProfileController {
         Page<User> page = userService.findUserPage(currentPage);
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();
-        List<User> workouts = page.getContent();
+
+        List<User> users = page.getContent();
 
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", totalItems);
-        model.addAttribute("workouts", workouts);
+        model.addAttribute("users", users);
         return "users";
     }
 

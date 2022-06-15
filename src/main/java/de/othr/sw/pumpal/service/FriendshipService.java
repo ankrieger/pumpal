@@ -8,7 +8,7 @@ import java.util.List;
 public interface FriendshipService {
 
     //ausbessern in Komponentendia: getFriendsOfUser steht da bisher
-    List<Friendship> getAllFriendsOfUser(User user); //userId statt User objekt?
+    List<User> getAllFriendsOfUser(User user); //userId statt User objekt?
 
     List<Friendship> getAllIncomingFriendRequestsOfUser(User user);  //maybe noch so anzahl an ... damit dann "Nachrichtenbutton" konstruieren kann?
 

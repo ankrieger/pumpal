@@ -192,23 +192,27 @@
 
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts</button>
+                  <button class="nav-link active" href="#workouts" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friendsPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Friends</button>
+                  <button class="nav-link" href="#friends" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friendsPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Friends</button>
                 </li>
 <!--                  maybe Private own workouts? Only visibile when /profile invoked;-->
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contactPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Idk</button>
+                  <button class="nav-link" href="#idk" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contactPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Idk</button>
                 </li>
               </ul>
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="workoutsPanel" role="tabpanel" aria-labelledby="workout-tab">
                   <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
                 </div>
-                <div class="tab-pane fade" id="friendsPanel" role="tabpanel" aria-labelledby="friends-tab">...</div>
-                <div class="tab-pane fade" id="contactPanel" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                <div class="tab-pane fade" id="friendsPanel" role="tabpanel" aria-labelledby="friends-tab">
+                    <div th:replace="partials/user-table :: user_table(users=${friends})"/>
+                </div>
+                <div class="tab-pane fade" id="contactPanel" role="tabpanel" aria-labelledby="contact-tab">Here will be all saved workouts(?)</div>
               </div>
+
+                <!-- idee: bei eigenem Profil: noch extra Reiter/Bereich mit privaten eigenen Workouts, saved workouts, ausstehenden/eingehenden Freundesanfragen-->
 
             </div>
           </div>
@@ -216,6 +220,13 @@
       </div>
     </div>
   </section>
+
+  <script>
+      jQuery(document).ready(function ($) {
+          let selectedTab = window.location.hash;
+          $('.nav-link[href="' + selectedTab + '"]' ).trigger('click');
+      })
+  </script>
 
 </body>
 </html>

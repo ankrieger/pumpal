@@ -2,11 +2,15 @@ package de.othr.sw.pumpal.service.impl;
 
 import de.othr.sw.pumpal.entity.AccountType;
 import de.othr.sw.pumpal.entity.User;
+import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.repository.UserRepository;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,7 +35,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> findUserPage(int pageNumber) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNumber - 1,10);
+
+        User user_auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findAllByEmailNotLike(user_auth.getEmail(), pageable);
     }
 
     @Override
