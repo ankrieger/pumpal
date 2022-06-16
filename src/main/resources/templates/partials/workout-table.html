@@ -4,6 +4,7 @@
 <body>
 
     <div th:fragment="workout_table(workouts)">
+
         <div th:if="${#lists.isEmpty(workouts)}">
             There are no workouts yet.
         </div>

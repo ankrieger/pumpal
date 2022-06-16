@@ -10,9 +10,9 @@ public interface FriendshipService {
     //ausbessern in Komponentendia: getFriendsOfUser steht da bisher
     List<User> getAllFriendsOfUser(User user); //userId statt User objekt?
 
-    List<Friendship> getAllIncomingFriendRequestsOfUser(User user);  //maybe noch so anzahl an ... damit dann "Nachrichtenbutton" konstruieren kann?
+    List<User> getAllIncomingFriendRequestsOfUser(User user);  //maybe noch so anzahl an ... damit dann "Nachrichtenbutton" konstruieren kann?
 
-    List<Friendship> getAllOutgoingFriendRequestsOfUser(User user);
+    List<User> getAllOutgoingFriendRequestsOfUser(User user);
 
     String getStatusOfFriendship(User requesting, User requested);
 

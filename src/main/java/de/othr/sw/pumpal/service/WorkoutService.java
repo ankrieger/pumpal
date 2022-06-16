@@ -8,11 +8,12 @@ import java.util.List;
 
 public interface WorkoutService {
     //sowohl für eigene workouts als auch für die anderer user als methode
-    List<Workout> getAllWorkoutsOfUser(User user); //oder String Email; nicht vergessen entsprechend visibility!
+    List<Workout> getAllWorkoutsOfUserByVisibility(Visibility visibility, User user); //oder String Email; nicht vergessen entsprechend visibility!
 
-    List<Workout> getAllWorkoutsVisible(); //ergo alle Public vorerst; später: auch FRIENDS + Freund
 
-    Page<Workout> findWorkoutPage(int pageNumber);
+    List<Workout> getAllWorkoutsVisible(Collection<Visibility> visibilities); //ergo alle Public vorerst; später: auch FRIENDS + Freund
+
+    Page<Workout> findWorkoutPage(Collection<Visibility> visibilities, int pageNumber);
 
     //List<Workout> getAllVisibleWorkoutsForUser(List<User> friends);
     // findAllVisibilitiesInAndAuthorIn -> nichtmal Original User notwendig

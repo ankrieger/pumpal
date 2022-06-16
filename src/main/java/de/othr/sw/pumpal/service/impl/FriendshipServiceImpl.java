@@ -24,20 +24,20 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     @Override
     public List<User> getAllFriendsOfUser(User user) {
-        List<User> friends = friendshipRepository.getActiveFriendshipsIncoming(user.getEmail());
-        friends.addAll(friendshipRepository.getActiveFriendshipsOutgoing(user.getEmail()));
+        List<User> friends = friendshipRepository.getFriendshipsIncoming(user.getEmail(), true); //active friendships
+        friends.addAll(friendshipRepository.getFriendshipsOutgoing(user.getEmail(), true)); //active friendships
         System.out.println(friends);
         return friends;
     }
 
     @Override
-    public List<Friendship> getAllIncomingFriendRequestsOfUser(User user) {
-        return null;
+    public List<User> getAllIncomingFriendRequestsOfUser(User user) {
+        return friendshipRepository.getFriendshipsIncoming(user.getEmail(), false);
     }
 
     @Override
-    public List<Friendship> getAllOutgoingFriendRequestsOfUser(User user) {
-        return null;
+    public List<User> getAllOutgoingFriendRequestsOfUser(User user) {
+        return friendshipRepository.getFriendshipsOutgoing(user.getEmail(), false);
     }
 
     @Override

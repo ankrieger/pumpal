@@ -3,32 +3,33 @@
 
 <body>
 
-<div th:fragment="user_table(users)">
-    <div th:if="${#lists.isEmpty(users)}">
-        There are no users yet.
-    </div>
-    <div th:unless="${#lists.isEmpty(users)}" class="table-responsive px-3">
-        <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-                <th scope="col">Email</th>          <!-- truncate !-->
-                <th scope="col">Firstname</th>    <!-- truncate !-->
-                <th scope="col">Name</th>
-            <!-- Possible other elements: Friends(amount), workouts(amount)-->
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${users}">  <!-- auch mal ohne label probieren; th in td einbetten -->
-                <th scope="row"><a th:href="@{/profile/{id}(id = ${user.email})}"
-                                   th:text="${user.email}"></a></th>
-                <td><label th:text="${user.firstName}"></label></td>
-                <td><label th:text="${user.name}"></label></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <div th:fragment="user_table(users)">
 
-</div>
+        <div th:if="${#lists.isEmpty(users)}">
+            There are no users yet.
+        </div>
+        <div th:unless="${#lists.isEmpty(users)}" class="table-responsive px-3">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Email</th>          <!-- truncate !-->
+                    <th scope="col">Firstname</th>    <!-- truncate !-->
+                    <th scope="col">Name</th>
+                <!-- Possible other elements: Friends(amount), workouts(amount)-->
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">  <!-- auch mal ohne label probieren; th in td einbetten -->
+                    <th scope="row"><a th:href="@{/profile/{id}(id = ${user.email})}"
+                                       th:text="${user.email}"></a></th>
+                    <td><label th:text="${user.firstName}"></label></td>
+                    <td><label th:text="${user.name}"></label></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 
 </body>
 </html>

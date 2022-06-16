@@ -3,6 +3,7 @@ package de.othr.sw.pumpal.web;
 
 import de.othr.sw.pumpal.entity.Exercise;
 import de.othr.sw.pumpal.entity.User;
+import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.entity.Workout;
 import de.othr.sw.pumpal.service.FriendshipService;
 import de.othr.sw.pumpal.service.UserService;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -32,8 +34,8 @@ public class WorkoutController {
     @Autowired
     private WorkoutService workoutService;
 
-    @Autowired
-    private FriendshipService friendshipService;
+//    @Autowired
+//    private FriendshipService friendshipService;
 
 //    @RequestMapping(value = "", method = RequestMethod.GET)
 //    public String viewWorkouts(Model model) {
@@ -53,7 +55,10 @@ public class WorkoutController {
     @RequestMapping(value = "/page/{pageNumber}", method = RequestMethod.GET)
     public String getOnePage(Model model,
                              @PathVariable("pageNumber") int currentPage) {
-        Page<Workout> page = workoutService.findWorkoutPage(currentPage);
+        Collection<Visibility> visibilities = new ArrayList<>();
+        visibilities.add(Visibility.PUBLIC);
+
+        Page<Workout> page = workoutService.findWorkoutPage(visibilities, currentPage);
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();
         List<Workout> workouts = page.getContent();
@@ -70,7 +75,7 @@ public class WorkoutController {
     public String viewUserWorkouts(@PathVariable("id") String id,
                                    Model model) {
         User user = userService.getUserByEmail(id);
-        List<Workout> workouts = workoutService.getAllWorkoutsOfUser(user);
+        List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
         System.out.println(workouts);
         model.addAttribute("workouts", workouts);
         return "workouts";

@@ -20,10 +20,10 @@
 
                             <!-- Save changes  -->
                             <!-- redirect to /profile with the new changes  -->
-                            <a th:if="${#httpServletRequest.requestURI == '/profile/edit'}" th:href="@{profile}" role="button" class="btn btn-outline-dark"
-                                    data-mdb-ripple-color="dark" style="z-index: 1;">
-                                Done
-                            </a>
+<!--                            <a th:if="${#httpServletRequest.requestURI == '/profile/edit'}" th:href="@{profile}" role="button" class="btn btn-outline-dark"-->
+<!--                                    data-mdb-ripple-color="dark" style="z-index: 1;">-->
+<!--                                Done-->
+<!--                            </a>-->
 
                             <!--Display as a form with Done button as Post-submit-->
                             <!-- Check if email is already in use etc.-->
@@ -31,8 +31,8 @@
 
                         </div>
                         <div class="ms-3" style="margin-top: 130px;">
-<!--                            <h5 th:text="${user.firstName + ' ' + user.name}"></h5>-->
-<!--                            <p th:text="${user.email}"></p>-->
+                            <h5 th:text="${user.firstName + ' ' + user.name}"></h5>
+                            <p th:text="${user.email}"></p>
                         </div>
                     </div>
                     <div class="p-4 text-black" style="background-color: #f8f9fa;">
@@ -51,8 +51,142 @@
                         <div class="mb-5">
                             <!--                <p class="lead fw-normal mb-1">About me</p>-->
                             <div class="p-4" style="background-color: #f8f9fa;">
-<!--                                <p class="font-italic mb-1" th:if="${#strings.isEmpty(user.description)}">There is no description.</p>-->
-<!--                                <p class="font-italic mb-1" th:unless="${#strings.isEmpty(user.description)}"></p>-->
+
+                                <!-- Form Section -->
+                                <form th:action="@{/profile}" th:object="${user}" method="post">
+
+                                    <h4>Want to add a description of yourself and your motivation as well as your fitness goals?</h4>
+
+                                    <div class="row mb-5 mt-3">
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" th:field="*{description}" th:value="*{description} ?: ''" id="description" rows="3"></textarea>
+                                            <label for="description" class="col-sm-2 col-form-label mb-3">Description</label>
+                                        </div>
+                                        <p class="alert-warning" th:errors="*{description}" th:if="${#fields.hasErrors('description')}"></p>
+                                    </div>
+
+                                    <h4>Personal information</h4>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-group">
+                                                <input type="text" th:field="*{firstName}" th:value="*{firstName}" id="regFirstName" class="form-control" required>
+                                                <label class="form-label" for="regFirstName">First name</label>
+                                                <p class="alert-warning" th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-group">
+                                                <input type="text" th:field="*{name}" th:value="*{name}" id="regLastName" class="form-control" required>
+                                                <label class="form-label" for="regLastName">Last name</label>
+                                                <p class="alert-warning" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-9 mb-4">
+                                                <div class="form-group">
+                                                    <input type="text" th:field="*{address.street}" th:value="*{address.street}" id="regStreet" class="form-control" required>
+                                                    <label class="form-label" for="regStreet">Street</label>
+                                                    <p class="alert-warning" th:errors="*{address.street}" th:if="${#fields.hasErrors('address.street')}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-4">
+                                                <div class="form-group">
+                                                    <input type="text" th:field="*{address.streetNumber}" th:value="*{address.streetNumber}" id="regStreetNum" class="form-control" required>
+                                                    <label class="form-label" for="regStreetNum">Street number</label>
+                                                    <p class="alert-warning" th:errors="*{address.streetNumber}" th:if="${#fields.hasErrors('address.streetNumber')}"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <input type="text" th:field="*{address.zip}" th:value="*{address.zip}" id="regZIP" class="form-control" pattern="[0-9]+" placeholder="12345" required>
+                                            <label class="form-label" for="regZIP">ZIP code</label>
+                                            <p class="alert-warning" th:errors="*{address.zip}" th:if="${#fields.hasErrors('address.zip')}"></p>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <input type="text" th:field="*{address.city}" th:value="*{address.city}" id="regCity" class="form-control" required>
+                                            <label class="form-label" for="regCity">City</label>
+                                            <p class="alert-warning" th:errors="*{address.city}" th:if="${#fields.hasErrors('address.city')}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end pt-3">
+                                        <button type="button" class="btn btn-outline-dark me-3"
+                                                data-bs-toggle="modal" data-bs-target="#cancelEdit" data-mdb-ripple-color="dark" style="z-index: 1;">
+                                            Cancel edit
+                                        </button>
+                                        <button type="button" class="btn btn-secondary me-3"
+                                                data-bs-toggle="modal" data-bs-target="#reverseChanges" data-mdb-ripple-color="dark" style="z-index: 1;">
+                                            Reverse Changes
+                                        </button>
+                                        <button type="button" class="btn btn-danger"
+                                                data-bs-toggle="modal" data-bs-target="#saveChanges" data-mdb-ripple-color="dark" style="z-index: 1;">
+                                            Save form
+                                        </button>
+
+
+                                        <!-- Modals -->
+                                        <div class="modal fade" id="cancelEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Cancel edit</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Do you want to cancel the edit and return to your profile?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a role="button" th:href="@{/profile}" class="btn btn-danger">Yes</a>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" id="saveChanges" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Save changes</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Do you really want to save the changes you made?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" id="reverseChanges" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Reverse changes</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Do you really want to reverse the changes and keep editing your profile?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a role="button" th:href="@{/profile/edit}" class="btn btn-danger">Yes</a>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
                                 <p class="font-italic mb-1"></p>
                                 <p class="font-italic mb-0"></p>
                             </div>

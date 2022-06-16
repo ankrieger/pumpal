@@ -28,23 +28,25 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     @Transactional
-    public List<Workout> getAllWorkoutsOfUser(User user) {
+    public List<Workout> getAllWorkoutsOfUserByVisibility(Visibility visibility, User user) {
         if (user != null) {
             //anders formulieren? ohne auf user repo zuzugreifen?
-            return userRepository.findById(user.getEmail()).get().getWorkouts();
+            //return userRepository.findById(user.getEmail()).get().getWorkouts();
+            return workoutRepository.findAllByAuthorAndVisibility(user, visibility);
         }
         return null;
     }
 
+
     @Override
-    public List<Workout> getAllWorkoutsVisible() {
-        return workoutRepository.findAllByVisibilityOrderByDateDesc(Visibility.PUBLIC);
+    public List<Workout> getAllWorkoutsVisible(Collection<Visibility> visibilities) {
+        return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities);
     }
 
     @Override
-    public Page<Workout> findWorkoutPage(int pageNumber) {
+    public Page<Workout> findWorkoutPage(Collection<Visibility> visibilities, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1,10);
-        return workoutRepository.findAllByVisibilityOrderByDateDesc(Visibility.PUBLIC, pageable);
+        return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities, pageable);
     }
 
 

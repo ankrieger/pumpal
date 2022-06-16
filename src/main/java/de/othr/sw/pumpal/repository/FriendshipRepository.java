@@ -17,9 +17,9 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     @Query("SELECT f FROM Friendship as f WHERE f.requestingUser.email IN :user AND f.requestedUser IN :user")
     Friendship getFriendshipOfUsers(@Param("user")Collection<String> users);
 
-    @Query("SELECT f.requestingUser FROM Friendship as f WHERE f.requestedUser.email LIKE %:email% AND f.isActive = TRUE")
-    List<User> getActiveFriendshipsIncoming(@Param("email") String email);
+    @Query("SELECT f.requestingUser FROM Friendship as f WHERE f.requestedUser.email LIKE %:email% AND f.isActive = :active")
+    List<User> getFriendshipsIncoming(@Param("email") String email, @Param("active") boolean active);
 
-    @Query("SELECT f.requestedUser FROM Friendship as f WHERE f.requestingUser.email LIKE %:email% AND f.isActive = TRUE")
-    List<User> getActiveFriendshipsOutgoing(@Param("email") String email);
+    @Query("SELECT f.requestedUser FROM Friendship as f WHERE f.requestingUser.email LIKE %:email% AND f.isActive = :active")
+    List<User> getFriendshipsOutgoing(@Param("email") String email, @Param("active") boolean active);
 }

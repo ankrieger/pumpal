@@ -59,7 +59,6 @@ public class StartController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST) // th:action="@{/register}"
     public String doRegister(@Valid User user, BindingResult result) {
-        System.out.println(user);
         if (result.hasErrors()) {
             return "redirect:registration?error";
         }

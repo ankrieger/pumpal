@@ -2,6 +2,7 @@ package de.othr.sw.pumpal.web;
 
 import de.othr.sw.pumpal.entity.Friendship;
 import de.othr.sw.pumpal.entity.User;
+import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.entity.Workout;
 import de.othr.sw.pumpal.service.FriendshipService;
 import de.othr.sw.pumpal.service.UserService;
@@ -12,9 +13,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/profile")
@@ -34,11 +38,23 @@ public class ProfileController {
                                Model model) {
         model.addAttribute("user", user);
 
-        List<Workout> workouts = workoutService.getAllWorkoutsOfUser(user);
+        //public workouts
+        List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
+        //private workouts
+        List<Workout> privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
+        // Incoming friend requests
+        List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
+        //Outgoing friend requests
+        List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
 
         model.addAttribute("workouts", workouts);
+        model.addAttribute("privworkouts", privateWorkouts);
         model.addAttribute("friends1", friends);
+        model.addAttribute("friendsIn", friendsIn);
+        model.addAttribute("friendsOut", friendsOut);
+
         return "profile";
     }
 
@@ -49,13 +65,26 @@ public class ProfileController {
         return "profile-edit";
     }
 
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public String doEditProfile(@AuthenticationPrincipal User user,
+                                @Valid User newUser,
+                                BindingResult result) {
+        if (result.hasErrors()) {
+            return "redirect:edit?error"; //error alert in profile-edit page
+        }
+
+        userService.updateUser(user, newUser);
+
+        return "redirect:/profile";
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String viewOtherProfile(@PathVariable("id") String id,
                                    Model model) {
         User user = userService.getUserByEmail(id);
         User user_auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (user.getEmail().equals(user_auth.getEmail())) {
-            return "redirect:";
+            return "redirect:/profile";
         }
 
 
@@ -83,7 +112,7 @@ public class ProfileController {
         model.addAttribute("user", user);
 
         List<User> friends1 = friendshipService.getAllFriendsOfUser(user);
-        List<Workout> workouts = workoutService.getAllWorkoutsOfUser(user);
+        List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
 
         model.addAttribute("friends1", friends1);
         model.addAttribute("workouts", workouts);

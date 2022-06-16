@@ -1,6 +1,7 @@
 package de.othr.sw.pumpal.service.impl;
 
 import de.othr.sw.pumpal.entity.AccountType;
+import de.othr.sw.pumpal.entity.Address;
 import de.othr.sw.pumpal.entity.User;
 import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.repository.UserRepository;
@@ -15,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -60,8 +63,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
-        return null;
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public User updateUser(User user, User newAttributes) {
+
+        user.setFirstName(newAttributes.getFirstName());
+        user.setName(newAttributes.getName());
+        user.setAddress(newAttributes.getAddress());
+        user.setDescription(newAttributes.getDescription());
+
+
+        return userRepository.save(user);
     }
 
     @Override

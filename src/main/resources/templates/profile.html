@@ -13,14 +13,17 @@
         <div class="col col-xl-10">
           <div class="card">
             <div class="rounded-top d-flex flex-row" style="background-color: #000; height:200px;">
+
+<!--                Image, Button and modal section-->
               <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
                      alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                      style="width: 150px; z-index: 1">
 
+
                 <!-- Display this if it's the authenticated user's page; maybe  -->
                 <!-- Go to profile/edit page  -->
-                <a th:if="${#httpServletRequest.requestURI == '/profile' || #httpServletRequest.requestURI == '/profile/'}" th:href="@{profile/edit}" role="button" class="btn btn-outline-dark"
+                <a th:if="${#httpServletRequest.requestURI == '/profile'}" th:href="@{profile/edit}" role="button" class="btn btn-outline-dark"
                         data-mdb-ripple-color="dark" style="z-index: 1;">
                         Edit profile
                 </a>
@@ -75,9 +78,9 @@
                               </div>
                               <div class="modal-footer">
                                   <form method="POST" th:action="@{/profile/{id}(id=${user.email})}">
-                                      <button type="submit" class="btn btn-secondary">Yes</button>
+                                      <button type="submit" class="btn btn-danger">Yes</button>
                                   </form>
-                                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                               </div>
                           </div>
                       </div>
@@ -96,9 +99,9 @@
                               </div>
                               <div class="modal-footer">
                                   <form method="POST" th:action="@{/profile/{id}(friendRequested=${friendRequested},id=${user.email})}">
-                                      <button type="submit" class="btn btn-secondary">Yes</button>
+                                      <button type="submit" class="btn btn-danger">Yes</button>
                                   </form>
-                                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                               </div>
                           </div>
                       </div>
@@ -117,12 +120,12 @@
                               </div>
                               <div class="modal-footer">
                                   <form method="POST" th:action="@{/profile/{id}(accept=${friendRequesting},id=${user.email})}">
-                                      <button type="submit" class="btn btn-secondary">Accept</button>
+                                      <button type="submit" class="btn btn-danger">Accept</button>
                                   </form>
                                   <form method="POST" th:action="@{/profile/{id}(deny=${friendRequesting},id=${user.email})}">
-                                      <button type="submit" class="btn btn-secondary">Deny</button>
+                                      <button type="submit" class="btn btn-light">Deny</button>
                                   </form>
-                                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Not now</button>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Not now</button>
                               </div>
                           </div>
                       </div>
@@ -142,9 +145,9 @@
                               </div>
                               <div class="modal-footer"> <!-- friedns should be true -> send as parameter-->
                                   <form method="POST" th:action="@{/profile/{id}(friends=${friends},id=${user.email})}">
-                                      <button type="submit" class="btn btn-secondary">Yes</button>
+                                      <button type="submit" class="btn btn-danger">Yes</button>
                                   </form>
-                                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                               </div>
                           </div>
                       </div>
@@ -152,6 +155,7 @@
 
 
               </div>
+
               <div class="ms-3 text-white" style="margin-top: 130px;">
                 <h5 th:text="${user.firstName + ' ' + user.name}"></h5>
                 <p th:text="${user.email}"></p>
@@ -188,21 +192,34 @@
               </div>
 
               <div class="d-flex justify-content-between align-items-center mb-4">
-                <p class="lead fw-normal mb-0">Recent photos</p>
-                <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
+                <p class="lead fw-normal mb-0">Workouts and Friends</p>
               </div>
 
+                <!-- Tab Section-->
               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
+                <!-- Public Information-->
+                  <li class="nav-item" role="presentation">
                   <button class="nav-link active" href="#workouts" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts</button>
-                </li>
-                <li class="nav-item" role="presentation">
+                  </li>
+
+                  <li class="nav-item" role="presentation">
                   <button class="nav-link" href="#friends" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friendsPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Friends</button>
-                </li>
-<!--                  maybe Private own workouts? Only visibile when /profile invoked;-->
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" href="#idk" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contactPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Idk</button>
-                </li>
+                  </li>
+
+                <!-- Private Section, Only visibile when /profile invoked;-->
+
+                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
+                  <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts</button>
+                  </li>
+
+                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
+                      <button class="nav-link" href="#requests-out" id="friends-out-tab" data-bs-toggle="tab" data-bs-target="#friendsOutPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Sent Friend Requests</button>
+                  </li>
+
+                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
+                      <button class="nav-link" href="#requests-in" id="firends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests</button>
+                  </li>
+
               </ul>
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="workoutsPanel" role="tabpanel" aria-labelledby="workout-tab">
@@ -211,6 +228,15 @@
                 <div class="tab-pane fade" id="friendsPanel" role="tabpanel" aria-labelledby="friends-tab">
                     <div th:replace="partials/user-table :: user_table(users=${friends1})"/>
                 </div>
+                  <div class="tab-pane fade" id="workoutPrivPanel" role="tabpanel" aria-labelledby="friends-tab">
+                      <div th:replace="partials/workout-table :: workout_table(workouts=${privworkouts})"/>
+                  </div>
+                  <div class="tab-pane fade" id="friendsOutPanel" role="tabpanel" aria-labelledby="friends-tab">
+                      <div th:replace="partials/user-table :: user_table(users=${friendsOut})"/>
+                  </div>
+                  <div class="tab-pane fade" id="friendsInPanel" role="tabpanel" aria-labelledby="friends-tab">
+                      <div th:replace="partials/user-table :: user_table(users=${friendsIn})"/>
+                  </div>
                 <div class="tab-pane fade" id="contactPanel" role="tabpanel" aria-labelledby="contact-tab">Here will be all saved workouts(?)</div>
               </div>
 
@@ -223,6 +249,7 @@
     </div>
   </section>
 
+<!--  URL and tab don't change when user is already on profile page but clickig on dropdown items-->
   <script>
       jQuery(document).ready(function ($) {
           let selectedTab = window.location.hash;

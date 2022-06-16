@@ -39,8 +39,8 @@
                                 Workouts
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="workoutDropdown">
-                                <li><a class="dropdown-item" th:href="@{/profile#workouts}">My workouts</a></li>
-                                <li><a class="dropdown-item" href="#">My friends' workouts</a></li>
+                                <li><a class="dropdown-item" th:href="@{/profile#workouts}">My public workouts</a></li>
+                                <li><a class="dropdown-item" th:href="@{/profile#workouts-priv}">My private workouts</a></li>
                                 <li><a class="dropdown-item" href="#">My saved workouts</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -58,8 +58,8 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="friendsDropdown">
                                 <li><a class="dropdown-item" th:href="@{/profile#friends}">My friends</a></li>  <!-- active friendships -->
-                                <li><a class="dropdown-item" href="#">New friend requests</a></li> <!-- incoming -->
-                                <li><a class="dropdown-item" href="#">Outstanding friend requests</a></li> <!-- outgoing -->
+                                <li><a class="dropdown-item" th:href="@{/profile#requests-in}">Incoming friend requests</a></li> <!-- incoming -->
+                                <li><a class="dropdown-item" th:href="@{/profile#requests-out}">Outstanding friend requests</a></li> <!-- outgoing -->
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

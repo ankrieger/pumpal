@@ -16,11 +16,13 @@ import java.util.List;
 @Repository
 public interface WorkoutRepository extends PagingAndSortingRepository<Workout, Long> {
 
+    List<Workout> findAllByAuthorAndVisibility(User user, Visibility visibility);
+
     List<Workout> findFirst5ByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities);
 
-    List<Workout> findAllByVisibilityOrderByDateDesc(Visibility visibility);
+    List<Workout> findAllByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities);
 
-    Page<Workout> findAllByVisibilityOrderByDateDesc(Visibility visibility, Pageable paging);
+    Page<Workout> findAllByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities, Pageable paging);
 
 
     //List<Workout> findAllByVisibilityInAndAuthorIn(Collection<Visibility> visibilities, Collection<User> users);
