@@ -38,7 +38,7 @@ public class ProfileController {
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
 
         model.addAttribute("workouts", workouts);
-        model.addAttribute("friends", friends);
+        model.addAttribute("friends1", friends);
         return "profile";
     }
 
@@ -58,7 +58,6 @@ public class ProfileController {
             return "redirect:";
         }
 
-        // get all friends of user
 
         // Check Friendship status for different HTML Elements, prepare attributes
         boolean friends, friendRequested, friendRequesting;
@@ -77,12 +76,16 @@ public class ProfileController {
         model.addAttribute("friendRequested", friendRequested);
         model.addAttribute("friendRequesting", friendRequesting);
 
+        System.out.println("friends = " + friends);
+        System.out.println("friendRequested = " + friendRequested);
+        System.out.println("friendRequesting = " + friendRequesting);
+
         model.addAttribute("user", user);
 
         List<User> friends1 = friendshipService.getAllFriendsOfUser(user);
         List<Workout> workouts = workoutService.getAllWorkoutsOfUser(user);
 
-        model.addAttribute("friends", friends1);
+        model.addAttribute("friends1", friends1);
         model.addAttribute("workouts", workouts);
         return "profile";
     }
@@ -96,6 +99,10 @@ public class ProfileController {
                             @RequestParam(required = false, value = "deny",defaultValue = "false") boolean deny,
                             @RequestParam(required = false, value = "accept",defaultValue = "false") boolean accept,
                             Model model) {
+
+        System.out.println("friends = " + friends);
+        System.out.println("friendRequested = " + friendRequested);
+        System.out.println("friendRequesting = " + friendRequesting);
 
         User user = userService.getUserByEmail(id);
         Friendship friendship;

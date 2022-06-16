@@ -20,7 +20,7 @@
 
                 <!-- Display this if it's the authenticated user's page; maybe  -->
                 <!-- Go to profile/edit page  -->
-                <a th:if="${#httpServletRequest.requestURI == '/profile'}" th:href="@{profile/edit}" role="button" class="btn btn-outline-dark"
+                <a th:if="${#httpServletRequest.requestURI == '/profile' || #httpServletRequest.requestURI == '/profile/'}" th:href="@{profile/edit}" role="button" class="btn btn-outline-dark"
                         data-mdb-ripple-color="dark" style="z-index: 1;">
                         Edit profile
                 </a>
@@ -29,35 +29,35 @@
 
                   <!--     static modal, ask if you want to send it: no->close the modal; yes->friendship create inactive+redirect to this same page         -->
                   <!--     th:unless="${#httpServletRequest.requestURI == '/profile'}"-->
-                  <button th:if="${friends == false &&
-                                friendRequested == false &&
-                                friendRequesting == false}" type="button" class="btn btn-outline-dark"
-                          data-bs-toggle="modal" data-bs-target="#sendFriendReq" data-mdb-ripple-color="dark" style="z-index: 1;">
-                      Send Friend Request
-                  </button>
+              <button th:if="${friends == false &&
+                            friendRequested == false &&
+                            friendRequesting == false}" type="button" class="btn btn-outline-dark"
+                            data-bs-toggle="modal" data-bs-target="#sendFriendReq" data-mdb-ripple-color="dark" style="z-index: 1;">
+                  Send Friend Request
+              </button>
 
 
-                  <button th:if="${friends == false &&
-                                friendRequested == true &&
-                                friendRequesting == false}" type="button" class="btn btn-outline-dark"
-                          data-bs-toggle="modal" data-bs-target="#requestedFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
-                      Pending Friend Request
-                  </button>
+              <button th:if="${friends == false &&
+                            friendRequested == true &&
+                            friendRequesting == false}" type="button" class="btn btn-outline-dark"
+                            data-bs-toggle="modal" data-bs-target="#requestedFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
+                  Pending Friend Request
+              </button>
 
-                  <button th:if="${friends == false &&
-                                friendRequested == false &&
-                                friendRequesting == true}" type="button" class="btn btn-outline-dark"
-                          data-bs-toggle="modal" data-bs-target="#requestingFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
-                      Accept/Deny Friend Request
-                  </button>
+              <button th:if="${friends == false &&
+                            friendRequested == false &&
+                            friendRequesting == true}" type="button" class="btn btn-outline-dark"
+                            data-bs-toggle="modal" data-bs-target="#requestingFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
+                  Accept/Deny Friend Request
+              </button>
 
 
-                  <button th:if="${friends == true &&
-                                friendRequested == false &&
-                                friendRequesting == false}" type="button" class="btn btn-outline-dark"
-                          data-bs-toggle="modal" data-bs-target="#removeFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
-                      Remove Friend
-                  </button>
+              <button th:if="${friends == true &&
+                            friendRequested == false &&
+                            friendRequesting == false}" type="button" class="btn btn-outline-dark"
+                            data-bs-toggle="modal" data-bs-target="#removeFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
+                  Remove Friend
+              </button>
 
 
 
@@ -174,6 +174,8 @@
 <!--                </div>-->
               </div>
             </div>
+
+
             <div class="card-body p-4 text-black">
               <div class="mb-5">
 <!--                <p class="lead fw-normal mb-1">About me</p>-->
@@ -207,7 +209,7 @@
                   <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
                 </div>
                 <div class="tab-pane fade" id="friendsPanel" role="tabpanel" aria-labelledby="friends-tab">
-                    <div th:replace="partials/user-table :: user_table(users=${friends})"/>
+                    <div th:replace="partials/user-table :: user_table(users=${friends1})"/>
                 </div>
                 <div class="tab-pane fade" id="contactPanel" role="tabpanel" aria-labelledby="contact-tab">Here will be all saved workouts(?)</div>
               </div>

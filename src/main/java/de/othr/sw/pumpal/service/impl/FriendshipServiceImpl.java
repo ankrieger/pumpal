@@ -87,4 +87,6 @@ public class FriendshipServiceImpl implements FriendshipService {
         users.add(requested.getEmail());
         return friendshipRepository.getFriendshipOfUsers(users);
     }
+
+
 }

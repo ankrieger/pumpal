@@ -2,6 +2,7 @@ package de.othr.sw.pumpal.repository;
 
 import de.othr.sw.pumpal.entity.Friendship;
 import de.othr.sw.pumpal.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface FriendshipRepository extends PagingAndSortingRepository<Friendship, Long> {
+public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     @Query("SELECT f FROM Friendship as f WHERE f.requestingUser.email IN :user AND f.requestedUser IN :user")
     Friendship getFriendshipOfUsers(@Param("user")Collection<String> users);
