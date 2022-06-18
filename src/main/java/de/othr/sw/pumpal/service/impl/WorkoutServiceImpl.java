@@ -60,9 +60,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<Workout> getNewestWorkouts(Collection<Visibility> visibilities) {
-        //check if user is loggedin and has friends
-        //if yes: display from public and friends workouts
-        //else only from public workouts
+        //only public workouts in this section
         return workoutRepository.findFirst5ByVisibilityInOrderByDateDesc(visibilities);
     }
 

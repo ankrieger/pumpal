@@ -165,11 +165,11 @@
             <div class="p-4 text-black" style="background-color: #f8f9fa;">
               <div class="d-flex justify-content-end text-center py-1">
                 <div>
-                  <p class="mb-1 h5">253</p>
+                  <p class="mb-1 h5" th:text="${amountOfWorkouts} ?: '0'"></p>
                   <p class="small text-muted mb-0">Workouts</p>
                 </div>
                 <div class="px-3">
-                  <p class="mb-1 h5">1026</p>
+                  <p class="mb-1 h5" th:text="${amountOfFriends} ?: '0'"></p>
                   <p class="small text-muted mb-0">Friends</p>
                 </div>
 <!--                <div>-->
@@ -185,7 +185,7 @@
 <!--                <p class="lead fw-normal mb-1">About me</p>-->
                 <div class="p-4" style="background-color: #f8f9fa;">
                   <p class="font-italic mb-1" th:if="${#strings.isEmpty(user.description)}">There is no description.</p>
-                  <p class="font-italic mb-1" th:unless="${#strings.isEmpty(user.description)}"></p>
+                  <p class="font-italic mb-1" th:unless="${#strings.isEmpty(user.description)}" th:text="${user.description}"></p>
                   <p class="font-italic mb-1"></p>
                   <p class="font-italic mb-0"></p>
                 </div>
@@ -208,7 +208,7 @@
 
                 <!-- Private Section, Only visibile when /profile invoked;-->
 
-                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
+                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friends}">
                   <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts</button>
                   </li>
 
@@ -217,9 +217,8 @@
                   </li>
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
-                      <button class="nav-link" href="#requests-in" id="firends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests</button>
+                      <button class="nav-link" href="#requests-in" id="friends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests</button>
                   </li>
-
               </ul>
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="workoutsPanel" role="tabpanel" aria-labelledby="workout-tab">
@@ -229,7 +228,7 @@
                     <div th:replace="partials/user-table :: user_table(users=${friends1})"/>
                 </div>
                   <div class="tab-pane fade" id="workoutPrivPanel" role="tabpanel" aria-labelledby="friends-tab">
-                      <div th:replace="partials/workout-table :: workout_table(workouts=${privworkouts})"/>
+                      <div th:replace="partials/workout-table :: workout_table(workouts=${privWorkouts})"/>
                   </div>
                   <div class="tab-pane fade" id="friendsOutPanel" role="tabpanel" aria-labelledby="friends-tab">
                       <div th:replace="partials/user-table :: user_table(users=${friendsOut})"/>

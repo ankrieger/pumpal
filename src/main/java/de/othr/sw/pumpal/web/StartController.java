@@ -4,6 +4,9 @@ import de.othr.sw.pumpal.entity.AccountType;
 import de.othr.sw.pumpal.entity.User;
 import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.entity.Workout;
+import de.othr.sw.pumpal.entity.dto.Friend;
+import de.othr.sw.pumpal.entity.dto.WorkoutDto;
+import de.othr.sw.pumpal.service.TestService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +29,26 @@ public class StartController {
     private UserService userService;
 
     @Autowired
+    private TestService testService;
+
+    @Autowired
     private WorkoutService workoutService;
 
     @RequestMapping(value = {"/", "/index"})
     public String start(Model model) {
         List<Visibility> visibilities = new ArrayList<>();
-        //check visibility if user is logged in -> TODO wenn Security implementiert
+        //TODO: check if admin or regular user -> if admin: add Visibility.PRIVATE as well!
         visibilities.add(Visibility.PUBLIC);
+        //wenn noch zeit: TODO: add display of friends' private workouts?
         model.addAttribute("workouts", workoutService.getNewestWorkouts(visibilities));
+
+
+        // Testing REST Functionality
+        WorkoutDto workoutDto = testService.getWorkoutById((long)111);
+        model.addAttribute("workoutDTO", workoutDto);
+
+        List<Friend> friendsRest = testService.getFriendsOfUserRest("testo@othr.de");
+        model.addAttribute("friendsDto", friendsRest);
 
         return "index";
     }

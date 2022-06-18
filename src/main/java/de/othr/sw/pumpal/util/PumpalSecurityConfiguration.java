@@ -26,7 +26,7 @@ public class PumpalSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return securityUtilities.passwordEncoder();
     }
     private static final String[] ALLOW_ACCESS_WITHOUT_AUTHENTICATION = {
-            "/css/**", "/images/**", "/js/**", "/", "/login", "/registration" };
+            "/css/**", "/images/**", "/js/**", "/", "/login", "/registration", "/restapi/**" };
 
 
     @Override

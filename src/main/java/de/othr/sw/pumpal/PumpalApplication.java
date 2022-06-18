@@ -1,6 +1,7 @@
 package de.othr.sw.pumpal;
 
 import de.othr.sw.pumpal.entity.*;
+import de.othr.sw.pumpal.entity.dto.Friend;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,18 +43,23 @@ public class ProfileController {
         List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
         //private workouts
         List<Workout> privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+        Integer amountOfWorkouts = workouts.size() + privateWorkouts.size();
+
 
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
+        Integer amountOfFriends = friends.size();
         // Incoming friend requests
         List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
         //Outgoing friend requests
         List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
 
         model.addAttribute("workouts", workouts);
-        model.addAttribute("privworkouts", privateWorkouts);
+        model.addAttribute("privWorkouts", privateWorkouts);
         model.addAttribute("friends1", friends);
         model.addAttribute("friendsIn", friendsIn);
         model.addAttribute("friendsOut", friendsOut);
+        model.addAttribute("amountOfFriends", amountOfFriends);
+        model.addAttribute("amountOfWorkouts", amountOfWorkouts);
 
         return "profile";
     }
@@ -105,17 +111,29 @@ public class ProfileController {
         model.addAttribute("friendRequested", friendRequested);
         model.addAttribute("friendRequesting", friendRequesting);
 
-        System.out.println("friends = " + friends);
-        System.out.println("friendRequested = " + friendRequested);
-        System.out.println("friendRequesting = " + friendRequesting);
+//        System.out.println("GET OTHER USER: friends = " + friends);
+//        System.out.println("friendRequested = " + friendRequested);
+//        System.out.println("friendRequesting = " + friendRequesting);
 
         model.addAttribute("user", user);
 
+        List<Workout> privateWorkouts = new ArrayList<>();
+        if (friends) {
+            privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+        }
         List<User> friends1 = friendshipService.getAllFriendsOfUser(user);
+        Integer amountOfFriends = friends1.size();
         List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
+
+        //display total amount of workouts even if logged in user cannot see all the workouts
+        Integer amountOfWorkouts = workouts.size() + privateWorkouts.size();
 
         model.addAttribute("friends1", friends1);
         model.addAttribute("workouts", workouts);
+        model.addAttribute("privWorkouts", privateWorkouts);
+        model.addAttribute("amountOfFriends", amountOfFriends);
+        model.addAttribute("amountOfWorkouts", amountOfWorkouts);
+
         return "profile";
     }
 
@@ -129,9 +147,9 @@ public class ProfileController {
                             @RequestParam(required = false, value = "accept",defaultValue = "false") boolean accept,
                             Model model) {
 
-        System.out.println("friends = " + friends);
-        System.out.println("friendRequested = " + friendRequested);
-        System.out.println("friendRequesting = " + friendRequesting);
+//        System.out.println("friends = " + friends);
+//        System.out.println("friendRequested = " + friendRequested);
+//        System.out.println("friendRequesting = " + friendRequesting);
 
         User user = userService.getUserByEmail(id);
         Friendship friendship;
