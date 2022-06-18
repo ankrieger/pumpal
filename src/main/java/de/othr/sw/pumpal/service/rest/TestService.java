@@ -1,4 +1,4 @@
-package de.othr.sw.pumpal.service;
+package de.othr.sw.pumpal.service.rest;
 
 import de.othr.sw.pumpal.entity.dto.Friend;
 import de.othr.sw.pumpal.entity.dto.WorkoutDto;

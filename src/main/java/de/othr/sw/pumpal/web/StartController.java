@@ -1,12 +1,10 @@
 package de.othr.sw.pumpal.web;
 
-import de.othr.sw.pumpal.entity.AccountType;
 import de.othr.sw.pumpal.entity.User;
 import de.othr.sw.pumpal.entity.Visibility;
-import de.othr.sw.pumpal.entity.Workout;
 import de.othr.sw.pumpal.entity.dto.Friend;
 import de.othr.sw.pumpal.entity.dto.WorkoutDto;
-import de.othr.sw.pumpal.service.TestService;
+import de.othr.sw.pumpal.service.rest.TestService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 

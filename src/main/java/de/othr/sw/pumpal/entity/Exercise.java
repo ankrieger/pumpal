@@ -13,7 +13,7 @@ public class Exercise extends SingleIdEntity<Long> {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id", name="workout_id", nullable = false)
+    @JoinColumn(referencedColumnName = "id", name="workout_id")
     private Workout workout;
 
     @Column(nullable = false)
@@ -30,11 +30,9 @@ public class Exercise extends SingleIdEntity<Long> {
 
 
     public Exercise() {
-
     }
 
-    public Exercise(Long id, Workout workout, String description) {
-        this.id = id;
+    public Exercise(Workout workout, String description) {
         this.workout = workout;
         this.description = description;
     }
@@ -46,6 +44,62 @@ public class Exercise extends SingleIdEntity<Long> {
         this.sets = sets;
         this.reps = reps;
         this.weight = weight;
+        this.note = note;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Workout getWorkout() {
+        return workout;
+    }
+
+    public void setWorkout(Workout workout) {
+        this.workout = workout;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getSets() {
+        return sets;
+    }
+
+    public void setSets(int sets) {
+        this.sets = sets;
+    }
+
+    public int getReps() {
+        return reps;
+    }
+
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
         this.note = note;
     }
 

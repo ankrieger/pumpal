@@ -5,6 +5,7 @@ import de.othr.sw.pumpal.entity.Exercise;
 import de.othr.sw.pumpal.entity.User;
 import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.entity.Workout;
+import de.othr.sw.pumpal.service.ExerciseService;
 import de.othr.sw.pumpal.service.FriendshipService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
@@ -34,17 +35,12 @@ public class WorkoutController {
     @Autowired
     private WorkoutService workoutService;
 
+    @Autowired
+    private ExerciseService exerciseService;
+
 //    @Autowired
 //    private FriendshipService friendshipService;
 
-//    @RequestMapping(value = "", method = RequestMethod.GET)
-//    public String viewWorkouts(Model model) {
-//        // get all friends of user
-//        // get all public workouts, own workouts, and friends workouts
-//        List<Workout> workouts = workoutService.getAllWorkoutsVisible();
-//        model.addAttribute("workouts", workouts);
-//        return "workouts";
-//    }
 
     // erstmaliges Laden
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -83,8 +79,15 @@ public class WorkoutController {
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createNewWorkout(Model model) {
-        model.addAttribute("workout", new Workout()); //TODO: Vorbelegung probieren mit visibility!
-       // model.addAttribute("exercises", new ArrayList<Exercise>());
+        Workout workout = new Workout();
+        Exercise exercise = new Exercise(workout, "Example exercise description");
+
+        List<Exercise> exercises = new ArrayList<>();
+        exercises.add(exercise);
+
+        workout.setExercises(exercises);
+        model.addAttribute("workout", workout); //TODO: Vorbelegung probieren mit visibility!
+
         return "create-workout";
     }
 
@@ -105,6 +108,7 @@ public class WorkoutController {
                                    @RequestParam(required = false, value = "error",defaultValue = "false") boolean error,
                                    Model model) {
         System.out.println(workout);
+        System.out.println(workout.getExercises());
         if (result.hasErrors()) {
             return "redirect:/workout/create?error";
         }

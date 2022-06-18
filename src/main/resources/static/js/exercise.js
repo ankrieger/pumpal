@@ -6,29 +6,30 @@ $(document).ready(function () {
     $('.add-exercise').click(function () {
 
         if (index < max_fields) {
-            let newRow = jQuery('<div class="exercise row">' +
+            let newRow = jQuery('<div class="exercise row mb-5">' +
+                '<h5>Exercise <span name="' + index + '"></span></h5>' +
                 ' <div class="mb-3">' +
-                ' Name' +
-                ' <input name="exercises[' + index + '].name" type="text" class="form-control form-control-lg"/>' +
+                ' Exercise name:' +
+                ' <input name="exercises[' + index + '].name" type="text" class="form-control form-control"/>' +
                 ' </div>' +
                 ' <div class="mb-3">' +
-                '  Weight' +
+                '  Weight(in kg):' +
                 ' <input name="exercises[' + index + '].weight" type="number" step="1" min="0"' +
-                ' class="form-control form-control-lg"/>' +
+                ' class="form-control form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +
-                '  Sets' +
+                '  Reps:' +
                 ' <input name="exercises[' + index + '].sets" type="number" step="1" min="0"' +
-                ' class="form-control form-control-lg"/>' +
+                ' class="form-control form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +
-                '  Reps' +
+                '  Sets:' +
                 ' <input name="exercises[' + index + '].reps" type="number" step="1" min="0"' +
-                ' class="form-control form-control-lg"/>' +
+                ' class="form-control form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +
-                ' Note' +
-                ' <input name="exercises[' + index + '].note" type="text" class="form-control form-control-lg"/>' +
+                ' Additional note:' +
+                ' <input name="exercises[' + index + '].note" type="text" class="form-control form-control"/>' +
                 ' </div>'+
                 '</div>');
 
