@@ -4,19 +4,19 @@ import de.othr.sw.pumpal.entity.util.SingleIdEntity;
 
 import javax.persistence.*;
 
-@Entity
-public class Exercise extends SingleIdEntity<Long> {
+@Embeddable
+public class Exercise /*extends SingleIdEntity<Long>*/ {
     //abschauen, wie so eine liste wo man Sachen dazu addiert und entfernen kann bei Erstellung/Bearbeitung
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "id", nullable = false)
+    private int id;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id", name="workout_id")
-    private Workout workout;
+//    @ManyToOne
+//    @JoinColumn(referencedColumnName = "id", name="workout_id")
+//    private Workout workout;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String description;
 
     private int sets;
@@ -31,15 +31,13 @@ public class Exercise extends SingleIdEntity<Long> {
 
     public Exercise() {
     }
-
-    public Exercise(Workout workout, String description) {
-        this.workout = workout;
-        this.description = description;
-    }
-
-    public Exercise(Long id, Workout workout, String description, int sets, int reps, int weight, String note) {
-        this.id = id;
-        this.workout = workout;
+//
+//    public Exercise(Workout workout, String description) {
+//        this.workout = workout;
+//        this.description = description;
+//    }
+//
+    public Exercise(String description, int sets, int reps, int weight, String note) {
         this.description = description;
         this.sets = sets;
         this.reps = reps;
@@ -47,21 +45,21 @@ public class Exercise extends SingleIdEntity<Long> {
         this.note = note;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Workout getWorkout() {
-        return workout;
-    }
-
-    public void setWorkout(Workout workout) {
-        this.workout = workout;
-    }
+//    public Workout getWorkout() {
+//        return workout;
+//    }
+//
+//    public void setWorkout(Workout workout) {
+//        this.workout = workout;
+//    }
 
     public String getDescription() {
         return description;
@@ -107,7 +105,7 @@ public class Exercise extends SingleIdEntity<Long> {
     public String toString() {
         return "Exercise{" +
                 "id=" + id +
-                ", workout=" + workout +
+//                ", workout=" + workout +
                 ", description='" + description + '\'' +
                 ", sets=" + sets +
                 ", reps=" + reps +
@@ -116,8 +114,8 @@ public class Exercise extends SingleIdEntity<Long> {
                 '}';
     }
 
-    @Override
-    public Long getID() {
-        return this.id;
-    }
+//    @Override
+//    public Long getID() {
+//        return this.id;
+//    }
 }

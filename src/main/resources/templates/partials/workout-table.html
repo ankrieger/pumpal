@@ -27,7 +27,7 @@
                     <th scope="row"><a th:href="@{/workout/{id}/details(id = ${workout.id})}"
                                        th:text="${#strings.abbreviate(workout.title,30)}"></a></th>
                     <td><label th:text="${#strings.abbreviate(workout.description,45)}"></label></td>
-                    <td><!--<label th:text="${#lists.size(workout.exercises)} ?: '0'"></label>-->0</td> <!--get Number of Exercises-->
+                    <td><label th:text="${#lists.size(workout.exercises)} ?: '0'"></label></td> <!--get Number of Exercises-->
                     <td><label th:text="${workout.level} ?: '-'"></label></td>
                     <td><a th:href="@{/profile/{id}(id = ${workout.author.email})}"
                             th:text="${#strings.abbreviate(workout.author.email,30)}"></a></td>

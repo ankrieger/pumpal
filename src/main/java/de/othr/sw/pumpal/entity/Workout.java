@@ -35,7 +35,9 @@ public class Workout extends SingleIdEntity<Long> {
     private Visibility visibility;
 
 
-    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @AttributeOverride(name = "description", column = @Column(name = "exercise_description"))
+    @AttributeOverride(name = "id", column = @Column(name = "exercise_id"))
     private List<Exercise> exercises;
 
     private String tagString;
@@ -141,7 +143,6 @@ public class Workout extends SingleIdEntity<Long> {
     }
 
     public List<Exercise> getExercises() {
-//        return Collections.unmodifiableList(exercises);
         return exercises;
     }
 

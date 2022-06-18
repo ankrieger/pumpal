@@ -64,6 +64,32 @@
                                 </div>
 
                                 <!-- TODO: Add Exercises (extra form?) -->
+
+                                <h4>Exercises</h4>
+
+                                <table class="table table-striped table-hover mt-4">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Number</th>          <!-- truncate !-->
+                                        <th scope="col">Description</th>    <!-- truncate !-->
+                                        <th scope="col">Weight(in kg)</th>
+                                        <th scope="col">Reps</th>
+                                        <th scope="col">Sets</th>         <!-- truncate !-->
+                                        <th scope="col">Note</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="exercise : ${workout.exercises}">  <!-- auch mal ohne label probieren; th in td einbetten -->
+                                        <th scope="row"><label th:text="${exercise.id}"></label></th>
+                                        <td><label th:text="${exercise.description}"></label></td>
+                                        <td><label th:text="${exercise.weight} ?: '-'"></label></td>
+                                        <td><label th:text="${exercise.reps} ?: '-'"></label></td>
+                                        <td><label th:text="${exercise.sets}"></label></td>
+                                        <td><label th:text="${exercise.note}"></label></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
                             </div>
                         </div>
 

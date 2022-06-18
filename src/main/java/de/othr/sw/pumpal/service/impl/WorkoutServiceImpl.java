@@ -91,6 +91,12 @@ public class WorkoutServiceImpl implements WorkoutService {
     public Workout saveWorkout(Workout workout, User user) {
         workout.setAuthor(user);
         workout.setDate(Timestamp.valueOf(LocalDateTime.now()));
+
+        //sort the exercises and give them an id!!!
+        int index =  1;
+        for (Exercise exercise : workout.getExercises()) {
+            exercise.setId(index++);
+        }
         return workoutRepository.save(workout);
     }
 

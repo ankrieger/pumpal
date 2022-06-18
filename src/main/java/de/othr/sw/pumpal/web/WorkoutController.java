@@ -5,8 +5,6 @@ import de.othr.sw.pumpal.entity.Exercise;
 import de.othr.sw.pumpal.entity.User;
 import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.entity.Workout;
-import de.othr.sw.pumpal.service.ExerciseService;
-import de.othr.sw.pumpal.service.FriendshipService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,8 +32,8 @@ public class WorkoutController {
     @Autowired
     private WorkoutService workoutService;
 
-    @Autowired
-    private ExerciseService exerciseService;
+//    @Autowired
+//    private ExerciseService exerciseService;
 
 //    @Autowired
 //    private FriendshipService friendshipService;
@@ -80,7 +77,7 @@ public class WorkoutController {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createNewWorkout(Model model) {
         Workout workout = new Workout();
-        Exercise exercise = new Exercise(workout, "Example exercise description");
+        Exercise exercise = new Exercise("Example exercise description", 3, 10, 15, "Example note");
 
         List<Exercise> exercises = new ArrayList<>();
         exercises.add(exercise);
@@ -90,13 +87,6 @@ public class WorkoutController {
 
         return "create-workout";
     }
-
-//      Trying to dynamically add exercises
-//    @RequestMapping(value = "/create", params = {"addExercise"}, method = RequestMethod.GET)
-//    public String addExercise(@ModelAttribute("workout") Workout workout, BindingResult result) {
-//        workout.getExercises().add(new Exercise());
-//        return "create-workout";
-//    }
 
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
