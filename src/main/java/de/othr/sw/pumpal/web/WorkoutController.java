@@ -83,6 +83,7 @@ public class WorkoutController {
         exercises.add(exercise);
 
         workout.setExercises(exercises);
+        workout.setVisibility(Visibility.PUBLIC);
         model.addAttribute("workout", workout); //TODO: Vorbelegung probieren mit visibility!
 
         return "create-workout";

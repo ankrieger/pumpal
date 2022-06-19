@@ -12,14 +12,14 @@
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-xl-10">
           <div class="card">
-            <div class="rounded-top d-flex flex-row" style="background-color: #000; height:200px;">
+<!--              rgba(42,23,76,0.3) hellgrau-->
+            <div class="rounded-top d-flex flex-row" style="background-color: rgb(184,13,41); height:200px;">
 
 <!--                Image, Button and modal section-->
               <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                     alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                <img src="../../static/images/undraw_male_avatar_323b.svg" th:src="@{images/undraw_male_avatar_323b.svg}"
+                     alt="Generic placeholder image" class="rounded-circle img-fluid img-thumbnail mt-4 mb-2"
                      style="width: 150px; z-index: 1">
-
 
                 <!-- Display this if it's the authenticated user's page; maybe  -->
                 <!-- Go to profile/edit page  -->
@@ -165,17 +165,13 @@
             <div class="p-4 text-black" style="background-color: #f8f9fa;">
               <div class="d-flex justify-content-end text-center py-1">
                 <div>
-                  <p class="mb-1 h5" th:text="${amountOfWorkouts} ?: '0'"></p>
+                  <p class="mb-1 h5" th:text="${workouts.size() + privWorkouts.size()} ?: '0'"></p>
                   <p class="small text-muted mb-0">Workouts</p>
                 </div>
                 <div class="px-3">
-                  <p class="mb-1 h5" th:text="${amountOfFriends} ?: '0'"></p>
+                  <p class="mb-1 h5" th:text="${friends1.size()} ?: '0'"></p>
                   <p class="small text-muted mb-0">Friends</p>
                 </div>
-<!--                <div>-->
-<!--                  <p class="mb-1 h5">478</p>-->
-<!--                  <p class="small text-muted mb-0">Following</p>          saved workouts?-->
-<!--                </div>-->
               </div>
             </div>
 
@@ -220,7 +216,7 @@
                       <button class="nav-link" href="#requests-in" id="friends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests</button>
                   </li>
               </ul>
-              <div class="tab-content" id="myTabContent">
+              <div class="tab-content mt-3" id="myTabContent">
                 <div class="tab-pane fade show active" id="workoutsPanel" role="tabpanel" aria-labelledby="workout-tab">
                   <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
                 </div>

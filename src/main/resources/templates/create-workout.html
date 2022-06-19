@@ -20,7 +20,7 @@
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                 </svg>
                 You have successfully created this new workout. Click
-                <a th:href="@{/workout/{id}/details(id = ${newworkout.id})}"> here </a> to view your new workout's details or create another one!
+                <a th:href="@{/workout/{id}/details(id = ${newworkout.id})}"> here </a> to view your new workout's details or stay and create another one!
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
@@ -41,11 +41,6 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col">
                     <div class="row">
-
-                        <div class="col-xl-3 pt-5 mt-5">
-                            <img src="../../images/undraw_handcrafts_options.svg" class="img-fluid">
-                        </div>
-
                         <div class="col-xl-6 px-0">
                             <div class="p-md-5">
                                 <h3 class="mb-5">Create a new workout</h3>
@@ -98,6 +93,7 @@
                                                     Private
                                                 </label>
                                             </div>
+                                            <label class="text-secondary">Public workouts are visible to all registered users; private ones only to you and your friends!</label>
                                         </div>
                                     </fieldset>
 
@@ -106,12 +102,14 @@
 
                                         <h4 class="py-4 mt-3">Exercises</h4>
 
+                                        <label class="pb-4">Add at least one exercise to your workout:</label>
+
                                         <div class="exercises" th:each="exercise,iterStat : ${workout.exercises}">
                                             <div class="exercise row mb-5">
                                                 <h5>Exercise 1</h5>
 
                                                 <div class="mb-3">
-                                                    Exercise name
+                                                    Exercise description*:
                                                     <input  th:field="${workout.exercises[__${iterStat.index}__].description}" id="exercise" class="form-control form-control" />
                                                 </div>
 
@@ -163,8 +161,8 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-3 pt-5 mt-5">
-                            <img src="../../images/undraw_healthy_habit_bh-5-w.svg"  class="img-fluid">
+                        <div class="col-xl-6 pt-5 mt-5" style="text-align: center;">
+                            <img src="../../images/undraw_healthy_habit_bh-5-w.svg"  class="w-75 img-fluid">
                         </div>
 
                     </div>

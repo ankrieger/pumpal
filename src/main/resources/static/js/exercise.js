@@ -9,7 +9,7 @@ $(document).ready(function () {
             let newRow = jQuery('<div class="exercise row mb-5">' +
                 ' <h5>Exercise <span name="' + index + '"></span></h5>' +
                 ' <div class="mb-3">' +
-                ' Exercise name:' +
+                ' Exercise description*:' +
                 ' <input name="exercises[' + index + '].description" type="text" class="form-control form-control"/>' +
                 ' </div>' +
                 ' <div class="mb-3">' +

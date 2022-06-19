@@ -34,6 +34,8 @@ public class ProfileController {
     @Autowired
     private FriendshipService friendshipService;
 
+//    TODO: outsource get friendship/workout/size of those into separate functions for better readability
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String viewProfile(@AuthenticationPrincipal User user,
                                Model model) {
@@ -43,23 +45,21 @@ public class ProfileController {
         List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
         //private workouts
         List<Workout> privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
-        Integer amountOfWorkouts = workouts.size() + privateWorkouts.size();
 
 
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
-        Integer amountOfFriends = friends.size();
         // Incoming friend requests
         List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
         //Outgoing friend requests
         List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
+
 
         model.addAttribute("workouts", workouts);
         model.addAttribute("privWorkouts", privateWorkouts);
         model.addAttribute("friends1", friends);
         model.addAttribute("friendsIn", friendsIn);
         model.addAttribute("friendsOut", friendsOut);
-        model.addAttribute("amountOfFriends", amountOfFriends);
-        model.addAttribute("amountOfWorkouts", amountOfWorkouts);
+
 
         return "profile";
     }
@@ -67,6 +67,7 @@ public class ProfileController {
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editProfile(@AuthenticationPrincipal User user,
                               Model model) {
+
         model.addAttribute("user", user);
         return "profile-edit";
     }
@@ -76,13 +77,15 @@ public class ProfileController {
                                 @Valid User newUser,
                                 BindingResult result) {
         if (result.hasErrors()) {
-            return "redirect:edit?error"; //error alert in profile-edit page
+            return "redirect:edit?error"; //TODO:error alert in profile-edit page
         }
 
         userService.updateUser(user, newUser);
 
         return "redirect:/profile";
     }
+
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String viewOtherProfile(@PathVariable("id") String id,
@@ -92,7 +95,6 @@ public class ProfileController {
         if (user.getEmail().equals(user_auth.getEmail())) {
             return "redirect:/profile";
         }
-
 
         // Check Friendship status for different HTML Elements, prepare attributes
         boolean friends, friendRequested, friendRequesting;
@@ -107,14 +109,14 @@ public class ProfileController {
             default: // none -> no friendship yet
         }
 
+        //bessere Lösung wäre es, ein attribut status zu benutzen und entsprechend string values
+        //zu benutzen, um weniger modelAttributes zu haben (z.B. status=friends, status=none, status=requested,...)
+        //zu spät zum umimplementieren aufgefallen
+
+
         model.addAttribute("friends", friends);
         model.addAttribute("friendRequested", friendRequested);
         model.addAttribute("friendRequesting", friendRequesting);
-
-//        System.out.println("GET OTHER USER: friends = " + friends);
-//        System.out.println("friendRequested = " + friendRequested);
-//        System.out.println("friendRequesting = " + friendRequesting);
-
         model.addAttribute("user", user);
 
         List<Workout> privateWorkouts = new ArrayList<>();
@@ -122,17 +124,13 @@ public class ProfileController {
             privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
         }
         List<User> friends1 = friendshipService.getAllFriendsOfUser(user);
-        Integer amountOfFriends = friends1.size();
         List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
 
         //display total amount of workouts even if logged in user cannot see all the workouts
-        Integer amountOfWorkouts = workouts.size() + privateWorkouts.size();
 
         model.addAttribute("friends1", friends1);
         model.addAttribute("workouts", workouts);
         model.addAttribute("privWorkouts", privateWorkouts);
-        model.addAttribute("amountOfFriends", amountOfFriends);
-        model.addAttribute("amountOfWorkouts", amountOfWorkouts);
 
         return "profile";
     }
@@ -147,9 +145,6 @@ public class ProfileController {
                             @RequestParam(required = false, value = "accept",defaultValue = "false") boolean accept,
                             Model model) {
 
-//        System.out.println("friends = " + friends);
-//        System.out.println("friendRequested = " + friendRequested);
-//        System.out.println("friendRequesting = " + friendRequesting);
 
         User user = userService.getUserByEmail(id);
         Friendship friendship;
