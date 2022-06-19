@@ -56,7 +56,7 @@ public class ProfileController {
 
         model.addAttribute("workouts", workouts);
         model.addAttribute("privWorkouts", privateWorkouts);
-        model.addAttribute("friends1", friends);
+        model.addAttribute("friends", friends);
         model.addAttribute("friendsIn", friendsIn);
         model.addAttribute("friendsOut", friendsOut);
 
@@ -90,45 +90,33 @@ public class ProfileController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String viewOtherProfile(@PathVariable("id") String id,
                                    Model model) {
+
         User user = userService.getUserByEmail(id);
         User user_auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        //wenn auf Profil mit eigener ID
         if (user.getEmail().equals(user_auth.getEmail())) {
             return "redirect:/profile";
         }
 
-        // Check Friendship status for different HTML Elements, prepare attributes
-        boolean friends, friendRequested, friendRequesting;
-        friends = friendRequested = friendRequesting = false;
-
-
+        //extra enum wäre möglicherweise besser; aber passt an der Stelle schon
         String friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
-        switch (friendshipStatus) {
-            case "friends": friends = true; break;
-            case "friendRequested": friendRequested = true; break;
-            case "friendRequesting": friendRequesting = true; break;
-            default: // none -> no friendship yet
-        }
 
-        //bessere Lösung wäre es, ein attribut status zu benutzen und entsprechend string values
-        //zu benutzen, um weniger modelAttributes zu haben (z.B. status=friends, status=none, status=requested,...)
-        //zu spät zum umimplementieren aufgefallen
-
-
-        model.addAttribute("friends", friends);
-        model.addAttribute("friendRequested", friendRequested);
-        model.addAttribute("friendRequesting", friendRequesting);
-        model.addAttribute("user", user);
-
-        List<Workout> privateWorkouts = new ArrayList<>();
-        if (friends) {
-            privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
-        }
-        List<User> friends1 = friendshipService.getAllFriendsOfUser(user);
+        List<User> friends = friendshipService.getAllFriendsOfUser(user);
         List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
 
-        //display total amount of workouts even if logged in user cannot see all the workouts
+        //zusätzlich private Workouts darstellen, falls Freundschaft besteht
+        List<Workout> privateWorkouts = new ArrayList<>();
+        if (friendshipStatus.equals("friends")) {
+            privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+        }
 
-        model.addAttribute("friends1", friends1);
+        //absichtlichAnzahl aller Workouts statt nur privater; möglicherweise Anreiz zur Anfrage,
+        //wenn die Zahl deutlich höher ausfällt als einsehbare Workouts
+
+        model.addAttribute("user", user);
+        model.addAttribute("friendShipStatus", friendshipStatus);
+        model.addAttribute("friends", friends);
         model.addAttribute("workouts", workouts);
         model.addAttribute("privWorkouts", privateWorkouts);
 
@@ -138,26 +126,19 @@ public class ProfileController {
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     String doEditFriendship(@PathVariable("id") String id,
                             @AuthenticationPrincipal User user_auth,
-                            @RequestParam(required = false, value = "friends",defaultValue = "false") boolean friends,
-                            @RequestParam(required = false, value = "friendRequested",defaultValue = "false") boolean friendRequested,
-                            @RequestParam(required = false, value = "friendRequesting",defaultValue = "false") boolean friendRequesting,
-                            @RequestParam(required = false, value = "deny",defaultValue = "false") boolean deny,
-                            @RequestParam(required = false, value = "accept",defaultValue = "false") boolean accept,
+                            @RequestParam(required = false, value = "friendShipStatus") String friendShipStatus,
                             Model model) {
 
 
         User user = userService.getUserByEmail(id);
         Friendship friendship;
 
-        //if there is no connection yet
-        if (friends==friendRequested==friendRequesting==deny==accept==false) {
+        if (friendShipStatus.equals("requesting")) {
             friendship = friendshipService.sendFriendRequest(user_auth, user);
-        //if request is denied, deleted or removed
-        } else if ((deny == true ) || (friends == true ) || (friendRequested == true )) {
+        } else if (friendShipStatus.matches("removed|withdrawn|denied")) {
             friendship = friendshipService.getFriendshipOfUsers(user_auth, user);
             friendshipService.deleteFriendship(friendship);
-            //if request is accepted
-        } else if (accept == true ) {
+        } else if (friendShipStatus.equals("accepted")) {
             friendship = friendshipService.getFriendshipOfUsers(user_auth, user);
             friendshipService.acceptFriendRequest(friendship);
         }

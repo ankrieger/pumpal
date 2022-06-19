@@ -17,7 +17,7 @@
 
 <!--                Image, Button and modal section-->
               <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                <img src="../../static/images/undraw_male_avatar_323b.svg" th:src="@{images/undraw_male_avatar_323b.svg}"
+                <img src="../../images/undraw_male_avatar_323b.svg"
                      alt="Generic placeholder image" class="rounded-circle img-fluid img-thumbnail mt-4 mb-2"
                      style="width: 150px; z-index: 1">
 
@@ -32,32 +32,24 @@
 
                   <!--     static modal, ask if you want to send it: no->close the modal; yes->friendship create inactive+redirect to this same page         -->
                   <!--     th:unless="${#httpServletRequest.requestURI == '/profile'}"-->
-              <button th:if="${friends == false &&
-                            friendRequested == false &&
-                            friendRequesting == false}" type="button" class="btn btn-outline-dark"
+              <button th:if="${friendShipStatus == 'none'}" type="button" class="btn btn-outline-dark"
                             data-bs-toggle="modal" data-bs-target="#sendFriendReq" data-mdb-ripple-color="dark" style="z-index: 1;">
                   Send Friend Request
               </button>
 
 
-              <button th:if="${friends == false &&
-                            friendRequested == true &&
-                            friendRequesting == false}" type="button" class="btn btn-outline-dark"
+              <button th:if="${friendShipStatus == 'friendRequested'}" type="button" class="btn btn-outline-dark"
                             data-bs-toggle="modal" data-bs-target="#requestedFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
                   Pending Friend Request
               </button>
 
-              <button th:if="${friends == false &&
-                            friendRequested == false &&
-                            friendRequesting == true}" type="button" class="btn btn-outline-dark"
+              <button th:if="${friendShipStatus == 'friendRequesting'}" type="button" class="btn btn-outline-dark"
                             data-bs-toggle="modal" data-bs-target="#requestingFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
                   Accept/Deny Friend Request
               </button>
 
 
-              <button th:if="${friends == true &&
-                            friendRequested == false &&
-                            friendRequesting == false}" type="button" class="btn btn-outline-dark"
+              <button th:if="${friendShipStatus == 'friends'}" type="button" class="btn btn-outline-dark"
                             data-bs-toggle="modal" data-bs-target="#removeFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
                   Remove Friend
               </button>
@@ -77,7 +69,7 @@
                                   Do you want to send a friend request to <span style="font-weight: bold;" th:text="${user.email}"></span>?
                               </div>
                               <div class="modal-footer">
-                                  <form method="POST" th:action="@{/profile/{id}(id=${user.email})}">
+                                  <form method="POST" th:action="@{/profile/{id}(friendShipStatus='requesting', id=${user.email})}">
                                       <button type="submit" class="btn btn-danger">Yes</button>
                                   </form>
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
@@ -98,7 +90,7 @@
                                   Do you want to withdraw the friend request?
                               </div>
                               <div class="modal-footer">
-                                  <form method="POST" th:action="@{/profile/{id}(friendRequested=${friendRequested},id=${user.email})}">
+                                  <form method="POST" th:action="@{/profile/{id}(friendShipStatus='withdrawn',id=${user.email})}">
                                       <button type="submit" class="btn btn-danger">Yes</button>
                                   </form>
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
@@ -119,10 +111,10 @@
                                   Do you want to accept or deny the friend request?
                               </div>
                               <div class="modal-footer">
-                                  <form method="POST" th:action="@{/profile/{id}(accept=${friendRequesting},id=${user.email})}">
+                                  <form method="POST" th:action="@{/profile/{id}(friendShipStatus='accepted',id=${user.email})}">
                                       <button type="submit" class="btn btn-danger">Accept</button>
                                   </form>
-                                  <form method="POST" th:action="@{/profile/{id}(deny=${friendRequesting},id=${user.email})}">
+                                  <form method="POST" th:action="@{/profile/{id}(friendShipStatus='denied',id=${user.email})}">
                                       <button type="submit" class="btn btn-light">Deny</button>
                                   </form>
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Not now</button>
@@ -144,7 +136,7 @@
                                   Do you want to remove <span style="font-weight: bold;" th:text="${user.email}"></span> from your friends?
                               </div>
                               <div class="modal-footer"> <!-- friedns should be true -> send as parameter-->
-                                  <form method="POST" th:action="@{/profile/{id}(friends=${friends},id=${user.email})}">
+                                  <form method="POST" th:action="@{/profile/{id}(friendShipStatus='removed',id=${user.email})}">
                                       <button type="submit" class="btn btn-danger">Yes</button>
                                   </form>
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
@@ -169,7 +161,7 @@
                   <p class="small text-muted mb-0">Workouts</p>
                 </div>
                 <div class="px-3">
-                  <p class="mb-1 h5" th:text="${friends1.size()} ?: '0'"></p>
+                  <p class="mb-1 h5" th:text="${friends.size()} ?: '0'"></p>
                   <p class="small text-muted mb-0">Friends</p>
                 </div>
               </div>
@@ -204,7 +196,7 @@
 
                 <!-- Private Section, Only visibile when /profile invoked;-->
 
-                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friends}">
+                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends'}">
                   <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts</button>
                   </li>
 
@@ -221,7 +213,7 @@
                   <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
                 </div>
                 <div class="tab-pane fade" id="friendsPanel" role="tabpanel" aria-labelledby="friends-tab">
-                    <div th:replace="partials/user-table :: user_table(users=${friends1})"/>
+                    <div th:replace="partials/user-table :: user_table(users=${friends})"/>
                 </div>
                   <div class="tab-pane fade" id="workoutPrivPanel" role="tabpanel" aria-labelledby="friends-tab">
                       <div th:replace="partials/workout-table :: workout_table(workouts=${privWorkouts})"/>
