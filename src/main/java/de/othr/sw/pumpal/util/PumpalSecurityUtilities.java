@@ -16,7 +16,7 @@ public class PumpalSecurityUtilities {
     private String salt;
 
     @Bean
-    @Scope(value = "singleton")
+    @Scope("singleton")
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(15, new SecureRandom(salt.getBytes()));
     }

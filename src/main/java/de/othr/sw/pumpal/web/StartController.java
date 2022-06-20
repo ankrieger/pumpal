@@ -2,11 +2,13 @@ package de.othr.sw.pumpal.web;
 
 import de.othr.sw.pumpal.entity.User;
 import de.othr.sw.pumpal.entity.Visibility;
+import de.othr.sw.pumpal.entity.Workout;
 import de.othr.sw.pumpal.entity.dto.Friend;
 import de.othr.sw.pumpal.entity.dto.WorkoutDto;
 import de.othr.sw.pumpal.service.rest.TestService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,20 +31,24 @@ public class StartController {
     @Autowired
     private WorkoutService workoutService;
 
+    @Autowired
+    Logger logger;
+
     @RequestMapping(value = {"/", "/index"})
     public String start(Model model) {
         List<Visibility> visibilities = new ArrayList<>();
         //TODO: check if admin or regular user -> if admin: add Visibility.PRIVATE as well!
         visibilities.add(Visibility.PUBLIC);
         //wenn noch zeit: TODO: add display of friends' private workouts?
-        model.addAttribute("workouts", workoutService.getNewestWorkouts(visibilities));
+        List<Workout> workouts = workoutService.getNewestWorkouts(visibilities);
+        model.addAttribute("workouts", workouts);
 
 
         // Testing REST Functionality
         WorkoutDto workoutDto = testService.getWorkoutById((long)111);
         model.addAttribute("workoutDTO", workoutDto);
 
-        List<Friend> friendsRest = testService.getFriendsOfUserRest("testo@othr.de");
+        List<Friend> friendsRest = testService.getFriendsOfUserRest("gio75@gmx.de");
         model.addAttribute("friendsDto", friendsRest);
 
         return "index";

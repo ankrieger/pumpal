@@ -28,9 +28,9 @@ public interface WorkoutService {
 
     Workout getWorkoutById(Long workoutId);
 
-    void createWorkout(Workout workout);
+    void saveWorkout(Workout workout);
 
-    Workout saveWorkout(Workout workout, User user);
+    Workout createWorkout(Workout workout, User user);
 
     void deleteWorkout(Workout workout);
 

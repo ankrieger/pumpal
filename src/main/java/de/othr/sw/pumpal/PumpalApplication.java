@@ -4,6 +4,8 @@ import de.othr.sw.pumpal.entity.*;
 import de.othr.sw.pumpal.entity.dto.Friend;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -22,11 +24,14 @@ public class PumpalApplication implements ApplicationRunner {
 	private WorkoutService workoutService;
 
 	public static void main(String[] args) {
+//		Logger logger = LoggerFactory.getLogger(PumpalApplication.class);
+//		logger.info("Hello World");
 		SpringApplication.run(PumpalApplication.class, args);
 	}
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
+
 
 		try {
 			userService.getUserByEmail("gio75@gmx.de");

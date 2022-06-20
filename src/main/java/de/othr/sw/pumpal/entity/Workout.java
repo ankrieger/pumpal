@@ -42,7 +42,7 @@ public class Workout extends SingleIdEntity<Long> {
 
     private String tagString;
 
-    @OneToMany(mappedBy = "workout")
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @ManyToMany(mappedBy = "savedWorkouts")

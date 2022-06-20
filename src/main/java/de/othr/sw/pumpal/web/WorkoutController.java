@@ -104,7 +104,7 @@ public class WorkoutController {
             return "redirect:/workout/create?error";
         }
         System.out.println(workout);
-        workoutService.saveWorkout(workout, user);
+        workoutService.createWorkout(workout, user);
         redirectAttributes.addFlashAttribute("newworkout", workout);
         return "redirect:/workout/create?success";
     }

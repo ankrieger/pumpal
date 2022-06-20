@@ -45,7 +45,7 @@ public class User extends SingleIdEntity<String> implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
     private List<Workout> workouts;
 
     @ManyToMany
@@ -56,10 +56,10 @@ public class User extends SingleIdEntity<String> implements UserDetails {
     )
     private List <Workout> savedWorkouts;
 
-    @OneToMany(/*fetch = FetchType.EAGER, */mappedBy = "requestingUser") //besseren namen
+    @OneToMany(mappedBy = "requestingUser", cascade = CascadeType.REMOVE) //besseren namen
     private List<Friendship> friendsRequested;  //isActive = False -> ausgehende Anfragen, True -> Freunde
 
-    @OneToMany(/*fetch = FetchType.EAGER, */mappedBy = "requestedUser")
+    @OneToMany(mappedBy = "requestedUser", cascade = CascadeType.REMOVE)
     private List<Friendship> friendRequests;  //isActive = False -> eingehende anfragen, True -> Freunde
 
 //    @Transient

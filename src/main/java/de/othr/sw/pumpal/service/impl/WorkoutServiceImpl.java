@@ -5,6 +5,7 @@ import de.othr.sw.pumpal.repository.UserRepository;
 import de.othr.sw.pumpal.repository.WorkoutRepository;
 import de.othr.sw.pumpal.service.WorkoutService;
 import de.othr.sw.pumpal.service.exception.UserNotFoundException;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    Logger logger;
 
     @Override
     @Transactional
@@ -61,6 +65,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public List<Workout> getNewestWorkouts(Collection<Visibility> visibilities) {
         //only public workouts in this section
+        logger.info("Getting the first 5 workouts");
         return workoutRepository.findFirst5ByVisibilityInOrderByDateDesc(visibilities);
     }
 
@@ -83,12 +88,12 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void createWorkout(Workout workout) {
+    public void saveWorkout(Workout workout) {
 
     }
 
     @Override
-    public Workout saveWorkout(Workout workout, User user) {
+    public Workout createWorkout(Workout workout, User user) {
         workout.setAuthor(user);
         workout.setDate(Timestamp.valueOf(LocalDateTime.now()));
 

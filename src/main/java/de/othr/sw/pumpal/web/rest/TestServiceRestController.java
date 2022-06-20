@@ -9,7 +9,9 @@ import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import de.othr.sw.pumpal.service.exception.UserNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,12 +34,18 @@ public class TestServiceRestController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    @Qualifier("customRestLogger")
+    Logger logger;
+
 
     @RequestMapping(value = "restapi/users/{email}/friends", method = RequestMethod.GET)
     public List<Friend> getFriendsOfUser(@PathVariable("email") String email) {
         //TODO: catch try blabla REST
         User user = userService.getUserByEmail(email);
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
+
+        logger.info("Friends of user {} have been sent via REST API", email);
 
         return friends.stream()
                 .map(friend -> modelMapper.map(friend, Friend.class))
@@ -47,6 +55,9 @@ public class TestServiceRestController {
     @RequestMapping(value = "restapi/workouts/{id}", method = RequestMethod.GET)
     public WorkoutDto getWorkoutById(@PathVariable("id") Long workoutId) {
         Workout workout = workoutService.getWorkoutById(workoutId);
+
+        logger.info("WorkoutDto with ID {} has been sent via REST API", workoutId);
+
         return new WorkoutDto(workout.getID(), workout.getTitle(), workout.getDescription()) ;
     }
 
