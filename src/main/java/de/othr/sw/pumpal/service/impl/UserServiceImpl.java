@@ -1,9 +1,6 @@
 package de.othr.sw.pumpal.service.impl;
 
-import de.othr.sw.pumpal.entity.AccountType;
-import de.othr.sw.pumpal.entity.Address;
-import de.othr.sw.pumpal.entity.User;
-import de.othr.sw.pumpal.entity.Visibility;
+import de.othr.sw.pumpal.entity.*;
 import de.othr.sw.pumpal.repository.UserRepository;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.exception.UserNotFoundException;
@@ -87,5 +84,39 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public List<User> getAllUsersSavingWorkout(Workout workout) {
+        return userRepository.getAllUsersSavingWorkoutWithId(workout.getId());
+    }
+
+    @Override
+    @Transactional( propagation = Propagation.REQUIRES_NEW)
+    public void removeWorkoutFromSavedWorkoutsFromUser(Workout workout, User user) {
+        User userSave = userRepository.findById(user.getID()).get();
+        List<Workout> savedWorkouts = userSave.getSavedWorkouts();
+        if(user!=null && workout!=null && savedWorkouts!=null){
+            if(savedWorkouts.contains(workout)) {
+                savedWorkouts.remove(workout);
+//                userSave.setSavedWorkouts(savedWorkouts);
+                workout.removeUserSavedBy(userSave);
+                userRepository.save(userSave);
+            }
+        }
+    }
+
+    @Override
+    @Transactional( propagation = Propagation.REQUIRES_NEW)
+    public void saveWorkoutForUser(Workout workout, User user) {
+        User userSave = userRepository.findById(user.getID()).get();
+        List<Workout> savedWorkouts = userSave.getSavedWorkouts();
+        if(user!=null && workout!=null){
+            if(!savedWorkouts.contains(workout)) {
+                savedWorkouts.add(workout);
+//                userSave.setSavedWorkouts(savedWorkouts);
+                workout.addUserSavedBy(userSave);
+                userRepository.save(userSave);
+            }
+        }
+    }
 
 }

@@ -11,12 +11,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WorkoutServiceImpl implements WorkoutService {
@@ -71,7 +74,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<Workout> getSavedWorkoutsOfUser(User user) {
-        return null;
+        return workoutRepository.getSavedWorkoutsOfUserWithEmail(user.getEmail());
     }
 
     @Override
@@ -87,10 +90,6 @@ public class WorkoutServiceImpl implements WorkoutService {
         );
     }
 
-    @Override
-    public void saveWorkout(Workout workout) {
-
-    }
 
     @Override
     public Workout createWorkout(Workout workout, User user) {
@@ -106,12 +105,22 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
+    @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void deleteWorkout(Workout workout) {
-
+//        alle savedWorkout Referenzen entfernen!
+        if(workout.getSavedBy()!=null) {
+            if(workout.getSavedBy().size()>=1) {
+                List<User> savedby = new ArrayList<>(workout.getSavedBy());
+                for(User u : savedby) {
+                    workout.removeUserSavedBy(u);
+                    List<Workout> savedWorkouts = u.getSavedWorkouts();
+                    savedWorkouts.remove(workout);
+                    u.setSavedWorkouts(savedWorkouts);
+                }
+            }
+        }
+        workoutRepository.delete(workout);
     }
 
-    @Override
-    public void removeWorkoutFromSavedWorkouts(Workout workout, User user) {
 
-    }
 }

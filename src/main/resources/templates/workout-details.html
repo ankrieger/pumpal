@@ -16,19 +16,50 @@
             <div class="row h-100 d-flex justify-content-center align-items-center">
                 <div class="col col-xl-10">
                     <div class="card">
-                        <div class="flex-row">
+                        <div class="flex-row" style="background-color: #f8f9fa;">
 <!--                                col 1 like col-xl-9-->
-                            <div style="background-color: #f8f9fa;">
-                                <div class="ms-5 mt-4">
-                                    <h2 th:text="${workout.title}"></h2>
-                                    <div class="mb-4">
-                                        <h5 class="mt-3"><a th:text="${workout.author.email}" th:href="@{/profile/{id}(id = ${workout.author.email})}"></a></h5>
-                                        <h6 class="text-secondary pb-3" th:text="${workout.author.firstName + ' ' + workout.author.name}"></h6>
-                                        <label>created on <span th:text="${#dates.format(workout.date, 'dd-MM-yyyy')}"></span></label>
+                            <div class="ms-5 mt-4">
+                                <h2 th:text="${workout.title}"></h2>
+                                <div class="me-5" style = "display: flex; justify-content:flex-end">
+                                    <button th:if="${isAuthor}" type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                            data-bs-target="#removeWorkout" data-mdb-ripple-color="dark" style="z-index: 1;">Delete workout</button>
+                                    <form th:if="${!isAuthor && !isSaved}" method="POST" th:action="@{/workout/{id}/details(saved=false,id=${workout.id})}">
+                                        <button type="submit" class="btn btn-outline-warning">Save Workout</button>
+                                    </form>
+                                    <form th:if="${!isAuthor && isSaved}" method="POST" th:action="@{/workout/{id}/details(saved=true,id=${workout.id})}">
+                                        <button type="submit" class="btn btn-warning">Unsave Workout</button>
+                                    </form>
+                                </div>
+                                <div class="mb-4">
+                                    <h5 class="mt-3"><a th:text="${workout.author.email}" th:href="@{/profile/{id}(id = ${workout.author.email})}"></a></h5>
+                                    <h6 class="text-secondary pb-3" th:text="${workout.author.firstName + ' ' + workout.author.name}"></h6>
+                                    <label>created on <span th:text="${#dates.format(workout.date, 'dd-MM-yyyy')}"></span></label>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="removeWorkout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete workout</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete your workout irreversibly?
+                                            All comments, exercises and references will be deleted.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form method="POST" th:action="@{/workout/{id}/delete(id=${workout.id})}">
+                                                <button type="submit" class="btn btn-outline-danger">Yes</button>
+                                            </form>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        </div>
                                     </div>
                                 </div>
-<!--                                col 2 mit save funktion col-xl-3-->
                             </div>
+
+
+
                         </div>
                         <div class="card-body p-4">
                             <div class="row ms-3">
@@ -82,8 +113,8 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" href="#comments" id="comment-tab" data-bs-toggle="tab" data-bs-target="#commentPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Comments</button> <!--(size(comments)) daneben in klammern-->
                                     </li>
-
-                                    <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
+<!--                                    Soll jeder die user sehen können die abgespeichert haben? oder nur Autor?-->
+                                    <li class="nav-item" role="presentation">
                                         <button class="nav-link" href="#saved-by" id="saved-tab" data-bs-toggle="tab" data-bs-target="#savedByPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Saved</button> <!-- anzahl wie viele gesaved haben-->
                                     </li>
 
@@ -121,7 +152,7 @@
 <!--                                            <div th:replace="partials/user-table :: user_table(users=${friends1})"/>-->
                                     </div>
                                     <div class="tab-pane fade" id="savedByPanel" role="tabpanel" aria-labelledby="friends-tab">
-<!--                                            <div th:replace="partials/user-table :: user_table(users=${friends1})"/>-->
+                                        <div th:replace="partials/user-table :: user_table(users=${savingUsers})"/>
                                     </div>
                                 </div>
                             </div>

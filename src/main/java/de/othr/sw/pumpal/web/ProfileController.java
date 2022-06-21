@@ -41,21 +41,43 @@ public class ProfileController {
                                Model model) {
         model.addAttribute("user", user);
 
+        //ansonsten wäre es möglich @OneToMany Liste an Workouts im User mit FetchType.EAGER
+        //zu annotieren und über den getter zu holen + entsprechende stream Methode zu filtern;
+        // persönlich fand ich die Query eleganter
+        // + nur eine FetchType.EGAER Annotation möglich -> für savedWorkouts entschieden da
+        //wsl mehr Workouts gepsiehcert als selber erstellt werden + keine Filteroperationen
+//
+//        List<Workout> workoutsPublic = user.getWorkouts().stream()
+//                .filter(workout -> workout.getVisibility().equals(Visibility.PUBLIC))
+//                .collect(Collectors.toList());
+//
+//        List<Workout> workoutsPrivate= user.getWorkouts().stream()
+//                .filter(workout -> workout.getVisibility().equals(Visibility.PRIVATE))
+//                .collect(Collectors.toList());
+
+        //TODO: Variable isAuthor einführen
+
         //public workouts
-        List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
+        List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
+
         //private workouts
-        List<Workout> privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+        List<Workout> workoutsPrivate = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
 
+        //saved workouts
+        List<Workout> workoutsSaved = workoutService.getSavedWorkoutsOfUser(user);
 
+        //active friendships
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
         // Incoming friend requests
+        //possibility to do .getFriendRequests and then all the Users?
         List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
         //Outgoing friend requests
         List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
 
 
-        model.addAttribute("workouts", workouts);
-        model.addAttribute("privWorkouts", privateWorkouts);
+        model.addAttribute("workouts", workoutsPublic);
+        model.addAttribute("privWorkouts", workoutsPrivate);
+        model.addAttribute("savedWorkouts", workoutsSaved);
         model.addAttribute("friends", friends);
         model.addAttribute("friendsIn", friendsIn);
         model.addAttribute("friendsOut", friendsOut);
@@ -64,6 +86,7 @@ public class ProfileController {
         return "profile";
     }
 
+
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editProfile(@AuthenticationPrincipal User user,
                               Model model) {
@@ -71,6 +94,7 @@ public class ProfileController {
         model.addAttribute("user", user);
         return "profile-edit";
     }
+
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String doEditProfile(@AuthenticationPrincipal User user,
@@ -84,7 +108,6 @@ public class ProfileController {
 
         return "redirect:/profile";
     }
-
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -101,14 +124,23 @@ public class ProfileController {
 
         //extra enum wäre möglicherweise besser; aber passt an der Stelle schon
         String friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
-
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
-        List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
+
+//        List<Workout> workoutsPublic = user.getWorkouts().stream()
+//                .filter(workout -> workout.getVisibility().equals(Visibility.PUBLIC))
+//                .collect(Collectors.toList());
+
+        List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
 
         //zusätzlich private Workouts darstellen, falls Freundschaft besteht
         List<Workout> privateWorkouts = new ArrayList<>();
+        List<Workout> savedWorkouts = new ArrayList<>();
         if (friendshipStatus.equals("friends")) {
             privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+            savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
+//            privateWorkouts = user.getWorkouts().stream()
+//                    .filter(workout -> workout.getVisibility().equals(Visibility.PRIVATE))
+//                    .collect(Collectors.toList());
         }
 
         //absichtlichAnzahl aller Workouts statt nur privater; möglicherweise Anreiz zur Anfrage,
@@ -117,11 +149,13 @@ public class ProfileController {
         model.addAttribute("user", user);
         model.addAttribute("friendShipStatus", friendshipStatus);
         model.addAttribute("friends", friends);
-        model.addAttribute("workouts", workouts);
+        model.addAttribute("workouts", workoutsPublic);
         model.addAttribute("privWorkouts", privateWorkouts);
+        model.addAttribute("savedWorkouts", savedWorkouts);
 
         return "profile";
     }
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     String doEditFriendship(@PathVariable("id") String id,
@@ -151,7 +185,6 @@ public class ProfileController {
     public String getAllUsers(Model model) {
         return getFirstPage(model, 1);
     }
-
 
 
     @RequestMapping(value = "/all/page/{pageNumber}", method = RequestMethod.GET)

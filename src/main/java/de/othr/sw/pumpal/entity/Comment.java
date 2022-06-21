@@ -11,7 +11,7 @@ public class Comment extends SingleIdEntity<Long> {
     @Column(nullable = false)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "email", name="user_id", nullable = false)
     private User author;
 
@@ -22,7 +22,7 @@ public class Comment extends SingleIdEntity<Long> {
     @Column(nullable = false)
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id", name="workout_id", nullable = false)
     private Workout workout;
 

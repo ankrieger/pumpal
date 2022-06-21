@@ -63,16 +63,6 @@ public class WorkoutController {
         return "workouts";
     }
 
-//    for testing
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String viewUserWorkouts(@PathVariable("id") String id,
-                                   Model model) {
-        User user = userService.getUserByEmail(id);
-        List<Workout> workouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
-        System.out.println(workouts);
-        model.addAttribute("workouts", workouts);
-        return "workouts";
-    }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createNewWorkout(Model model) {
@@ -98,8 +88,8 @@ public class WorkoutController {
                                    @RequestParam(required = false, value = "success",defaultValue = "false") boolean success,
                                    @RequestParam(required = false, value = "error",defaultValue = "false") boolean error,
                                    Model model) {
-        System.out.println(workout);
-        System.out.println(workout.getExercises());
+        System.out.println("Workout:" + workout);
+        System.out.println("Workout exercises:" + workout.getExercises());
         if (result.hasErrors()) {
             return "redirect:/workout/create?error";
         }
@@ -111,10 +101,53 @@ public class WorkoutController {
 
 
     @RequestMapping(value = "/{id}/details", method = RequestMethod.GET)
-    public String workoutDetails(@PathVariable("id") Long id,
+    public String workoutDetails(@AuthenticationPrincipal User user,
+                                 @PathVariable("id") Long id,
                                  Model model) {
         Workout workout = workoutService.getWorkoutById(id);
-        model.addAttribute("workout", workoutService.getWorkoutById(id)); //Vorbelegung probieren mit visibility!
+        List<User> savingUsers = userService.getAllUsersSavingWorkout(workout);
+        //maybe just one status variable?
+        boolean isAuthor = workout.getAuthor().equals(user);
+        boolean isSaved;
+
+       List<Workout> savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
+
+        if(savedWorkouts.contains(workout)) {
+            isSaved = true;
+        } else isSaved = false;
+
+        System.out.println("isSaved = " + isSaved);
+        System.out.println("Size of saved workout list: " + savedWorkouts.size());
+
+        model.addAttribute("workout", workout); //Vorbelegung probieren mit visibility!
+        model.addAttribute("savingUsers", savingUsers);
+        model.addAttribute("isAuthor", isAuthor);
+        model.addAttribute("isSaved", isSaved);
         return "workout-details";
+    }
+
+    @RequestMapping(value = "/{id}/details", method = RequestMethod.POST)
+    public String updateSavedStatus(@AuthenticationPrincipal User user,
+                                    @PathVariable("id") Long id,
+                                    @RequestParam(required = false, value = "saved") boolean saved,
+                                    Model model) {
+        Workout workout = workoutService.getWorkoutById(id);
+        //funktionalität
+        if (!saved) {
+            //add user to savedBy and add workout to savedWorkouts
+            userService.saveWorkoutForUser(workout, user);
+        } else {
+            //remove the relation
+            userService.removeWorkoutFromSavedWorkoutsFromUser(workout, user);
+        }
+        return "redirect:/workout/"+id+"/details";
+    }
+
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public String deleteWorkout(@PathVariable("id") Long id,
+                                 Model model) {
+        Workout workout = workoutService.getWorkoutById(id);
+        workoutService.deleteWorkout(workout);
+        return "redirect:/index";
     }
 }

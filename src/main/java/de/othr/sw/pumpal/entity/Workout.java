@@ -23,7 +23,7 @@ public class Workout extends SingleIdEntity<Long> {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "email", name="user_id"  /*, nullable = false*/)
+    @JoinColumn(referencedColumnName = "email", name="user_id"  /*FetchType eager?*/)
     private User author;
 
     @Column(nullable = false)
@@ -35,17 +35,17 @@ public class Workout extends SingleIdEntity<Long> {
     private Visibility visibility;
 
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @AttributeOverride(name = "description", column = @Column(name = "exercise_description"))
     @AttributeOverride(name = "id", column = @Column(name = "exercise_id"))
     private List<Exercise> exercises;
 
     private String tagString;
 
-    @OneToMany(mappedBy = "workout", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "workout", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-    @ManyToMany(mappedBy = "savedWorkouts")
+    @ManyToMany(mappedBy = "savedWorkouts", fetch = FetchType.LAZY)
     private List<User> savedBy;
 
     @Enumerated(value = EnumType.STRING)
@@ -167,7 +167,7 @@ public class Workout extends SingleIdEntity<Long> {
     }
 
     public List<User> getSavedBy() {
-        return savedBy;
+        return Collections.unmodifiableList(savedBy);
     }
 
     public void setSavedBy(List<User> savedBy) {
@@ -220,4 +220,13 @@ public class Workout extends SingleIdEntity<Long> {
                 ", visibility=" + visibility +
                 '}';
     }
+
+    public void addUserSavedBy(User user) {
+        if(!savedBy.contains(user)) savedBy.add(user);
+    }
+
+    public void removeUserSavedBy(User user) {
+        if(savedBy.contains(user)) savedBy.remove(user);
+    }
+
 }

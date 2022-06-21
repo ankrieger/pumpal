@@ -21,5 +21,10 @@ public interface UserService extends UserDetailsService {
 
     void deleteUser(User user);
 
+    List<User> getAllUsersSavingWorkout(Workout workout);
+
+    void saveWorkoutForUser(Workout workout, User user);
+
+    void removeWorkoutFromSavedWorkoutsFromUser(Workout workout, User user);
 
 }

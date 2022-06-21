@@ -28,11 +28,8 @@ public interface WorkoutService {
 
     Workout getWorkoutById(Long workoutId);
 
-    void saveWorkout(Workout workout);
-
     Workout createWorkout(Workout workout, User user);
 
     void deleteWorkout(Workout workout);
 
-    void removeWorkoutFromSavedWorkouts(Workout workout, User user);
 }

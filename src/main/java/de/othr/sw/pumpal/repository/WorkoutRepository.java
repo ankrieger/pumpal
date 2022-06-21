@@ -24,6 +24,9 @@ public interface WorkoutRepository extends PagingAndSortingRepository<Workout, L
 
     Page<Workout> findAllByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities, Pageable paging);
 
+    @Query("SELECT w FROM Workout w JOIN w.savedBy u WHERE u.email=:email")
+    List<Workout> getSavedWorkoutsOfUserWithEmail(@Param("email") String email);
+
 
     //List<Workout> findAllByVisibilityInAndAuthorIn(Collection<Visibility> visibilities, Collection<User> users);
 
