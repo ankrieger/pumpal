@@ -1,10 +1,8 @@
 package de.othr.sw.pumpal.web;
 
 
-import de.othr.sw.pumpal.entity.Exercise;
-import de.othr.sw.pumpal.entity.User;
-import de.othr.sw.pumpal.entity.Visibility;
-import de.othr.sw.pumpal.entity.Workout;
+import de.othr.sw.pumpal.entity.*;
+import de.othr.sw.pumpal.service.CommentService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +30,8 @@ public class WorkoutController {
     @Autowired
     private WorkoutService workoutService;
 
-//    @Autowired
-//    private ExerciseService exerciseService;
-
-//    @Autowired
-//    private FriendshipService friendshipService;
+    @Autowired
+    private CommentService commentService;
 
 
     // erstmaliges Laden
@@ -67,8 +62,8 @@ public class WorkoutController {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createNewWorkout(Model model) {
         Workout workout = new Workout();
-        Exercise exercise = new Exercise("Example exercise description", 3, 10, 15, "Example note");
 
+        Exercise exercise = new Exercise("Example exercise description", 3, 10, 15, "Example note");
         List<Exercise> exercises = new ArrayList<>();
         exercises.add(exercise);
 
@@ -88,12 +83,10 @@ public class WorkoutController {
                                    @RequestParam(required = false, value = "success",defaultValue = "false") boolean success,
                                    @RequestParam(required = false, value = "error",defaultValue = "false") boolean error,
                                    Model model) {
-        System.out.println("Workout:" + workout);
-        System.out.println("Workout exercises:" + workout.getExercises());
+        //TODO: check if exercises are valid -> remove exercises without description + at least one exercise has to exist!
         if (result.hasErrors()) {
             return "redirect:/workout/create?error";
         }
-        System.out.println(workout);
         workoutService.createWorkout(workout, user);
         redirectAttributes.addFlashAttribute("newworkout", workout);
         return "redirect:/workout/create?success";
@@ -105,31 +98,33 @@ public class WorkoutController {
                                  @PathVariable("id") Long id,
                                  Model model) {
         Workout workout = workoutService.getWorkoutById(id);
+
+        List<Comment> comments = commentService.getAllCommentsOfWorkout(workout);
         List<User> savingUsers = userService.getAllUsersSavingWorkout(workout);
         //maybe just one status variable?
         boolean isAuthor = workout.getAuthor().equals(user);
         boolean isSaved;
 
-       List<Workout> savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
+        List<Workout> savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
 
         if(savedWorkouts.contains(workout)) {
             isSaved = true;
         } else isSaved = false;
 
-        System.out.println("isSaved = " + isSaved);
-        System.out.println("Size of saved workout list: " + savedWorkouts.size());
-
-        model.addAttribute("workout", workout); //Vorbelegung probieren mit visibility!
+        model.addAttribute("workout", workout);
+        model.addAttribute("newComment", new Comment());
+        model.addAttribute("comments", comments);
         model.addAttribute("savingUsers", savingUsers);
         model.addAttribute("isAuthor", isAuthor);
         model.addAttribute("isSaved", isSaved);
         return "workout-details";
     }
 
+
     @RequestMapping(value = "/{id}/details", method = RequestMethod.POST)
     public String updateSavedStatus(@AuthenticationPrincipal User user,
                                     @PathVariable("id") Long id,
-                                    @RequestParam(required = false, value = "saved") boolean saved,
+                                    @RequestParam(value = "saved") boolean saved,
                                     Model model) {
         Workout workout = workoutService.getWorkoutById(id);
         //funktionalität
@@ -143,11 +138,32 @@ public class WorkoutController {
         return "redirect:/workout/"+id+"/details";
     }
 
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/deleteWorkout", method = RequestMethod.POST)
     public String deleteWorkout(@PathVariable("id") Long id,
                                  Model model) {
         Workout workout = workoutService.getWorkoutById(id);
         workoutService.deleteWorkout(workout);
         return "redirect:/index";
     }
+
+    @RequestMapping(value = "/{id}/addComment", method = RequestMethod.POST)
+    public String addComment(@AuthenticationPrincipal User user,
+                             @PathVariable("id") Long id,
+                             @Valid Comment comment,
+                             BindingResult result) {
+        if (result.hasErrors()) {
+            return "redirect:/workout/"+id+"/details?error";
+        }
+        commentService.addComment(comment,user, workoutService.getWorkoutById(id));
+        return "redirect:/workout/"+id+"/details#comments";
+    }
+
+
+//    @RequestMapping(value = "/{workoutId}/deleteComment/{commentId}", method = RequestMethod.POST)
+//    public String deleteComment(@PathVariable("workoutId") Long workoutId,
+//                                @PathVariable("commentId") Long commentId,
+//                                Model model) {
+//
+//        return "redirect:/workout/"+workoutId+"/details";
+//    }
 }

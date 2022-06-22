@@ -32,40 +32,40 @@ public class PumpalApplication implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
+//
+//		try {
+//			userService.getUserByEmail("gio75@gmx.de");
+//		} catch (Exception ex) {
+//			User user = new User();
+//			user.setEmail("gio75@gmx.de");
+//			user.setName("Krieger");
+//			user.setFirstName("Victoria");
+//			user.setPassword("secret");
+//			user.setAccountType(AccountType.USER);
+//
+//			Address address = new Address();
+//			address.setCity("Nuremberg");
+//			address.setZip("54321");
+//			address.setStreet("Musterstraße");
+//			address.setStreetNumber("41");
+//
+//			user.setAddress(address);
+//
+//			userService.registerUser(user);
+//		}
 
-		try {
-			userService.getUserByEmail("gio75@gmx.de");
-		} catch (Exception ex) {
-			User user = new User();
-			user.setEmail("gio75@gmx.de");
-			user.setName("Krieger");
-			user.setFirstName("Victoria");
-			user.setPassword("secret");
-			user.setAccountType(AccountType.USER);
-
-			Address address = new Address();
-			address.setCity("Nuremberg");
-			address.setZip("54321");
-			address.setStreet("Musterstraße");
-			address.setStreetNumber("41");
-
-			user.setAddress(address);
-
-			userService.registerUser(user);
-		}
-
-		try {
-			workoutService.getWorkoutById((long)1);
-		} catch (Exception ex) {
-//			Workout workout = new Workout();
-//			workout.setTitle("Easy Beginner Workout");
-//			workout.setDescription("Very Beginner friendly workout for anyone with little time");
-//			//workout.setDate(Timestamp.valueOf(LocalDateTime.now()));
-//			workout.setVisibility(Visibility.PUBLIC);
-//			workout.setLevel(Level.EASY);
-//			workout.setDurationInMin(30);
-//			workoutService.saveWorkout(workout, userService.getUserByEmail("testo@othr.de"));
-		}
+//		try {
+//			workoutService.getWorkoutById((long)1);
+//		} catch (Exception ex) {
+////			Workout workout = new Workout();
+////			workout.setTitle("Easy Beginner Workout");
+////			workout.setDescription("Very Beginner friendly workout for anyone with little time");
+////			//workout.setDate(Timestamp.valueOf(LocalDateTime.now()));
+////			workout.setVisibility(Visibility.PUBLIC);
+////			workout.setLevel(Level.EASY);
+////			workout.setDurationInMin(30);
+////			workoutService.saveWorkout(workout, userService.getUserByEmail("testo@othr.de"));
+//		}
 
 
 	}

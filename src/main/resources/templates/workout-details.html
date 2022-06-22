@@ -49,7 +49,7 @@
                                             All comments, exercises and references will be deleted.
                                         </div>
                                         <div class="modal-footer">
-                                            <form method="POST" th:action="@{/workout/{id}/delete(id=${workout.id})}">
+                                            <form method="POST" th:action="@{/workout/{id}/deleteWorkout(id=${workout.id})}">
                                                 <button type="submit" class="btn btn-outline-danger">Yes</button>
                                             </form>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
@@ -107,15 +107,15 @@
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <!-- Public Information-->
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" href="#exercises" id="exercise-tab" data-bs-toggle="tab" data-bs-target="#exercisePanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Exercises</button>
+                                        <button class="nav-link active" href="#exercises" id="exercise-tab" data-bs-toggle="tab" data-bs-target="#exercisePanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Exercises(<span th:text="${#lists.size(workout.exercises)} ?: '0'"></span>)</button>
                                     </li>
 
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" href="#comments" id="comment-tab" data-bs-toggle="tab" data-bs-target="#commentPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Comments</button> <!--(size(comments)) daneben in klammern-->
+                                        <button class="nav-link" href="#comments" id="comment-tab" data-bs-toggle="tab" data-bs-target="#commentPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Comments(<span th:text="${#lists.size(comments)} ?: '0'"></span>)</button> <!--(size(comments)) daneben in klammern-->
                                     </li>
 <!--                                    Soll jeder die user sehen können die abgespeichert haben? oder nur Autor?-->
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" href="#saved-by" id="saved-tab" data-bs-toggle="tab" data-bs-target="#savedByPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Saved</button> <!-- anzahl wie viele gesaved haben-->
+                                        <button class="nav-link" href="#saved-by" id="saved-tab" data-bs-toggle="tab" data-bs-target="#savedByPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">User who saved this workout(<span th:text="${#lists.size(savingUsers)} ?: '0'"></span>)</button> <!-- anzahl wie viele gesaved haben-->
                                     </li>
 
                                 </ul>
@@ -149,7 +149,11 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="commentPanel" role="tabpanel" aria-labelledby="friends-tab">
-<!--                                            <div th:replace="partials/user-table :: user_table(users=${friends1})"/>-->
+                                        <div th:replace="partials/comment-cards :: comment_cards(comments=${comments})"/>
+                                        <form method="POST" th:action="@{/workout/{id}/addComment(id=${workout.id})}" th:object="${newComment}">
+                                            <textarea class="form-control mt-5 mb-4 mx-5" th:field="${newComment.description}" rows="3"></textarea>
+                                            <button type="submit mx-5 mb-5" class="btn btn-outline-secondary">Add comment</button>
+                                        </form>
                                     </div>
                                     <div class="tab-pane fade" id="savedByPanel" role="tabpanel" aria-labelledby="friends-tab">
                                         <div th:replace="partials/user-table :: user_table(users=${savingUsers})"/>

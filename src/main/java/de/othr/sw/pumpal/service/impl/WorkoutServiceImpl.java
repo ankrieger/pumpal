@@ -57,13 +57,6 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
 
-    //    @Override
-//    public List<Workout> getAllVisibleWorkoutsForUser(User user, List<User> friends) { //find the friends in FriendService beforehand
-//        if (user != null) {
-//
-//        };
-//        return null;
-//    }
 
     @Override
     public List<Workout> getNewestWorkouts(Collection<Visibility> visibilities) {
@@ -77,10 +70,10 @@ public class WorkoutServiceImpl implements WorkoutService {
         return workoutRepository.getSavedWorkoutsOfUserWithEmail(user.getEmail());
     }
 
-    @Override
-    public List<Workout> getWorkoutsOfCertainLevel(Level level) {
-        return null;
-    }
+//    @Override
+//    public List<Workout> getWorkoutsOfCertainLevel(Level level) {
+//        return null;
+//    }
 
 
     @Override

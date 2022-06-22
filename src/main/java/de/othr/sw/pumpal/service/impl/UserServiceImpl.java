@@ -27,11 +27,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
-    @Override
-    public List<User> getAllUsers() {
-        return null;
-    }
+//
+//    @Override
+//    public List<User> getAllUsers() {
+//        return null;
+//    }
 
     @Override
     public Page<User> findUserPage(int pageNumber) {

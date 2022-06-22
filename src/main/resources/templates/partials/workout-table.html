@@ -33,7 +33,7 @@
                             th:text="${#strings.abbreviate(workout.author.email,30)}"></a></td>
                     <td><label th:text="${#dates.format(workout.date, 'dd-MM-yyyy')}"></label></td>
                     <td><label th:text="${workout.durationInMin} ?: '-'"></label></td>
-                    <td><label th:text="'0'"></label></td>
+                    <td><label th:text="${#lists.size(workout.savedBy)} ?: '0'"></label></td>
                 </tr>
                 </tbody>
             </table>

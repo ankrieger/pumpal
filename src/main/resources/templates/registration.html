@@ -47,6 +47,7 @@
                                     <div class="mb-4">
                                         <input type="email" th:field="*{email}" id="regEmail" class="form-control" placeholder="email@example.com" required>
                                         <label class="form-label" for="regEmail">Email</label>
+                                        <p class="text-secondary">You won't be able to change your email address; Choose wisely!</p>
                                         <p class="alert-warning" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></p>
                                     </div>
 

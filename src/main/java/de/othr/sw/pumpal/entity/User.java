@@ -48,7 +48,10 @@ public class User extends SingleIdEntity<String> implements UserDetails {
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Workout> workouts;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "saved_wrk_by_user",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "email", nullable = false),
@@ -160,8 +163,6 @@ public class User extends SingleIdEntity<String> implements UserDetails {
         return description;
     }
 
-
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -174,6 +175,14 @@ public class User extends SingleIdEntity<String> implements UserDetails {
         this.workouts = workouts;
     }
 
+    public List<Comment> getComments() {
+        return Collections.unmodifiableList(comments);
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     public List<Workout> getSavedWorkouts() {
         return savedWorkouts;
     }
@@ -183,7 +192,7 @@ public class User extends SingleIdEntity<String> implements UserDetails {
     }
 
     public List<Friendship> getFriendsRequested() {
-        return friendsRequested;
+        return Collections.unmodifiableList(friendsRequested);
     }
 
     public void setFriendsRequested(List<Friendship> friendsRequested) {
@@ -191,7 +200,7 @@ public class User extends SingleIdEntity<String> implements UserDetails {
     }
 
     public List<Friendship> getFriendRequests() {
-        return friendRequests;
+        return Collections.unmodifiableList(friendRequests);
     }
 
     public void setFriendRequests(List<Friendship> friendRequests) {

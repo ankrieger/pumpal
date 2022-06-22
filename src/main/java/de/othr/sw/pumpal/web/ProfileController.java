@@ -43,9 +43,6 @@ public class ProfileController {
 
         //ansonsten wäre es möglich @OneToMany Liste an Workouts im User mit FetchType.EAGER
         //zu annotieren und über den getter zu holen + entsprechende stream Methode zu filtern;
-        // persönlich fand ich die Query eleganter
-        // + nur eine FetchType.EGAER Annotation möglich -> für savedWorkouts entschieden da
-        //wsl mehr Workouts gepsiehcert als selber erstellt werden + keine Filteroperationen
 //
 //        List<Workout> workoutsPublic = user.getWorkouts().stream()
 //                .filter(workout -> workout.getVisibility().equals(Visibility.PUBLIC))
@@ -59,9 +56,9 @@ public class ProfileController {
 
         //public workouts
         List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
-
         //private workouts
         List<Workout> workoutsPrivate = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+
 
         //saved workouts
         List<Workout> workoutsSaved = workoutService.getSavedWorkoutsOfUser(user);
@@ -69,7 +66,6 @@ public class ProfileController {
         //active friendships
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
         // Incoming friend requests
-        //possibility to do .getFriendRequests and then all the Users?
         List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
         //Outgoing friend requests
         List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
@@ -126,10 +122,6 @@ public class ProfileController {
         String friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
 
-//        List<Workout> workoutsPublic = user.getWorkouts().stream()
-//                .filter(workout -> workout.getVisibility().equals(Visibility.PUBLIC))
-//                .collect(Collectors.toList());
-
         List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
 
         //zusätzlich private Workouts darstellen, falls Freundschaft besteht
@@ -160,7 +152,7 @@ public class ProfileController {
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     String doEditFriendship(@PathVariable("id") String id,
                             @AuthenticationPrincipal User user_auth,
-                            @RequestParam(required = false, value = "friendShipStatus") String friendShipStatus,
+                            @RequestParam(value = "friendShipStatus") String friendShipStatus,
                             Model model) {
 
 

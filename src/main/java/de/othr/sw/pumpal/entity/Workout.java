@@ -42,7 +42,7 @@ public class Workout extends SingleIdEntity<Long> {
 
     private String tagString;
 
-    @OneToMany(mappedBy = "workout", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "workout", orphanRemoval = true,  cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     @ManyToMany(mappedBy = "savedWorkouts", fetch = FetchType.LAZY)

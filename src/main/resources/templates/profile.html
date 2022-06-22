@@ -186,29 +186,29 @@
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <!-- Public Information-->
                   <li class="nav-item" role="presentation">
-                  <button class="nav-link active" href="#workouts" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts</button>
+                  <button class="nav-link active" href="#workouts" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts(<span th:text="${#lists.size(workouts)} ?: '0'"></span>)</button>
                   </li>
 
                   <li class="nav-item" role="presentation">
-                  <button class="nav-link" href="#friends" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friendsPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Friends</button>
+                  <button class="nav-link" href="#friends" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friendsPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Friends(<span th:text="${#lists.size(friends)} ?: '0'"></span>)</button>
                   </li>
 
                 <!-- Private Section, Only visibile when /profile invoked;-->
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends'}">
-                  <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts</button>
+                  <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts(<span th:text="${#lists.size(privWorkouts)} ?: '0'"></span>)</button>
                   </li>
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
-                      <button class="nav-link" href="#requests-out" id="friends-out-tab" data-bs-toggle="tab" data-bs-target="#friendsOutPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Sent Friend Requests</button>
+                      <button class="nav-link" href="#requests-out" id="friends-out-tab" data-bs-toggle="tab" data-bs-target="#friendsOutPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Sent Friend Requests(<span th:text="${#lists.size(friendsOut)} ?: '0'"></span>)</button>
                   </li>
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
-                      <button class="nav-link" href="#requests-in" id="friends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests</button>
+                      <button class="nav-link" href="#requests-in" id="friends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests(<span th:text="${#lists.size(friendsIn)} ?: '0'"></span>)</button>
                   </li>
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends'}">
-                      <button class="nav-link" href="#requests-in" id="saved-workouts-tab" data-bs-toggle="tab" data-bs-target="#savedWorkoutsPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Saved Workouts</button>
+                      <button class="nav-link" href="#saved-workouts" id="saved-workouts-tab" data-bs-toggle="tab" data-bs-target="#savedWorkoutsPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Saved Workouts(<span th:text="${#lists.size(savedWorkouts)} ?: '0'"></span>)</button>
                   </li>
               </ul>
               <div class="tab-content mt-3" id="myTabContent">

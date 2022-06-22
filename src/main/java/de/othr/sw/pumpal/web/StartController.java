@@ -44,12 +44,12 @@ public class StartController {
         model.addAttribute("workouts", workouts);
 
 
-        // Testing REST Functionality
-        WorkoutDto workoutDto = testService.getWorkoutById((long)111);
-        model.addAttribute("workoutDTO", workoutDto);
-
-        List<Friend> friendsRest = testService.getFriendsOfUserRest("gio75@gmx.de");
-        model.addAttribute("friendsDto", friendsRest);
+//        // Testing REST Functionality
+//        WorkoutDto workoutDto = testService.getWorkoutById((long)111);
+//        model.addAttribute("workoutDTO", workoutDto);
+//
+//        List<Friend> friendsRest = testService.getFriendsOfUserRest("gio75@gmx.de");
+//        model.addAttribute("friendsDto", friendsRest);
 
         return "index";
     }
@@ -69,7 +69,7 @@ public class StartController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String register(Model model) {
-        model.addAttribute("user", new User()); //Vorbelegung probieren mit accountType!
+        model.addAttribute("user", new User()); //TODO:Vorbelegung probieren mit accountType!
         return "registration";
     }
 
@@ -78,6 +78,7 @@ public class StartController {
         if (result.hasErrors()) {
             return "redirect:registration?error";
         }
+        //TODO: Test ob email bereits belegt
         userService.registerUser(user);
         return "redirect:index";
     }

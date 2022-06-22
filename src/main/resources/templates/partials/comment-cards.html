@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<body>
+
+    <div th:fragment="comment_cards(comments)">
+
+        <div th:if="${#lists.isEmpty(comments)}">
+            There are no comments yet.
+        </div>
+        <div th:unless="${#lists.isEmpty(comments)}" class="px-5 mt-3" style="text-align: center;">
+            <h5 style="text-align: left;" class="mb-4">Comments</h5>
+            <div th:each="comment : ${comments}" class="card mb-3 me-4">
+                <div class="card-header d-flex justify-content-between">
+                    <a th:href="@{/profile/{id}(id = ${comment.author.email})}"
+                       th:text="${comment.author.email}"></a>
+                    <label th:text="${#dates.format(comment.date, 'dd-MM-yyyy HH:mm')}"></label>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li th:text="${comment.description}" class="list-group-item" style="text-align: left;"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

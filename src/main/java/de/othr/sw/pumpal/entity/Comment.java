@@ -8,22 +8,22 @@ import java.util.Date;
 public class Comment extends SingleIdEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "email", name="user_id", nullable = false)
+    @JoinColumn(referencedColumnName = "email", name="user_id")
     private User author;
 
     @Column(nullable = false)
-    private String comment;
+    private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "id", name="workout_id", nullable = false)
+    @JoinColumn(referencedColumnName = "id", name="workout_id")
     private Workout workout;
 
 
@@ -31,11 +31,8 @@ public class Comment extends SingleIdEntity<Long> {
 
     }
 
-    public Comment(Long id, User author, String comment, Date date, Workout workout) {
-        this.id = id;
+    public Comment(User author, Workout workout) {
         this.author = author;
-        this.comment = comment;
-        this.date = date;
         this.workout = workout;
     }
 
@@ -55,12 +52,12 @@ public class Comment extends SingleIdEntity<Long> {
         this.author = author;
     }
 
-    public String getComment() {
-        return comment;
+    public String getDescription() {
+        return description;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getDate() {
@@ -90,7 +87,7 @@ public class Comment extends SingleIdEntity<Long> {
         return "Comment{" +
                 "id=" + id +
                 ", author=" + author +
-                ", comment='" + comment + '\'' +
+                ", description='" + description + '\'' +
                 ", date=" + date +
                 ", workout=" + workout +
                 '}';
