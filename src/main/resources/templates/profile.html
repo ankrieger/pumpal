@@ -23,7 +23,7 @@
 
 <!--                  Possible Admin Display-->
                   <button sec:authorize="hasAuthority('ADMIN')" th:if="${#httpServletRequest.requestURI != '/profile'}" type="button" class="btn btn-outline-dark"
-                          data-bs-toggle="modal" data-bs-target="#requestingFriend" style="z-index: 1;">
+                          data-bs-toggle="modal" data-bs-target="#deleteUser" style="z-index: 1;">
                       Delete user
                   </button>
 
@@ -156,6 +156,26 @@
                       </div>
                   </div>
 
+                  <div class="modal fade" id="deleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h5 class="modal-title">Delete user</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                  User <span style="font-weight: bold;" th:text="${user.email}"></span> and all his workouts will be deleted. Continue?
+                              </div>
+                              <div class="modal-footer"> <!-- friedns should be true -> send as parameter-->
+                                  <form method="POST" th:action="@{/profile/{id}/deleteUser(id=${user.email})}">
+                                      <button type="submit" class="btn btn-danger">Yes</button>
+                                  </form>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
 
               </div>
 
@@ -198,29 +218,35 @@
               <ul th:if="${user.accountType.name()=='USER'}" class="nav nav-tabs" id="myTab" role="tablist">
                 <!-- Public Information-->
                   <li class="nav-item" role="presentation">
-                  <button class="nav-link active" href="#workouts" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts(<span th:text="${#lists.size(workouts)} ?: '0'"></span>)</button>
+                      <button class="nav-link active" href="#workouts" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel"
+                              type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts(<span th:text="${#lists.size(workouts)} ?: '0'"></span>)</button>
                   </li>
 
                   <li class="nav-item" role="presentation">
-                  <button class="nav-link" href="#friends" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friendsPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Friends(<span th:text="${#lists.size(friends)} ?: '0'"></span>)</button>
+                      <button class="nav-link" href="#friends" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friendsPanel"
+                              type="button" role="tab" aria-controls="friends" aria-selected="false">Friends(<span th:text="${#lists.size(friends)} ?: '0'"></span>)</button>
                   </li>
 
                 <!-- Private Section, Only visibile when /profile invoked;-->
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends' || friendShipStatus == 'admin'}">
-                  <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts(<span th:text="${#lists.size(privWorkouts)} ?: '0'"></span>)</button>
+                      <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel"
+                              type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts(<span th:text="${#lists.size(privWorkouts)} ?: '0'"></span>)</button>
                   </li>
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
-                      <button class="nav-link" href="#requests-out" id="friends-out-tab" data-bs-toggle="tab" data-bs-target="#friendsOutPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Sent Friend Requests(<span th:text="${#lists.size(friendsOut)} ?: '0'"></span>)</button>
+                      <button class="nav-link" href="#requests-out" id="friends-out-tab" data-bs-toggle="tab" data-bs-target="#friendsOutPanel"
+                              type="button" role="tab" aria-controls="contact" aria-selected="false">Sent Friend Requests(<span th:text="${#lists.size(friendsOut)} ?: '0'"></span>)</button>
                   </li>
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
-                      <button class="nav-link" href="#requests-in" id="friends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests(<span th:text="${#lists.size(friendsIn)} ?: '0'"></span>)</button>
+                      <button class="nav-link" href="#requests-in" id="friends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel"
+                              type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests(<span th:text="${#lists.size(friendsIn)} ?: '0'"></span>)</button>
                   </li>
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends' || friendShipStatus == 'admin'}">
-                      <button class="nav-link" href="#saved-workouts" id="saved-workouts-tab" data-bs-toggle="tab" data-bs-target="#savedWorkoutsPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Saved Workouts(<span th:text="${#lists.size(savedWorkouts)} ?: '0'"></span>)</button>
+                      <button class="nav-link" href="#saved-workouts" id="saved-workouts-tab" data-bs-toggle="tab" data-bs-target="#savedWorkoutsPanel"
+                              type="button" role="tab" aria-controls="contact" aria-selected="false">Saved Workouts(<span th:text="${#lists.size(savedWorkouts)} ?: '0'"></span>)</button>
                   </li>
               </ul>
               <div th:if="${user.accountType.name()=='USER'}" class="tab-content mt-3" id="myTabContent">

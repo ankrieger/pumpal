@@ -172,6 +172,13 @@ public class ProfileController {
     }
 
 
+    @RequestMapping(value = "/{id}/deleteUser", method = RequestMethod.POST)
+    public String deletsUser(@PathVariable("id") String id) {
+        User user = userService.getUserByEmail(id);
+        userService.deleteUser(user);
+        return "redirect:/index";
+    }
+
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public String getAllUsers(Model model) {
         return getFirstPage(model, 1);

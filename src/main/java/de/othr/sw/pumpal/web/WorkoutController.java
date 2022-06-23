@@ -8,6 +8,7 @@ import de.othr.sw.pumpal.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,11 @@ public class WorkoutController {
     public String getOnePage(Model model,
                              @PathVariable("pageNumber") int currentPage) {
         Collection<Visibility> visibilities = new ArrayList<>();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(user.getAccountType().name().equals("ADMIN")) {
+            visibilities.add(Visibility.PRIVATE);
+        }
+        //user sehen hier nur öffentliche workouts; besser wäre es, die privaten der Freunde mitreinzunehmen
         visibilities.add(Visibility.PUBLIC);
 
         Page<Workout> page = workoutService.findWorkoutPage(visibilities, currentPage);
@@ -93,11 +99,13 @@ public class WorkoutController {
     }
 
 
+    //TODO: zugriff über adressleiste möglich! check ob user berechtigung hat das workout zu sehen!
     @RequestMapping(value = "/{id}/details", method = RequestMethod.GET)
     public String workoutDetails(@AuthenticationPrincipal User user,
                                  @PathVariable("id") Long id,
                                  Model model) {
         Workout workout = workoutService.getWorkoutById(id);
+
 
         List<Comment> comments = commentService.getAllCommentsOfWorkout(workout);
         List<User> savingUsers = userService.getAllUsersSavingWorkout(workout);

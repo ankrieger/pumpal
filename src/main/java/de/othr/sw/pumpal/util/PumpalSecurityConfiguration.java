@@ -1,5 +1,6 @@
 package de.othr.sw.pumpal.util;
 
+import de.othr.sw.pumpal.entity.AccountType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,14 +34,20 @@ public class PumpalSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(ALLOW_ACCESS_WITHOUT_AUTHENTICATION)
-                .permitAll().anyRequest().authenticated();
+                .permitAll()
+                .antMatchers("/workout/create").hasAuthority(AccountType.USER.name())
+                .antMatchers("/user/{\\d+}/deleteUser").hasAuthority(AccountType.ADMIN.name())
+                .anyRequest().authenticated();
         http
                 .formLogin()
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/index?success")
                 .failureUrl("/login?error")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 //TODO: find out how how to configure success/error path of registration
                 .logoutSuccessUrl("/index?logout")
                 .deleteCookies("remember-me")
