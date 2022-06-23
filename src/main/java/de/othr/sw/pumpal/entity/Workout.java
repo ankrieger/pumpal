@@ -42,6 +42,7 @@ public class Workout extends SingleIdEntity<Long> {
 
     private String tagString;
 
+//    OrphanRemovel => abkoppeln der Kommentare von dem enstprechenden Workout führt zum löschen der Kommentare
     @OneToMany(mappedBy = "workout", orphanRemoval = true,  cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 

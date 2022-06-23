@@ -1,9 +1,6 @@
 package de.othr.sw.pumpal.web;
 
-import de.othr.sw.pumpal.entity.Friendship;
-import de.othr.sw.pumpal.entity.User;
-import de.othr.sw.pumpal.entity.Visibility;
-import de.othr.sw.pumpal.entity.Workout;
+import de.othr.sw.pumpal.entity.*;
 import de.othr.sw.pumpal.service.FriendshipService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
@@ -54,30 +51,30 @@ public class ProfileController {
 
         //TODO: Variable isAuthor einführen
 
-        //public workouts
-        List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
-        //private workouts
-        List<Workout> workoutsPrivate = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+        if(user.getAccountType().equals(AccountType.USER)) {            //public workouts
+            List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
+            //private workouts
+            List<Workout> workoutsPrivate = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
 
 
-        //saved workouts
-        List<Workout> workoutsSaved = workoutService.getSavedWorkoutsOfUser(user);
+            //saved workouts
+            List<Workout> workoutsSaved = workoutService.getSavedWorkoutsOfUser(user);
 
-        //active friendships
-        List<User> friends = friendshipService.getAllFriendsOfUser(user);
-        // Incoming friend requests
-        List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
-        //Outgoing friend requests
-        List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
+            //active friendships
+            List<User> friends = friendshipService.getAllFriendsOfUser(user);
+            // Incoming friend requests
+            List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
+            //Outgoing friend requests
+            List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
 
 
-        model.addAttribute("workouts", workoutsPublic);
-        model.addAttribute("privWorkouts", workoutsPrivate);
-        model.addAttribute("savedWorkouts", workoutsSaved);
-        model.addAttribute("friends", friends);
-        model.addAttribute("friendsIn", friendsIn);
-        model.addAttribute("friendsOut", friendsOut);
-
+            model.addAttribute("workouts", workoutsPublic);
+            model.addAttribute("privWorkouts", workoutsPrivate);
+            model.addAttribute("savedWorkouts", workoutsSaved);
+            model.addAttribute("friends", friends);
+            model.addAttribute("friendsIn", friendsIn);
+            model.addAttribute("friendsOut", friendsOut);
+        }
 
         return "profile";
     }
@@ -118,21 +115,23 @@ public class ProfileController {
             return "redirect:/profile";
         }
 
-        //extra enum wäre möglicherweise besser; aber passt an der Stelle schon
-        String friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
-        List<User> friends = friendshipService.getAllFriendsOfUser(user);
+        String friendshipStatus;
 
+
+        if(user_auth.getAccountType().name().equals("USER")) {
+            friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
+        } else friendshipStatus = "admin";
+
+        List<User> friends = friendshipService.getAllFriendsOfUser(user);
         List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
 
-        //zusätzlich private Workouts darstellen, falls Freundschaft besteht
+        //zusätzlich private Workouts darstellen, falls Freundschaft besteht oder Admin Profil besucht
         List<Workout> privateWorkouts = new ArrayList<>();
         List<Workout> savedWorkouts = new ArrayList<>();
-        if (friendshipStatus.equals("friends")) {
+
+        if (friendshipStatus.matches("friends|admin")) {
             privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
             savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
-//            privateWorkouts = user.getWorkouts().stream()
-//                    .filter(workout -> workout.getVisibility().equals(Visibility.PRIVATE))
-//                    .collect(Collectors.toList());
         }
 
         //absichtlichAnzahl aller Workouts statt nur privater; möglicherweise Anreiz zur Anfrage,

@@ -12,5 +12,5 @@ public interface CommentService {
 
     void addComment(Comment comment, User user, Workout workout); //workoutid/userid wird vorher über model in comment gesetzt
 
-    void deleteComment(Comment comment); //überlegen, ob Comment ID ausreicht oder Comment übergeben??
+    void deleteCommentById(Long commentId); //überlegen, ob Comment ID ausreicht oder Comment übergeben??
 }

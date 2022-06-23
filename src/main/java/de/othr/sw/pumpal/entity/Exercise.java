@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Embeddable
 public class Exercise /*extends SingleIdEntity<Long>*/ {
-    //abschauen, wie so eine liste wo man Sachen dazu addiert und entfernen kann bei Erstellung/Bearbeitung
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
 //    @Column(name = "id", nullable = false)

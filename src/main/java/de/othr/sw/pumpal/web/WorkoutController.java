@@ -117,6 +117,7 @@ public class WorkoutController {
         model.addAttribute("savingUsers", savingUsers);
         model.addAttribute("isAuthor", isAuthor);
         model.addAttribute("isSaved", isSaved);
+        model.addAttribute("user", user);
         return "workout-details";
     }
 
@@ -155,15 +156,15 @@ public class WorkoutController {
             return "redirect:/workout/"+id+"/details?error";
         }
         commentService.addComment(comment,user, workoutService.getWorkoutById(id));
-        return "redirect:/workout/"+id+"/details#comments";
+        return "redirect:/workout/"+id+"/details";
     }
 
 
-//    @RequestMapping(value = "/{workoutId}/deleteComment/{commentId}", method = RequestMethod.POST)
-//    public String deleteComment(@PathVariable("workoutId") Long workoutId,
-//                                @PathVariable("commentId") Long commentId,
-//                                Model model) {
-//
-//        return "redirect:/workout/"+workoutId+"/details";
-//    }
+    @RequestMapping(value = "/{workoutId}/deleteComment/{commentId}", method = RequestMethod.POST)
+    public String deleteComment(@PathVariable("workoutId") Long workoutId,
+                                @PathVariable("commentId") Long commentId,
+                                Model model) {
+        commentService.deleteCommentById(commentId);
+        return "redirect:/workout/"+workoutId+"/details";
+    }
 }

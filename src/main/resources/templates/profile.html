@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
 
 <head th:replace="partials/header :: header(~{::title})">
   <title>Your profile</title>
@@ -21,38 +21,50 @@
                      alt="Generic placeholder image" class="rounded-circle img-fluid img-thumbnail mt-4 mb-2"
                      style="width: 150px; z-index: 1">
 
-                <!-- Display this if it's the authenticated user's page; maybe  -->
-                <!-- Go to profile/edit page  -->
-                <a th:if="${#httpServletRequest.requestURI == '/profile'}" th:href="@{profile/edit}" role="button" class="btn btn-outline-dark"
-                        data-mdb-ripple-color="dark" style="z-index: 1;">
-                        Edit profile
-                </a>
+<!--                  Possible Admin Display-->
+                  <button sec:authorize="hasAuthority('ADMIN')" th:if="${#httpServletRequest.requestURI != '/profile'}" type="button" class="btn btn-outline-dark"
+                          data-bs-toggle="modal" data-bs-target="#requestingFriend" style="z-index: 1;">
+                      Delete user
+                  </button>
+
+
+                <!-- Regular User display  -->
+
+                  <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'admin'}" class="btn btn-warning"
+                        style="z-index: 1;" aria-disabled="true">
+                      Admin
+                  </button>
+
+                  <a sec:authorize="hasAuthority('USER')" th:if="${#httpServletRequest.requestURI == '/profile'}" th:href="@{profile/edit}" role="button" class="btn btn-outline-dark"
+                     style="z-index: 1;">
+                            Edit profile
+                  </a>
 
                   <!--   Possible  Buttons  -->
 
                   <!--     static modal, ask if you want to send it: no->close the modal; yes->friendship create inactive+redirect to this same page         -->
                   <!--     th:unless="${#httpServletRequest.requestURI == '/profile'}"-->
-              <button th:if="${friendShipStatus == 'none'}" type="button" class="btn btn-outline-dark"
-                            data-bs-toggle="modal" data-bs-target="#sendFriendReq" data-mdb-ripple-color="dark" style="z-index: 1;">
-                  Send Friend Request
-              </button>
+                  <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'none'}" type="button" class="btn btn-outline-dark"
+                            data-bs-toggle="modal" data-bs-target="#sendFriendReq" style="z-index: 1;">
+                      Send Friend Request
+                  </button>
 
 
-              <button th:if="${friendShipStatus == 'friendRequested'}" type="button" class="btn btn-outline-dark"
-                            data-bs-toggle="modal" data-bs-target="#requestedFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
-                  Pending Friend Request
-              </button>
+                  <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'friendRequested'}" type="button" class="btn btn-outline-dark"
+                                data-bs-toggle="modal" data-bs-target="#requestedFriend" style="z-index: 1;">
+                      Pending Friend Request
+                  </button>
 
-              <button th:if="${friendShipStatus == 'friendRequesting'}" type="button" class="btn btn-outline-dark"
-                            data-bs-toggle="modal" data-bs-target="#requestingFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
-                  Accept/Deny Friend Request
-              </button>
+                  <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'friendRequesting'}" type="button" class="btn btn-outline-dark"
+                                data-bs-toggle="modal" data-bs-target="#requestingFriend" style="z-index: 1;">
+                      Accept/Deny Friend Request
+                  </button>
 
 
-              <button th:if="${friendShipStatus == 'friends'}" type="button" class="btn btn-outline-dark"
-                            data-bs-toggle="modal" data-bs-target="#removeFriend" data-mdb-ripple-color="dark" style="z-index: 1;">
-                  Remove Friend
-              </button>
+                  <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'friends'}" type="button" class="btn btn-outline-dark"
+                                data-bs-toggle="modal" data-bs-target="#removeFriend" style="z-index: 1;">
+                      Remove Friend
+                  </button>
 
 
 
@@ -123,7 +135,6 @@
                       </div>
                   </div>
 
-
                   <div class="modal fade" id="removeFriend" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered">
                           <div class="modal-content">
@@ -156,11 +167,11 @@
 
             <div class="p-4 text-black" style="background-color: #f8f9fa;">
               <div class="d-flex justify-content-end text-center py-1">
-                <div>
+                <div th:if="${user.accountType.name()=='USER'}">
                   <p class="mb-1 h5" th:text="${workouts.size() + privWorkouts.size()} ?: '0'"></p>
                   <p class="small text-muted mb-0">Workouts</p>
                 </div>
-                <div class="px-3">
+                <div th:if="${user.accountType.name()=='USER'}" class="px-3">
                   <p class="mb-1 h5" th:text="${friends.size()} ?: '0'"></p>
                   <p class="small text-muted mb-0">Friends</p>
                 </div>
@@ -172,18 +183,19 @@
               <div class="mb-5">
 <!--                <p class="lead fw-normal mb-1">About me</p>-->
                 <div class="p-4" style="background-color: #f8f9fa;">
-                  <p class="font-italic mb-1" th:field="${#strings.isEmpty(user.description)} ?: 'There is no description.'"></p>
+                  <p class="font-italic mb-1" th:text="${user.description} ?: 'There is no description.'"></p>
                   <p class="font-italic mb-1"></p>
                   <p class="font-italic mb-0"></p>
                 </div>
               </div>
 
-              <div class="d-flex justify-content-between align-items-center mb-4">
+
+              <div th:if="${user.accountType.name()=='USER'}" class="d-flex justify-content-between align-items-center mb-4">
                 <p class="lead fw-normal mb-0">Workouts and Friends</p>
               </div>
 
                 <!-- Tab Section-->
-              <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <ul th:if="${user.accountType.name()=='USER'}" class="nav nav-tabs" id="myTab" role="tablist">
                 <!-- Public Information-->
                   <li class="nav-item" role="presentation">
                   <button class="nav-link active" href="#workouts" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts(<span th:text="${#lists.size(workouts)} ?: '0'"></span>)</button>
@@ -195,7 +207,7 @@
 
                 <!-- Private Section, Only visibile when /profile invoked;-->
 
-                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends'}">
+                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends' || friendShipStatus == 'admin'}">
                   <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts(<span th:text="${#lists.size(privWorkouts)} ?: '0'"></span>)</button>
                   </li>
 
@@ -207,11 +219,11 @@
                       <button class="nav-link" href="#requests-in" id="friends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests(<span th:text="${#lists.size(friendsIn)} ?: '0'"></span>)</button>
                   </li>
 
-                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends'}">
+                  <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends' || friendShipStatus == 'admin'}">
                       <button class="nav-link" href="#saved-workouts" id="saved-workouts-tab" data-bs-toggle="tab" data-bs-target="#savedWorkoutsPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">Saved Workouts(<span th:text="${#lists.size(savedWorkouts)} ?: '0'"></span>)</button>
                   </li>
               </ul>
-              <div class="tab-content mt-3" id="myTabContent">
+              <div th:if="${user.accountType.name()=='USER'}" class="tab-content mt-3" id="myTabContent">
                 <div class="tab-pane fade show active" id="workoutsPanel" role="tabpanel" aria-labelledby="workout-tab">
                   <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
                 </div>
@@ -231,9 +243,11 @@
                       <div th:replace="partials/workout-table :: workout_table(workouts=${savedWorkouts})"/>
                   </div>
             </div>
+
           </div>
         </div>
       </div>
+    </div>
     </div>
   </section>
 

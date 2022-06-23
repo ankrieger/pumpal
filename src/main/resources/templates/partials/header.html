@@ -34,33 +34,38 @@
                 </div>
                 <div class="offcanvas-body" style="background-color: #C70039;">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item dropdown">
+                        <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="workoutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Workouts
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="workoutDropdown">
-                                <li><a class="dropdown-item" th:href="@{/profile#workouts}">My public workouts</a></li>
-                                <li><a class="dropdown-item" th:href="@{/profile#workouts-priv}">My private workouts</a></li>
-                                <li><a class="dropdown-item" th:href="@{/profile#saved-workouts}">My saved workouts</a></li>
-                                <li>
+                                <li sec:authorize="hasAuthority('USER')"><a class="dropdown-item" th:href="@{/profile#workouts}">My public workouts</a></li>
+                                <li sec:authorize="hasAuthority('USER')"><a class="dropdown-item" th:href="@{/profile#workouts-priv}">My private workouts</a></li>
+                                <li sec:authorize="hasAuthority('USER')"><a class="dropdown-item" th:href="@{/profile#saved-workouts}">My saved workouts</a></li>
+                                <li sec:authorize="hasAuthority('USER')">
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" th:href="@{/workout/create}">Create a new workout</a></li>
-                                <li>
+                                <li sec:authorize="hasAuthority('USER')"><a class="dropdown-item" th:href="@{/workout/create}">Create a new workout</a></li>
+                                <li sec:authorize="hasAuthority('USER')">
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" th:href="@{/workout}">Explore new workouts</a></li>
+                                <li><a class="dropdown-item" th:href="@{/workout}">All workouts</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="friendsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Friends
+                                <span sec:authorize="hasAuthority('USER')">
+                                    Friends
+                                </span>
+                                <span sec:authorize="hasAuthority('ADMIN')">
+                                    User
+                                </span>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="friendsDropdown">
-                                <li><a class="dropdown-item" th:href="@{/profile#friends}">My friends</a></li>  <!-- active friendships -->
-                                <li><a class="dropdown-item" th:href="@{/profile#requests-in}">Incoming friend requests</a></li> <!-- incoming -->
-                                <li><a class="dropdown-item" th:href="@{/profile#requests-out}">Outstanding friend requests</a></li> <!-- outgoing -->
-                                <li>
+                                <li sec:authorize="hasAuthority('USER')"><a class="dropdown-item" th:href="@{/profile#friends}">My friends</a></li>  <!-- active friendships -->
+                                <li sec:authorize="hasAuthority('USER')"><a class="dropdown-item" th:href="@{/profile#requests-in}">Incoming friend requests</a></li> <!-- incoming -->
+                                <li sec:authorize="hasAuthority('USER')"><a class="dropdown-item" th:href="@{/profile#requests-out}">Outstanding friend requests</a></li> <!-- outgoing -->
+                                <li sec:authorize="hasAuthority('USER')">
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li><a class="dropdown-item" th:href="@{/profile/all}">User search</a></li> <!-- by name -->

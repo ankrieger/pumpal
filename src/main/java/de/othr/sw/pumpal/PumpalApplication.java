@@ -32,22 +32,22 @@ public class PumpalApplication implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
-//
+
 //		try {
-//			userService.getUserByEmail("gio75@gmx.de");
+//			userService.getUserByEmail("admin@gmx.de");
 //		} catch (Exception ex) {
 //			User user = new User();
-//			user.setEmail("gio75@gmx.de");
-//			user.setName("Krieger");
-//			user.setFirstName("Victoria");
+//			user.setEmail("admin@gmx.de");
+//			user.setName("Mumm");
+//			user.setFirstName("Armin");
 //			user.setPassword("secret");
-//			user.setAccountType(AccountType.USER);
+//			user.setAccountType(AccountType.ADMIN);
 //
 //			Address address = new Address();
-//			address.setCity("Nuremberg");
+//			address.setCity("Muenchen");
 //			address.setZip("54321");
-//			address.setStreet("Musterstraße");
-//			address.setStreetNumber("41");
+//			address.setStreet("Adminstraße");
+//			address.setStreetNumber("22");
 //
 //			user.setAddress(address);
 //

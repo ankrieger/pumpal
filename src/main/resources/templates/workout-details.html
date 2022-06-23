@@ -21,9 +21,9 @@
                             <div class="ms-5 mt-4">
                                 <h2 th:text="${workout.title}"></h2>
                                 <div class="me-5" style = "display: flex; justify-content:flex-end">
-                                    <button th:if="${isAuthor}" type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                            data-bs-target="#removeWorkout" data-mdb-ripple-color="dark" style="z-index: 1;">Delete workout</button>
-                                    <form th:if="${!isAuthor && !isSaved}" method="POST" th:action="@{/workout/{id}/details(saved=false,id=${workout.id})}">
+                                    <button th:if="${isAuthor || user.accountType.name() == 'ADMIN'}" type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                            data-bs-target="#removeWorkout" style="z-index: 1;">Delete workout</button>
+                                    <form th:if="${!isAuthor && !isSaved && user.accountType.name() != 'ADMIN'}" method="POST" th:action="@{/workout/{id}/details(saved=false,id=${workout.id})}">
                                         <button type="submit" class="btn btn-outline-warning">Save Workout</button>
                                     </form>
                                     <form th:if="${!isAuthor && isSaved}" method="POST" th:action="@{/workout/{id}/details(saved=true,id=${workout.id})}">
@@ -149,10 +149,10 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="commentPanel" role="tabpanel" aria-labelledby="friends-tab">
-                                        <div th:replace="partials/comment-cards :: comment_cards(comments=${comments})"/>
+                                        <div th:replace="partials/comment-cards :: comment_cards(comments=${comments},user=${user},workout=${workout})"/>
                                         <form method="POST" th:action="@{/workout/{id}/addComment(id=${workout.id})}" th:object="${newComment}">
-                                            <textarea class="form-control mt-5 mb-4 mx-5" th:field="${newComment.description}" rows="3"></textarea>
-                                            <button type="submit mx-5 mb-5" class="btn btn-outline-secondary">Add comment</button>
+                                            <textarea class="form-control mt-5 mb-4 mx-5 w-75" th:field="${newComment.description}" rows="3"></textarea>
+                                            <button type="submit" class="btn btn-outline-secondary ms-5 mb-3">Add comment</button>
                                         </form>
                                     </div>
                                     <div class="tab-pane fade" id="savedByPanel" role="tabpanel" aria-labelledby="friends-tab">
