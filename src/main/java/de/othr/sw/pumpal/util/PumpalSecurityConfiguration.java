@@ -36,7 +36,7 @@ public class PumpalSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(ALLOW_ACCESS_WITHOUT_AUTHENTICATION)
                 .permitAll()
                 .antMatchers("/workout/create").hasAuthority(AccountType.USER.name())
-                .antMatchers("/user/{\\d+}/deleteUser").hasAuthority(AccountType.ADMIN.name())
+//                .antMatchers("/user/{\\d+}/deleteUser").hasAuthority(AccountType.ADMIN.name())
                 .anyRequest().authenticated();
         http
                 .formLogin()

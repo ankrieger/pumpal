@@ -8,16 +8,20 @@ import javax.validation.constraints.Size;
 @Embeddable
 public class Address {
     @Size(min = 2, max = 100, message = "Street must be between 2 and 100 characters long")
+    @NotEmpty(message = "Street cannot be empty")
     private String street;
 
-    @Size(min = 1, max = 10, message = "Street number must be between 2 and 10 characters long")
+    @Size(min = 1, max = 10, message = "Street number must be between 1 and 10 characters long")
+    @NotEmpty(message = "Street number cannot be empty")
     private String streetNumber;
 
     @Pattern(regexp = "(^[0-9]+$|^$)", message = "Only numericals (0-9) are permitted")
     @Size(min = 5, max = 10, message = "ZIP code must be between 5 and 10 characters long")
+    @NotEmpty(message = "ZIP cannot be empty")
     private String zip;
 
     @Size(min = 2, max = 100, message = "City must be between 2 and 100 characters long")
+    @NotEmpty(message = "City cannot be empty")
     private String city;
 
     public Address() {

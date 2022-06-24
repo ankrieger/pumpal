@@ -8,10 +8,10 @@
 <body>
     <div th:replace="partials/header :: navigation"/>
 
-    <!--Font Awesome (added because you use icons in your prepend/append)-->
-    <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+<!--    &lt;!&ndash;Font Awesome (added because you use icons in your prepend/append)&ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />-->
 
-    <!-- stark angelehnt an https://mdbootstrap.com/docs/standard/extended/registration/#section-4 -->
+    <!-- angelehnt an https://mdbootstrap.com/docs/standard/extended/registration/#section-4 -->
 
     <section class="h-100">
         <div class="container py-5 h-100">
@@ -29,64 +29,64 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
                                             <div class="form-group">
-                                                <input type="text" th:field="*{firstName}" id="regFirstName" class="form-control" required>
+                                                <input type="text" th:field="*{firstName}" id="regFirstName" class="form-control" > <!-- required-->
                                                 <label class="form-label" for="regFirstName">First name</label>
-                                                <p class="alert-warning" th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}"></p>
+                                                <p class="text-danger" th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-4">
                                             <div class="form-group">
-                                                <input type="text" th:field="*{name}" id="regLastName" class="form-control" required>
+                                                <input type="text" th:field="*{name}" id="regLastName" class="form-control" > <!-- required-->
                                                 <label class="form-label" for="regLastName">Last name</label>
-                                                <p class="alert-warning" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></p>
+                                                <p class="text-danger" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></p>
                                             </div>
                                         </div>
                                     </div>
 
 
                                     <div class="mb-4">
-                                        <input type="email" th:field="*{email}" id="regEmail" class="form-control" placeholder="email@example.com" required>
+                                        <input type="email" th:field="*{email}" id="regEmail" class="form-control" placeholder="email@example.com"> <!-- required-->
                                         <label class="form-label" for="regEmail">Email</label>
                                         <p class="text-secondary">You won't be able to change your email address; Choose wisely!</p>
-                                        <p class="alert-warning" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></p>
+                                        <p class="text-danger" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></p>
                                     </div>
 
                                     <div class="mb-4">
-                                        <input type="password" th:field="*{password}" id="regPassword" class="form-control" required>
+                                        <input type="password" th:field="*{password}" id="regPassword" class="form-control" > <!-- required-->
                                         <label class="form-label" for="regPassword">Password</label>
-                                        <p class="alert-warning" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
-                                        <!--                                        <input type="checkbox" id="showPassword" />               show pwd funktionalität-->
-<!--                                        <label for="showPassword">  Show password</label>-->
+                                        <p class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
+                                        <input class="ms-3" type="checkbox" id="showPassword" />
+                                        <label for="showPassword">  Show password</label>
                                     </div>
 
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-9 mb-4">
                                                 <div class="form-group">
-                                                    <input type="text" th:field="*{address.street}" id="regStreet" class="form-control" required>
+                                                    <input type="text" th:field="*{address.street}" id="regStreet" class="form-control" > <!-- required-->
                                                     <label class="form-label" for="regStreet">Street</label>
-                                                    <p class="alert-warning" th:errors="*{address.street}" th:if="${#fields.hasErrors('address.street')}"></p>
+                                                    <p class="text-danger" th:errors="*{address.street}" th:if="${#fields.hasErrors('address.street')}"></p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 mb-4">
                                                 <div class="form-group">
-                                                    <input type="text" th:field="*{address.streetNumber}" id="regStreetNum" class="form-control" required>
+                                                    <input type="text" th:field="*{address.streetNumber}" id="regStreetNum" class="form-control" > <!-- required-->
                                                     <label class="form-label" for="regStreetNum">Street number</label>
-                                                    <p class="alert-warning" th:errors="*{address.streetNumber}" th:if="${#fields.hasErrors('address.streetNumber')}"></p>
+                                                    <p class="text-danger" th:errors="*{address.streetNumber}" th:if="${#fields.hasErrors('address.streetNumber')}"></p>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="mb-4">
-                                            <input type="text" th:field="*{address.zip}" id="regZIP" class="form-control" pattern="[0-9]+" placeholder="12345" required>
+                                            <input type="text" th:field="*{address.zip}" id="regZIP" class="form-control" placeholder="12345"> <!-- pattern="[0-9]+" required-->
                                             <label class="form-label" for="regZIP">ZIP code</label>
-                                            <p class="alert-warning" th:errors="*{address.zip}" th:if="${#fields.hasErrors('address.zip')}"></p>
+                                            <p class="text-danger" th:errors="*{address.zip}" th:if="${#fields.hasErrors('address.zip')}"></p>
                                         </div>
 
                                         <div class="mb-4">
-                                            <input type="text" th:field="*{address.city}" id="regCity" class="form-control" required>
+                                            <input type="text" th:field="*{address.city}" id="regCity" class="form-control"> <!--  required-->
                                             <label class="form-label" for="regCity">City</label>
-                                            <p class="alert-warning" th:errors="*{address.city}" th:if="${#fields.hasErrors('address.city')}"></p>
+                                            <p class="text-danger" th:errors="*{address.city}" th:if="${#fields.hasErrors('address.city')}"></p>
                                         </div>
                                     </div>
 
@@ -106,12 +106,15 @@
         </div>
     </section>
 
-<!--    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
-<!--    &lt;!&ndash; Bootstrap Date-Picker Plugin &ndash;&gt;-->
-<!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>-->
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>-->
-<!--&lt;!&ndash;    <script src="../static/js/password.js"></script>&ndash;&gt;-->
-<!--    <script th:src="@{/js/password.js}" type="text/javascript"></script>-->
+    <script>
+        document.getElementById('showPassword').onclick = function() {
+            if ( this.checked ) {
+                document.getElementById('regPassword').type = "text";
+            } else {
+                document.getElementById('regPassword').type = "password";
+            }
+        };
+    </script>
 
 </body>
 </html>

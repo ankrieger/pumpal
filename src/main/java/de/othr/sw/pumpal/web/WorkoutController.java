@@ -69,7 +69,7 @@ public class WorkoutController {
     public String createNewWorkout(Model model) {
         Workout workout = new Workout();
 
-        Exercise exercise = new Exercise("Example exercise description", 3, 10, 15, "Example note");
+        Exercise exercise = new Exercise();
         List<Exercise> exercises = new ArrayList<>();
         exercises.add(exercise);
 
@@ -89,9 +89,8 @@ public class WorkoutController {
                                    @RequestParam(required = false, value = "success",defaultValue = "false") boolean success,
                                    @RequestParam(required = false, value = "error",defaultValue = "false") boolean error,
                                    Model model) {
-        //TODO: check if exercises are valid -> remove exercises without description + at least one exercise has to exist!
         if (result.hasErrors()) {
-            return "redirect:/workout/create?error";
+            return "create-workout";
         }
         workoutService.createWorkout(workout, user);
         redirectAttributes.addFlashAttribute("newworkout", workout);
@@ -158,12 +157,10 @@ public class WorkoutController {
     @RequestMapping(value = "/{id}/addComment", method = RequestMethod.POST)
     public String addComment(@AuthenticationPrincipal User user,
                              @PathVariable("id") Long id,
-                             @Valid Comment comment,
-                             BindingResult result) {
-        if (result.hasErrors()) {
-            return "redirect:/workout/"+id+"/details?error";
+                             Comment comment) {
+        if(!comment.getDescription().isBlank()) {
+            commentService.addComment(comment,user, workoutService.getWorkoutById(id));
         }
-        commentService.addComment(comment,user, workoutService.getWorkoutById(id));
         return "redirect:/workout/"+id+"/details";
     }
 

@@ -7,7 +7,6 @@ $(document).ready(function () {
 
         if (index < max_fields) {
             let newRow = jQuery('<div class="exercise row mb-5">' +
-                ' <h5>Exercise <span name="' + index + '"></span></h5>' +
                 ' <div class="mb-3">' +
                 ' Exercise description*:' +
                 ' <input name="exercises[' + index + '].description" type="text" class="form-control form-control"/>' +

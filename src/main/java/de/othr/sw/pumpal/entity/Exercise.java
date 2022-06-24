@@ -5,17 +5,10 @@ import de.othr.sw.pumpal.entity.util.SingleIdEntity;
 import javax.persistence.*;
 
 @Embeddable
-public class Exercise /*extends SingleIdEntity<Long>*/ {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(name = "id", nullable = false)
+public class Exercise {
+
     private int id;
 
-//    @ManyToOne
-//    @JoinColumn(referencedColumnName = "id", name="workout_id")
-//    private Workout workout;
-
-//    @Column(nullable = false)
     private String description;
 
     private int sets;
@@ -30,11 +23,6 @@ public class Exercise /*extends SingleIdEntity<Long>*/ {
 
     public Exercise() {
     }
-//
-//    public Exercise(Workout workout, String description) {
-//        this.workout = workout;
-//        this.description = description;
-//    }
 //
     public Exercise(String description, int sets, int reps, int weight, String note) {
         this.description = description;
@@ -51,14 +39,6 @@ public class Exercise /*extends SingleIdEntity<Long>*/ {
     public void setId(int id) {
         this.id = id;
     }
-
-//    public Workout getWorkout() {
-//        return workout;
-//    }
-//
-//    public void setWorkout(Workout workout) {
-//        this.workout = workout;
-//    }
 
     public String getDescription() {
         return description;
@@ -104,7 +84,6 @@ public class Exercise /*extends SingleIdEntity<Long>*/ {
     public String toString() {
         return "Exercise{" +
                 "id=" + id +
-//                ", workout=" + workout +
                 ", description='" + description + '\'' +
                 ", sets=" + sets +
                 ", reps=" + reps +
@@ -113,8 +92,4 @@ public class Exercise /*extends SingleIdEntity<Long>*/ {
                 '}';
     }
 
-//    @Override
-//    public Long getID() {
-//        return this.id;
-//    }
 }

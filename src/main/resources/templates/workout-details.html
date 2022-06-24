@@ -151,8 +151,10 @@
                                     <div class="tab-pane fade" id="commentPanel" role="tabpanel" aria-labelledby="friends-tab">
                                         <div th:replace="partials/comment-cards :: comment_cards(comments=${comments},user=${user},workout=${workout})"/>
                                         <form method="POST" th:action="@{/workout/{id}/addComment(id=${workout.id})}" th:object="${newComment}">
-                                            <textarea class="form-control mt-5 mb-4 mx-5 w-75" th:field="${newComment.description}" rows="3"></textarea>
-                                            <button type="submit" class="btn btn-outline-secondary ms-5 mb-3">Add comment</button>
+                                            <textarea class="form-control mt-5 mb-4 mx-5 w-75" id="commentInput"
+                                                      th:field="${newComment.description}" rows="3"></textarea>
+                                            <button type="submit" class="btn btn-outline-secondary ms-5 mb-3"
+                                                    id="commentBtn" disabled>Add comment</button>
                                         </form>
                                     </div>
                                     <div class="tab-pane fade" id="savedByPanel" role="tabpanel" aria-labelledby="friends-tab">
@@ -168,5 +170,17 @@
             </div>
         </div>
     </section>
+<script>
+    let button = document.getElementById("commentBtn")
+    let input = document.getElementById("commentInput")
+    input.addEventListener("input", function(e) {
+        if(input.value.length == 0) {
+            button.disabled = true
+        } else {
+            button.disabled = false
+        }
+    })
+</script>
+
 </body>
 </html>

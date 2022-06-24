@@ -4,6 +4,8 @@ import de.othr.sw.pumpal.entity.util.SingleIdEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.*;
 
@@ -14,21 +16,23 @@ public class Workout extends SingleIdEntity<Long> {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
     @Size(min = 3, max = 60, message = "Your workout's title must be between 3 and 60 characters long")
+    @NotEmpty(message = "Workout title cannot be empty")
     private String title;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Date date;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "email", name="user_id"  /*FetchType eager?*/)
     private User author;
 
-    @Column(nullable = false)
-    @Size(min = 2, max = 350, message = "Your surname must be between 2 and 350 characters long")
+    @Size(min = 2, max = 350, message = "Your workout's description must be between 2 and 350 characters long")
+    @NotEmpty(message = "Workout description cannot be empty")
     private String description;
+
+    private Integer durationInMin;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
@@ -57,7 +61,6 @@ public class Workout extends SingleIdEntity<Long> {
 //    bei initialisierung: tags splitten und in ein Array packen
 
 
-    private Integer durationInMin;
 
     public Workout() {
 

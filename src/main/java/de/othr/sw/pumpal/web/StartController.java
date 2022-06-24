@@ -73,14 +73,15 @@ public class StartController {
         return "registration";
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST) // th:action="@{/register}"
-    public String doRegister(@Valid User user, BindingResult result) {
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String doRegister(@Valid @ModelAttribute User user,
+                             BindingResult result) {
         if (result.hasErrors()) {
-            return "redirect:registration?error";
+            return "registration";
         }
         //TODO: Test ob email bereits belegt
         userService.registerUser(user);
-        return "redirect:index";
+        return "redirect:/";
     }
 
 
