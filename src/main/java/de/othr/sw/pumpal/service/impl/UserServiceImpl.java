@@ -27,11 +27,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-//
-//    @Override
-//    public List<User> getAllUsers() {
-//        return null;
-//    }
 
     @Override
     public Page<User> findUserPage(int pageNumber) {
@@ -39,6 +34,15 @@ public class UserServiceImpl implements UserService {
 
         User user_auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findAllByEmailNotLike(user_auth.getEmail(), pageable);
+    }
+
+    @Override
+    public Page<User> findFilteredUser(String filter, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1,10);
+        if (filter.isBlank()) {
+            return userRepository.getUserByKeyword("", pageable);
+        }
+        return userRepository.getUserByKeyword(filter, pageable);
     }
 
     @Override

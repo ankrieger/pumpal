@@ -180,15 +180,18 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public String getAllUsers(Model model) {
-        return getFirstPage(model, 1);
+    public String getAllUsers(Model model,
+                              @ModelAttribute("keyword") String keyword) {
+        return getFirstPage(model, keyword,1);
     }
 
 
     @RequestMapping(value = "/all/page/{pageNumber}", method = RequestMethod.GET)
     public String getFirstPage(Model model,
-                      @PathVariable("pageNumber") int currentPage) {
-        Page<User> page = userService.findUserPage(currentPage);
+                               @RequestParam(required = false, value = "keyword") String keyword,
+                               @PathVariable("pageNumber") int currentPage) {
+//        Page<User> page = userService.findUserPage(currentPage);
+        Page<User> page = userService.findFilteredUser(keyword, currentPage);
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();
 
@@ -198,7 +201,10 @@ public class ProfileController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("users", users);
+        model.addAttribute("keyword", keyword);
+
         return "users";
     }
+
 
 }

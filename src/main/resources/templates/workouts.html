@@ -8,16 +8,18 @@
     <div th:replace="partials/header :: navigation"/>
 
     <div class="mt-5 py-4 px-4 d-flex justify-content-end" style="background-color: #f8f9fa;">
-        <form class="d-flex">
+        <form class="d-flex" th:action="@{/workout/all}">
             <label for="level" class="lh-lg">Level: </label>
-            <select class="form-select ms-3 text-lowercase w-25"  aria-label="level" id="level">
-                <option selected>ANY</option>
+            <select class="form-select ms-3 text-lowercase w-25"  aria-label="level" name="selectedlevel" id="level">
+                <option value="any">any</option>
+<!--                TODO: selectedvalue is not displayed when changing page-->
                 <option th:each="level : ${T(de.othr.sw.pumpal.entity.Level).values()}"
                         th:value="${level}"
+                        th:selected="${selectedlevel.toLowerCase() eq level}"
                         th:text="${level}">
                 </option>
             </select>
-            <input class="form-control ms-5 me-3" style="width: 470px;" type="search" placeholder="Search for title, description, user or difficulty level" aria-label="Search">
+            <input class="form-control ms-5 me-3" name="keyword" th:value="${keyword}" style="width: 470px;" type="search" placeholder="Search for title, description or difficulty level" aria-label="Search">
             <button class="btn btn-outline-warning pe-5" type="submit">Search</button>
         </form>
     </div>
@@ -34,8 +36,8 @@
                                 Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
                                 &nbsp; &nbsp; - &nbsp;
                                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                                    <a th:href="@{'/workout/page/' + ${i}}">[[${i}]]</a>
-                                    &nbsp; &nbsp;
+                                    <a th:href="@{/workout/all/page/{i}(selectedlevel=${selectedlevel},keyword=${keyword},i=${i})}">[[${i}]]</a>
+                                      &nbsp;
                                 </span>
                             </footer>
                         </div>

@@ -49,7 +49,7 @@
                                 <li sec:authorize="hasAuthority('USER')">
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" th:href="@{/workout}">All workouts</a></li>
+                                <li><a class="dropdown-item" th:href="@{/workout/all}">All workouts</a></li>
                             </ul>
                         </li>
                         <li sec:authorize="isAuthenticated()" class="nav-item dropdown">

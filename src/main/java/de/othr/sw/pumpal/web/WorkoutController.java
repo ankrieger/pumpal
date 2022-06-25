@@ -36,15 +36,28 @@ public class WorkoutController {
 
 
     // erstmaliges Laden
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String viewWorkouts(Model model) {
-        return getOnePage(model, 1);
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public String viewWorkouts(Model model,
+                               @ModelAttribute("keyword") String keyword,
+                               @ModelAttribute("selectedlevel") String level) {
+        return getOnePage(model, keyword, level,1);
     }
 
-    @RequestMapping(value = "/page/{pageNumber}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/all/page/{pageNumber}", method = RequestMethod.GET)
     public String getOnePage(Model model,
+                             @RequestParam(required = false, value = "keyword") String keyword,
+                             @RequestParam(required = false, value = "selectedlevel") String level,
                              @PathVariable("pageNumber") int currentPage) {
-        Collection<Visibility> visibilities = new ArrayList<>();
+
+        List<Level> levels = new ArrayList<>();
+        if (level.isBlank() || level.equals("any")) {
+            levels.add(Level.EASY);
+            levels.add(Level.MEDIUM);
+            levels.add(Level.HARD);
+        } else levels.add(Level.valueOf(level));
+
+        List<Visibility> visibilities = new ArrayList<>();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(user.getAccountType().name().equals("ADMIN")) {
             visibilities.add(Visibility.PRIVATE);
@@ -52,7 +65,9 @@ public class WorkoutController {
         //user sehen hier nur öffentliche workouts; besser wäre es, die privaten der Freunde mitreinzunehmen
         visibilities.add(Visibility.PUBLIC);
 
-        Page<Workout> page = workoutService.findWorkoutPage(visibilities, currentPage);
+//        Page<Workout> page = workoutService.findWorkoutPage(visibilities, currentPage);
+        Page<Workout> page = workoutService.findFilteredWorkoutPage(keyword, levels, visibilities, currentPage);
+
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();
         List<Workout> workouts = page.getContent();
@@ -61,6 +76,8 @@ public class WorkoutController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("workouts", workouts);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedlevel", level);
         return "workouts";
     }
 

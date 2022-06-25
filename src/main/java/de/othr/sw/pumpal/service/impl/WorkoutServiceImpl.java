@@ -56,7 +56,14 @@ public class WorkoutServiceImpl implements WorkoutService {
         return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities, pageable);
     }
 
-
+    @Override
+    public Page<Workout> findFilteredWorkoutPage(String filter, List<Level> levels, List<Visibility> visibilities, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1,10);
+        if (filter.isBlank()) {
+            return workoutRepository.getWorkoutsByKeyword("", levels, visibilities, pageable);
+        }
+        return workoutRepository.getWorkoutsByKeyword(filter, levels, visibilities, pageable);
+    }
 
     @Override
     public List<Workout> getNewestWorkouts(Collection<Visibility> visibilities) {
@@ -69,11 +76,6 @@ public class WorkoutServiceImpl implements WorkoutService {
     public List<Workout> getSavedWorkoutsOfUser(User user) {
         return workoutRepository.getSavedWorkoutsOfUserWithEmail(user.getEmail());
     }
-
-//    @Override
-//    public List<Workout> getWorkoutsOfCertainLevel(Level level) {
-//        return null;
-//    }
 
 
     @Override

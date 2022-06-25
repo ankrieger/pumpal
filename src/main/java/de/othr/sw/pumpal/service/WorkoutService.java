@@ -14,11 +14,13 @@ public interface WorkoutService {
 
     Page<Workout> findWorkoutPage(Collection<Visibility> visibilities, int pageNumber);
 
+    Page<Workout> findFilteredWorkoutPage(String filter, List<Level> levels, List<Visibility> visibilities, int pageNumber);
+
     List<Workout> getNewestWorkouts(Collection<Visibility> visibilities);  //auf startpage, noch vor dem einloggen angezeigt, so 5 Titel + Descprition -> bei Klick auf Titel zu Einloggen weitergeleitet
 
     List<Workout> getSavedWorkoutsOfUser(User user);
 
-//    List<Workout> getWorkoutsOfCertainLevel(Level level); // String level?
+    //List<Workout> getFilteredWorkouts(String filter, Level level);
 
     Workout getWorkoutById(Long workoutId);
 
