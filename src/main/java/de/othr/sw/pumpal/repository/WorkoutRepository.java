@@ -21,21 +21,24 @@ public interface WorkoutRepository extends PagingAndSortingRepository<Workout, L
 
     List<Workout> findFirst5ByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities);
 
-    List<Workout> findAllByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities);
-
-    Page<Workout> findAllByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities, Pageable paging);
-
-//    :#{#level?.name()}
     @Query("SELECT w FROM Workout w WHERE concat(w.title,w.description) LIKE %:filter% and w.level IN :levels " +
-            "and w.visibility IN :visibilities order by w.date desc") //pass % if any
+            "and w.visibility IN :visibilities order by w.date desc")
     Page<Workout> getWorkoutsByKeyword(@Param("filter") String filter, @Param("levels") List<Level> levels, @Param("visibilities") List<Visibility> visibilities, Pageable paging);
-
-
-//    Page<Workout> findAllByTitleContainsOrDescriptionContainsAndLevelInAndVisibilityInOrderByDateDesc(String title, String description, List<Level> levels, List<Visibility> visibilities, Pageable paging);
 
     @Query("SELECT w FROM Workout w JOIN w.savedBy u WHERE u.email=:email")
     List<Workout> getSavedWorkoutsOfUserWithEmail(@Param("email") String email);
 
+
+
+
+
+
+//    Page<Workout> findAllByTitleContainsOrDescriptionContainsAndLevelInAndVisibilityInOrderByDateDesc(String title, String description, List<Level> levels, List<Visibility> visibilities, Pageable paging);
+
+
+//    List<Workout> findAllByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities);
+
+//    Page<Workout> findAllByVisibilityInOrderByDateDesc(Collection<Visibility> visibilities, Pageable paging);
 
     //List<Workout> findAllByVisibilityInAndAuthorIn(Collection<Visibility> visibilities, Collection<User> users);
 

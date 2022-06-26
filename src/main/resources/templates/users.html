@@ -17,18 +17,50 @@
     <section class="h-100 mt-3">
         <div class="container py-4 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col col-xl-10">
+                <div class="col col-xl-11">
                     <h3 class="mb-3 pb-3">Users</h3>
                     <div class="card">
                         <div class="card-body p-4">
                             <div th:replace="partials/user-table :: user_table(users=${users})"/>
                             <footer class="panel-footer pt-3">
-                                Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
-                                &nbsp; &nbsp; - &nbsp;
-                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                                        <a th:href="@{/profile/all/page/{i}(keyword=${keyword},i=${i})}">[[${i}]]</a>
-                                        &nbsp; &nbsp;
-                                    </span>
+                                <nav aria-label="Page navigation example"  th:if="${totalPages > 0}">
+                                    Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+
+                                    <ul class="pagination justify-content-start pt-3">
+                                        <li class="page-item">
+                                            <a  class="page-link" th:if="${currentPage > 1}" th:href="@{/profile/all/page/1(keyword=${keyword})}">First</a>
+                                            <span th:unless="${currentPage > 1}">First</span>
+                                        </li>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <li class="page-item">
+                                            <a th:if="${currentPage > 1}" th:href="@{/profile/all/page/{page}(keyword=${keyword},page=${currentPage - 1})}">Previous</a>
+                                            <span th:unless="${currentPage > 1}">Previous</span>
+                                        </li>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <li class="page-item">
+                                            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                                <a th:href="@{/profile/all/page/{i}(keyword=${keyword},i=${i})}">[[${i}]]</a>
+                                                &nbsp;&nbsp;
+                                            </span>
+                                        </li>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <li class="page-item">
+                                            <a th:if="${currentPage < totalPages}" th:href="@{/profile/all/page/{page}(keyword=${keyword},page=${currentPage + 1})}">Next</a>
+                                            <span th:unless="${currentPage < totalPages}">Next</span>
+                                        </li>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <li class="page-item">
+                                            <a th:if="${currentPage < totalPages}" th:href="@{/profile/all/page/{page}(keyword=${keyword},page=${totalPages})}">Last</a>
+                                            <span th:unless="${currentPage < totalPages}">Last</span>
+                                        </li>
+                                    </ul>
+                                </nav>
+<!--                                Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]-->
+<!--                                &nbsp; &nbsp; - &nbsp;-->
+<!--                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">-->
+<!--                                        <a th:href="@{/profile/all/page/{i}(keyword=${keyword},i=${i})}">[[${i}]]</a>-->
+<!--                                        &nbsp; &nbsp;-->
+<!--                                    </span>-->
                             </footer>
                         </div>
                     </div>

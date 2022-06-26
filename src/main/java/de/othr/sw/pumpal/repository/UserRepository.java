@@ -16,7 +16,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, String> {
 
-    Page<User> findAllByEmailNotLike(String email, Pageable paging);
 
     @Query("SELECT u FROM User u WHERE concat(u.email,u.firstName,u.name) LIKE %:filter%")
     Page<User> getUserByKeyword(@Param("filter") String filter, Pageable paging);

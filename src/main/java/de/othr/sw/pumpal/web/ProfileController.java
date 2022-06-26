@@ -1,9 +1,12 @@
 package de.othr.sw.pumpal.web;
 
 import de.othr.sw.pumpal.entity.*;
+import de.othr.sw.pumpal.entity.dto.Friend;
 import de.othr.sw.pumpal.service.FriendshipService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
+import de.othr.sw.pumpal.service.rest.TestService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -31,6 +35,12 @@ public class ProfileController {
     @Autowired
     private FriendshipService friendshipService;
 
+    @Autowired
+    private TestService testService;
+
+    @Autowired
+    Logger logger;
+
 //    TODO: outsource get friendship/workout/size of those into separate functions for better readability
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -43,10 +53,6 @@ public class ProfileController {
 //
 //        List<Workout> workoutsPublic = user.getWorkouts().stream()
 //                .filter(workout -> workout.getVisibility().equals(Visibility.PUBLIC))
-//                .collect(Collectors.toList());
-//
-//        List<Workout> workoutsPrivate= user.getWorkouts().stream()
-//                .filter(workout -> workout.getVisibility().equals(Visibility.PRIVATE))
 //                .collect(Collectors.toList());
 
         //TODO: Variable isAuthor einführen
@@ -66,6 +72,16 @@ public class ProfileController {
             List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
             //Outgoing friend requests
             List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
+
+
+            //REST Test:
+            try {
+                List<Friend> friendsRest = testService.getFriendsOfUserRest(user.getID());
+                model.addAttribute("friendsDto", friendsRest);
+            } catch (HttpClientErrorException e) {
+                logger.error(e.getMessage());
+                return "redirect:/index?error";
+            }
 
 
             model.addAttribute("workouts", workoutsPublic);
@@ -94,7 +110,7 @@ public class ProfileController {
                                 @Valid User newUser,
                                 BindingResult result) {
         if (result.hasErrors()) {
-            return "redirect:edit?error"; //TODO:error alert in profile-edit page
+            return "profile-edit";
         }
 
         userService.updateUser(user, newUser);
@@ -117,8 +133,7 @@ public class ProfileController {
 
         String friendshipStatus;
 
-
-        if(user_auth.getAccountType().name().equals("USER")) {
+        if(user.getAccountType().name().equals("USER")) {
             friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
         } else friendshipStatus = "admin";
 
@@ -134,7 +149,19 @@ public class ProfileController {
             savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
         }
 
-        //absichtlichAnzahl aller Workouts statt nur privater; möglicherweise Anreiz zur Anfrage,
+        //REST Test:
+        //generell echt schlechte idee die ganze profil seite down zu nehmen, wenn
+        //rest ss down ist; ist zu spät aufgefallen um größere änderungen vorzunehmen
+        //dient hier also eher der exemplarischen veranschauung
+        try {
+            List<Friend> friendsRest = testService.getFriendsOfUserRest(user.getID());
+            model.addAttribute("friendsDto", friendsRest);
+        } catch (HttpClientErrorException e) {
+            logger.error(e.getMessage());
+            return "redirect:/index?error";
+        }
+
+        //absichtlich Anzahl aller Workouts statt nur privater; möglicherweise Anreiz zur Anfrage,
         //wenn die Zahl deutlich höher ausfällt als einsehbare Workouts
 
         model.addAttribute("user", user);
@@ -173,7 +200,7 @@ public class ProfileController {
 
 
     @RequestMapping(value = "/{id}/deleteUser", method = RequestMethod.POST)
-    public String deletsUser(@PathVariable("id") String id) {
+    public String deleteUser(@PathVariable("id") String id) {
         User user = userService.getUserByEmail(id);
         userService.deleteUser(user);
         return "redirect:/index";
@@ -190,7 +217,6 @@ public class ProfileController {
     public String getFirstPage(Model model,
                                @RequestParam(required = false, value = "keyword") String keyword,
                                @PathVariable("pageNumber") int currentPage) {
-//        Page<User> page = userService.findUserPage(currentPage);
         Page<User> page = userService.findFilteredUser(keyword, currentPage);
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();

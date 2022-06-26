@@ -47,9 +47,7 @@ public class StartController {
 //        // Testing REST Functionality
 //        WorkoutDto workoutDto = testService.getWorkoutById((long)111);
 //        model.addAttribute("workoutDTO", workoutDto);
-//
-//        List<Friend> friendsRest = testService.getFriendsOfUserRest("gio75@gmx.de");
-//        model.addAttribute("friendsDto", friendsRest);
+
 
         return "index";
     }

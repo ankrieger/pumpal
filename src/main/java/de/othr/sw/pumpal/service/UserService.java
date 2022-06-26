@@ -11,9 +11,6 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
-    //List<User> getAllUsers();
-
-    Page<User> findUserPage(int pageNumber);
 
     Page<User> findFilteredUser(String filter, int pageNumber);
 
@@ -24,6 +21,8 @@ public interface UserService extends UserDetailsService {
     User updateUser(User user, User newAttributes);
 
     void deleteUser(User user);
+
+    void removeAllSavingUsersFromUsersWorkouts(User user);
 
     List<User> getAllUsersSavingWorkout(Workout workout);
 

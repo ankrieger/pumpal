@@ -4,6 +4,7 @@ import de.othr.sw.pumpal.entity.Friendship;
 import de.othr.sw.pumpal.entity.User;
 import de.othr.sw.pumpal.repository.FriendshipRepository;
 import de.othr.sw.pumpal.service.FriendshipService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,22 +22,27 @@ public class FriendshipServiceImpl implements FriendshipService {
     @Autowired
     private FriendshipRepository friendshipRepository;
 
+    @Autowired
+    Logger logger;
+
 
     @Override
     public List<User> getAllFriendsOfUser(User user) {
         List<User> friends = friendshipRepository.getFriendshipsIncoming(user.getEmail(), true); //active friendships
         friends.addAll(friendshipRepository.getFriendshipsOutgoing(user.getEmail(), true)); //active friendships
-        System.out.println(friends);
+        logger.info("Got friends of user " + user.getEmail());
         return friends;
     }
 
     @Override
     public List<User> getAllIncomingFriendRequestsOfUser(User user) {
+        logger.info("Got received friendrequests of user " + user.getEmail());
         return friendshipRepository.getFriendshipsIncoming(user.getEmail(), false);
     }
 
     @Override
     public List<User> getAllOutgoingFriendRequestsOfUser(User user) {
+        logger.info("Got sent friendrequests of user " + user.getEmail());
         return friendshipRepository.getFriendshipsOutgoing(user.getEmail(), false);
     }
 
@@ -63,26 +69,28 @@ public class FriendshipServiceImpl implements FriendshipService {
         friendship.setRequested(requested);
         friendship.setActive(false);
 
-        System.out.println(friendship);
-
+        logger.info("Friendrequest from user " + requesting.getEmail() + " to user " + requested.getEmail() + " was sent.");
         return friendshipRepository.save(friendship);
     }
 
     @Override
+    @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void acceptFriendRequest(Friendship friendship) {
         friendship.setActive(true);
         friendshipRepository.save(friendship);
+        logger.info("Friendship was accepted.");
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteFriendship(Friendship friendship) {
         friendshipRepository.delete(friendship);
+        logger.info("Friendship was removed.");
     }
 
     @Override
     public Friendship getFriendshipOfUsers(User requesting, User requested) {
-        Collection<String> users = new ArrayList<String>();
+        Collection<String> users = new ArrayList<>();
         users.add(requesting.getEmail());
         users.add(requested.getEmail());
         return friendshipRepository.getFriendshipOfUsers(users);

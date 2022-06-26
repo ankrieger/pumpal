@@ -54,7 +54,6 @@
                                             <textarea class="form-control" th:field="*{description}" th:value="*{description} ?: ''" id="description" rows="3"></textarea>
                                             <label for="description" class="col-sm-2 col-form-label mb-3">Description</label>
                                         </div>
-                                        <p class="alert-warning" th:errors="*{description}" th:if="${#fields.hasErrors('description')}"></p>
                                     </div>
 
                                     <h4>Personal information</h4>
@@ -64,14 +63,14 @@
                                             <div class="form-group">
                                                 <input type="text" th:field="*{firstName}" th:value="*{firstName}" id="regFirstName" class="form-control" required>
                                                 <label class="form-label" for="regFirstName">First name</label>
-                                                <p class="alert-warning" th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}"></p>
+                                                <p class="text-danger" th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}"></p>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-4">
                                             <div class="form-group">
                                                 <input type="text" th:field="*{name}" th:value="*{name}" id="regLastName" class="form-control" required>
                                                 <label class="form-label" for="regLastName">Last name</label>
-                                                <p class="alert-warning" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></p>
+                                                <p class="text-danger" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -82,14 +81,14 @@
                                                 <div class="form-group">
                                                     <input type="text" th:field="*{address.street}" th:value="*{address.street}" id="regStreet" class="form-control" required>
                                                     <label class="form-label" for="regStreet">Street</label>
-                                                    <p class="alert-warning" th:errors="*{address.street}" th:if="${#fields.hasErrors('address.street')}"></p>
+                                                    <p class="text-danger" th:errors="*{address.street}" th:if="${#fields.hasErrors('address.street')}"></p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 mb-4">
                                                 <div class="form-group">
                                                     <input type="text" th:field="*{address.streetNumber}" th:value="*{address.streetNumber}" id="regStreetNum" class="form-control" required>
                                                     <label class="form-label" for="regStreetNum">Street number</label>
-                                                    <p class="alert-warning" th:errors="*{address.streetNumber}" th:if="${#fields.hasErrors('address.streetNumber')}"></p>
+                                                    <p class="text-danger" th:errors="*{address.streetNumber}" th:if="${#fields.hasErrors('address.streetNumber')}"></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -97,13 +96,13 @@
                                         <div class="mb-4">
                                             <input type="text" th:field="*{address.zip}" th:value="*{address.zip}" id="regZIP" class="form-control" pattern="[0-9]+" placeholder="12345" required>
                                             <label class="form-label" for="regZIP">ZIP code</label>
-                                            <p class="alert-warning" th:errors="*{address.zip}" th:if="${#fields.hasErrors('address.zip')}"></p>
+                                            <p class="text-danger" th:errors="*{address.zip}" th:if="${#fields.hasErrors('address.zip')}"></p>
                                         </div>
 
                                         <div class="mb-4">
                                             <input type="text" th:field="*{address.city}" th:value="*{address.city}" id="regCity" class="form-control" required>
                                             <label class="form-label" for="regCity">City</label>
-                                            <p class="alert-warning" th:errors="*{address.city}" th:if="${#fields.hasErrors('address.city')}"></p>
+                                            <p class="text-danger" th:errors="*{address.city}" th:if="${#fields.hasErrors('address.city')}"></p>
                                         </div>
                                     </div>
 

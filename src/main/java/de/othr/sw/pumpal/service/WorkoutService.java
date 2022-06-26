@@ -7,12 +7,8 @@ import java.util.Collection;
 import java.util.List;
 
 public interface WorkoutService {
-    //sowohl für eigene workouts als auch für die anderer user als methode
+
     List<Workout> getAllWorkoutsOfUserByVisibility(Visibility visibility, User user); //oder String Email; nicht vergessen entsprechend visibility!
-
-    List<Workout> getAllWorkoutsVisible(Collection<Visibility> visibilities); //ergo alle Public vorerst; später: auch FRIENDS + Freund
-
-    Page<Workout> findWorkoutPage(Collection<Visibility> visibilities, int pageNumber);
 
     Page<Workout> findFilteredWorkoutPage(String filter, List<Level> levels, List<Visibility> visibilities, int pageNumber);
 
@@ -20,12 +16,20 @@ public interface WorkoutService {
 
     List<Workout> getSavedWorkoutsOfUser(User user);
 
-    //List<Workout> getFilteredWorkouts(String filter, Level level);
-
     Workout getWorkoutById(Long workoutId);
 
     Workout createWorkout(Workout workout, User user);
 
     void deleteWorkout(Workout workout);
+
+
+
+
+    //List<Workout> getFilteredWorkouts(String filter, Level level);
+
+//    List<Workout> getAllWorkoutsVisible(Collection<Visibility> visibilities); //ergo alle Public vorerst; später: auch FRIENDS + Freund
+
+//    Page<Workout> findWorkoutPage(Collection<Visibility> visibilities, int pageNumber);
+
 
 }

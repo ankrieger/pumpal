@@ -45,7 +45,7 @@ public class TestServiceRestController {
         User user = userService.getUserByEmail(email);
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
 
-        logger.info("Friends of user {} have been sent via REST API", email);
+        logger.info("Friends of user " + email + "have been sent via REST API");
 
         return friends.stream()
                 .map(friend -> modelMapper.map(friend, Friend.class))
@@ -56,7 +56,7 @@ public class TestServiceRestController {
     public WorkoutDto getWorkoutById(@PathVariable("id") Long workoutId) {
         Workout workout = workoutService.getWorkoutById(workoutId);
 
-        logger.info("WorkoutDto with ID {} has been sent via REST API", workoutId);
+        logger.info("WorkoutDto with ID" + workoutId + " has been sent via REST API");
 
         return new WorkoutDto(workout.getID(), workout.getTitle(), workout.getDescription()) ;
     }

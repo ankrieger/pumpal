@@ -50,7 +50,7 @@ public class Workout extends SingleIdEntity<Long> {
     @OneToMany(mappedBy = "workout", orphanRemoval = true,  cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-    @ManyToMany(mappedBy = "savedWorkouts", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "savedWorkouts", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<User> savedBy;
 
     @Enumerated(value = EnumType.STRING)

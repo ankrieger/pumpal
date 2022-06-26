@@ -3,6 +3,7 @@ package de.othr.sw.pumpal.service.impl;
 import de.othr.sw.pumpal.entity.*;
 import de.othr.sw.pumpal.repository.UserRepository;
 import de.othr.sw.pumpal.repository.WorkoutRepository;
+import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import de.othr.sw.pumpal.service.exception.UserNotFoundException;
 import org.slf4j.Logger;
@@ -16,19 +17,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class WorkoutServiceImpl implements WorkoutService {
+
+    //Comments werden durch CascadeType.REMOVE automatisch gelöscht,
+    //da es in meinem Fall nicht gewollt ist, diese Entitätsobjekte ohne Referenz auf ein Workout in der DB zu erhalten.
+    //Ansonsten müsste man hier den CommentService autowiren und bei Löschen eines
+    //Workouts die Referenz aller Kommentare auf dieses Workout entfernen über entsprechende Service Methoden
+    //(falls Kommentare  aus irgendwelchen Gründen archiviert werden sollten o.Ä.)
+
 
     @Autowired
     private WorkoutRepository workoutRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     Logger logger;
@@ -37,23 +42,11 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Transactional
     public List<Workout> getAllWorkoutsOfUserByVisibility(Visibility visibility, User user) {
         if (user != null) {
-            //anders formulieren? ohne auf user repo zuzugreifen?
-            //return userRepository.findById(user.getEmail()).get().getWorkouts();
+            logger.info("Got workouts of user " + user.getEmail());
             return workoutRepository.findAllByAuthorAndVisibility(user, visibility);
         }
+        logger.info("There are no workouts yet by user " + user.getEmail());
         return null;
-    }
-
-
-    @Override
-    public List<Workout> getAllWorkoutsVisible(Collection<Visibility> visibilities) {
-        return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities);
-    }
-
-    @Override
-    public Page<Workout> findWorkoutPage(Collection<Visibility> visibilities, int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1,10);
-        return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities, pageable);
     }
 
     @Override
@@ -74,6 +67,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<Workout> getSavedWorkoutsOfUser(User user) {
+        logger.info("Got saved workouts from user " + user.getEmail());
         return workoutRepository.getSavedWorkoutsOfUserWithEmail(user.getEmail());
     }
 
@@ -87,6 +81,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
 
     @Override
+    @Transactional( propagation = Propagation.REQUIRES_NEW)
     public Workout createWorkout(Workout workout, User user) {
         workout.setAuthor(user);
         workout.setDate(Timestamp.valueOf(LocalDateTime.now()));
@@ -96,26 +91,43 @@ public class WorkoutServiceImpl implements WorkoutService {
             if (exercise.getDescription().isBlank()) continue;
             exercise.setId(index++);
         }
+        logger.info("Created workout.");
         return workoutRepository.save(workout);
     }
 
     @Override
     @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void deleteWorkout(Workout workout) {
-//        alle savedWorkout Referenzen entfernen!
+////        alle savedWorkout Referenzen entfernen!
         if(workout.getSavedBy()!=null) {
             if(workout.getSavedBy().size()>=1) {
-                List<User> savedby = new ArrayList<>(workout.getSavedBy());
-                for(User u : savedby) {
-                    workout.removeUserSavedBy(u);
-                    List<Workout> savedWorkouts = u.getSavedWorkouts();
-                    savedWorkouts.remove(workout);
-                    u.setSavedWorkouts(savedWorkouts);
+                List<User> savedBy = new ArrayList<>(workout.getSavedBy());
+                for(User user : savedBy) {
+                    userService.removeWorkoutFromSavedWorkoutsFromUser(workout, user);
                 }
             }
         }
         workoutRepository.delete(workout);
+        logger.info("Deleted workout with id " + workout.getID());
     }
+
+
+
+
+
+
+
+
+//    @Override
+//    public List<Workout> getAllWorkoutsVisible(Collection<Visibility> visibilities) {
+//        return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities);
+//    }
+
+//    @Override
+//    public Page<Workout> findWorkoutPage(Collection<Visibility> visibilities, int pageNumber) {
+//        Pageable pageable = PageRequest.of(pageNumber - 1,10);
+//        return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities, pageable);
+//    }
 
 
 }

@@ -10,6 +10,17 @@
 
     <div class="pt-4 container">
 
+        <!-- Error alert -->
+        <div th:if="${param.error}" class="pt-5 mt-5">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                </svg>
+                Something went wrong! User profiles are down at the moment. Try later again and check out some workouts in the meantime!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+
         <!-- Successfully logged in alert-->
         <div th:if="${param.success}" class="pt-5 mt-5">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -31,6 +42,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
+
 
         <div class="row pt-4">  <!--  style="background-color: #F08080" -->
             <div class="pt-5 mt-3 col-xl-6">
@@ -83,7 +95,7 @@
         <div class="row">
             <h3 class="px-4 pt-5 mt-3 pb-3">Newly added workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
             <div class="d-flex justify-content-md-end mb-5">
-                <a href="/workout" class="mb-0 me-4">Show all</a>
+                <a th:href="@{/workout/all}" class="mb-0 me-4">Show all</a>
             </div>
         <div class="container row mb-4">
             <div class="card">

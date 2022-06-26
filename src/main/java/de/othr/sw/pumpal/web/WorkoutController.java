@@ -184,8 +184,7 @@ public class WorkoutController {
 
     @RequestMapping(value = "/{workoutId}/deleteComment/{commentId}", method = RequestMethod.POST)
     public String deleteComment(@PathVariable("workoutId") Long workoutId,
-                                @PathVariable("commentId") Long commentId,
-                                Model model) {
+                                @PathVariable("commentId") Long commentId) {
         commentService.deleteCommentById(commentId);
         return "redirect:/workout/"+workoutId+"/details";
     }

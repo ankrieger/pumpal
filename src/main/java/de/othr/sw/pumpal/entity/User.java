@@ -18,13 +18,13 @@ import javax.validation.constraints.*;
 public class User extends SingleIdEntity<String> implements UserDetails {
     @Id
     @Column(name = "email")
-    @Email(message = "An email address requires an @")
-    @NotEmpty(message = "Email cannot be empty")
+//    @Email(message = "An email address requires an @")
+//    @NotEmpty(message = "Email cannot be empty")
     private String email;
 
 //    @Column(nullable = false)
-    @Size(min = 5, message = "Your password must be at least 5 characters long")
-    @NotEmpty(message = "Password cannot be empty")
+//    @Size(min = 5, message = "Your password must be at least 5 characters long")
+//    @NotEmpty(message = "Password cannot be empty")
     private String password;
 
     @Size(min = 2, max = 35, message = "Your surname must be between 2 and 35 characters long")
@@ -49,7 +49,7 @@ public class User extends SingleIdEntity<String> implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Workout> workouts;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

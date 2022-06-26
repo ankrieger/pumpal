@@ -32,14 +32,14 @@ public class TestService {
         ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:8080/restapi/users/{id}/friends", List.class, id);
         List<Friend> friends = response.getBody();
 
-        logger.info("Friends of user {} have been received via REST API", id);
+        logger.info("Friends of user " + id + "have been received via REST API");
         return friends;
 }
 
     public WorkoutDto getWorkoutById(Long id) {
         WorkoutDto workoutDto = restTemplate.getForObject("http://localhost:8080/restapi/workouts/{id}", WorkoutDto.class, id);
 
-        logger.info("WorkoutDto with ID {} has been received via REST API", id);
+        logger.info("WorkoutDto with ID " + id + "has been received via REST API");
         return workoutDto;
     }
 }

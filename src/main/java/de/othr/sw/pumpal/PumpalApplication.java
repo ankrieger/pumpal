@@ -33,26 +33,27 @@ public class PumpalApplication implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 
 
-//		try {
-//			userService.getUserByEmail("admin@gmx.de");
-//		} catch (Exception ex) {
-//			User user = new User();
-//			user.setEmail("admin@gmx.de");
-//			user.setName("Mumm");
-//			user.setFirstName("Armin");
-//			user.setPassword("secret");
-//			user.setAccountType(AccountType.ADMIN);
-//
-//			Address address = new Address();
-//			address.setCity("Muenchen");
-//			address.setZip("54321");
-//			address.setStreet("Adminstraße");
-//			address.setStreetNumber("22");
-//
-//			user.setAddress(address);
-//
-//			userService.registerUser(user);
-//		}
+		try {
+			userService.getUserByEmail("admin@pumpal.de");
+		} catch (Exception ex) {
+			User user = new User();
+			user.setEmail("admin@pumpal.de");
+			user.setName("Admin");
+			user.setFirstName("Pumpal");
+			user.setPassword("secret");
+			user.setAccountType(AccountType.ADMIN);
+			user.setDescription("Admin of pumpal application");
+
+			Address address = new Address();
+			address.setCity("Adminson");
+			address.setZip("54321");
+			address.setStreet("Adminstraße");
+			address.setStreetNumber("22");
+
+			user.setAddress(address);
+
+			userService.registerUser(user);
+		}
 
 //		try {
 //			workoutService.getWorkoutById((long)1);

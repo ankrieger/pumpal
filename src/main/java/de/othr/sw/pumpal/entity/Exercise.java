@@ -23,7 +23,7 @@ public class Exercise {
 
     public Exercise() {
     }
-//
+
     public Exercise(String description, int sets, int reps, int weight, String note) {
         this.description = description;
         this.sets = sets;
