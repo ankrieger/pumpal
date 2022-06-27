@@ -34,7 +34,7 @@
 
         <!-- Successfully logged out alert-->
         <div th:if="${param.logout}" class="pt-5 mt-5">
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                 </svg>
@@ -47,7 +47,7 @@
         <div class="row pt-4">  <!--  style="background-color: #F08080" -->
             <div class="pt-5 mt-3 col-xl-6">
 
-                <h1>welcome to pumpal!</h1>
+                <h1>Welcome to pumpal!</h1>
 
 
 <!--                Rest Test-->
@@ -56,11 +56,15 @@
 <!--                <p th:text="${workoutDTO.getTitle()}"></p>-->
 <!--                <p th:text="${workoutDTO.getDescription()}"></p>-->
 
-<!--                <div th:replace="partials/user-table :: user_table(users=${friendsDto})"/>-->
-
-                <p class="pt-4 mt-4"> test test testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-                    testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-                    testtesttetstetstteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p>
+                <p class="ms-4 pt-5 mt-5 mb-4 fs-5">
+                    You want to keep track of your favorite workouts and find some new workout inspiration
+                    by browsing through other motivated athlete's workouts? Or are you just searching for
+                    a platform, that supports you and your gym buddies share training plans among each other? Or are you still
+                    seeking like-minded people in order to push each other further and further?
+                </p>
+                <p class="ms-4 fs-5 pt-4">
+                    You've come to the right website then! Pumpal offers you all this and even more! Check some more information out or sign up now:
+                </p>
             </div>
             <div class="pt-5 mt-3 col-xl-6"><img th:src="@{images/undraw_personal_trainer_re_cnua.svg}" class="img-fluid"></div>
         </div>
@@ -91,15 +95,15 @@
             <div class="col">
                 <div class="collapse multi-collapse" id="collapse3">
                     <div class="card card-body">
-                        Because Pumpal will give you opportunities you'll never have dreamt of! Check it yourself out and register now!
+                        Because Pumpal will give you opportunities you'll never have dreamt of! Check it yourself out and sign up now!
                     </div>
                 </div>
             </div>
         </div>
 
 <!--        Workout insight section-->
-        <div class="row">
-            <h3 class="px-4 pt-5 mt-3 pb-3">Newly added workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
+        <div class="row pt-5 mt-3">
+            <h3 class="px-4 pt-5 mt-3 pb-3">Latest workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
             <div class="d-flex justify-content-md-end mb-5">
                 <a th:href="@{/workout/all}" class="mb-0 me-4">Show all</a>
             </div>

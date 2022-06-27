@@ -61,7 +61,7 @@ public class ProfileController {
             List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
             List<Workout> workoutsPrivate = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
             List<Workout> workoutsSaved = workoutService.getSavedWorkoutsOfUser(user);
-            List<User> friends = friendshipService.getAllFriendsOfUser(user);
+//            List<User> friends = friendshipService.getAllFriendsOfUser(user);
             List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
             List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
 
@@ -79,7 +79,7 @@ public class ProfileController {
             model.addAttribute("workouts", workoutsPublic);
             model.addAttribute("privWorkouts", workoutsPrivate);
             model.addAttribute("savedWorkouts", workoutsSaved);
-            model.addAttribute("friends", friends);
+//            model.addAttribute("friends", friends);
             model.addAttribute("friendsIn", friendsIn);
             model.addAttribute("friendsOut", friendsOut);
         }
@@ -126,16 +126,18 @@ public class ProfileController {
         String friendshipStatus;
         if(user.getAccountType().name().equals("USER")) {
             friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
-        } else friendshipStatus = "admin";
+        } else friendshipStatus = "admin"; //User auf admin profil gelandet
 
-        List<User> friends = friendshipService.getAllFriendsOfUser(user);
+        if(user_auth.getAccountType().name().equals("ADMIN")) friendshipStatus = "isAdmin";
+
+//        List<User> friends = friendshipService.getAllFriendsOfUser(user);
         List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
 
         //zusätzlich private Workouts darstellen, falls Freundschaft besteht oder Admin Profil besucht
         List<Workout> privateWorkouts = new ArrayList<>();
         List<Workout> savedWorkouts = new ArrayList<>();
 
-        if (friendshipStatus.matches("friends|admin")) {
+        if (friendshipStatus.matches("friends|admin|isAdmin")) {
             privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
             savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
         }
@@ -157,7 +159,7 @@ public class ProfileController {
 
         model.addAttribute("user", user);
         model.addAttribute("friendShipStatus", friendshipStatus);
-        model.addAttribute("friends", friends);
+//        model.addAttribute("friends", friends);
         model.addAttribute("workouts", workoutsPublic);
         model.addAttribute("privWorkouts", privateWorkouts);
         model.addAttribute("savedWorkouts", savedWorkouts);

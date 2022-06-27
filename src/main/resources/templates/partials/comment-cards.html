@@ -12,7 +12,8 @@
             <h5 style="text-align: left;" class="mb-4">Comments</h5>
             <div th:each="comment : ${comments}" class="card mb-3 w-75">
                 <div class="card-header d-flex justify-content-between">
-                    <a th:href="@{/profile/{id}(id = ${comment.author.email})}"
+                    <a th:class="${comment.author.accountType == T(de.othr.sw.pumpal.entity.AccountType).ADMIN ? 'btn btn-warning' : ''}"
+                       th:href="@{/profile/{id}(id = ${comment.author.email})}"
                        th:text="${comment.author.email}"></a>
                     <label th:text="${#dates.format(comment.date, 'dd-MM-yyyy HH:mm')}"></label>
 <!--                    ziemlich unelegant gelöst, auf die Schnelle aber kein besserer Weg eingefallen-->

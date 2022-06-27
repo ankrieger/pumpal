@@ -6,6 +6,7 @@ import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.entity.Workout;
 import de.othr.sw.pumpal.entity.dto.Friend;
 import de.othr.sw.pumpal.entity.dto.WorkoutDto;
+import de.othr.sw.pumpal.service.exception.UserNotFoundException;
 import de.othr.sw.pumpal.service.rest.TestService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
@@ -79,7 +80,13 @@ public class StartController {
         if (result.hasErrors()) {
             return "registration";
         }
-        //TODO: Test ob email bereits belegt
+        try {
+            User exUser = userService.getUserByEmail(user.getEmail());
+            result.rejectValue("email", exUser.getEmail(), "This email is already taken. Plase choose another one.");
+            if (result.hasErrors()) return "registration";
+        } catch (UserNotFoundException e) {
+            logger.error(e.getMessage());
+        }
         userService.registerUser(user);
         return "redirect:/";
     }
