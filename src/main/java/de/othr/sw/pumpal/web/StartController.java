@@ -1,5 +1,6 @@
 package de.othr.sw.pumpal.web;
 
+import de.othr.sw.pumpal.entity.AccountType;
 import de.othr.sw.pumpal.entity.User;
 import de.othr.sw.pumpal.entity.Visibility;
 import de.othr.sw.pumpal.entity.Workout;
@@ -10,6 +11,7 @@ import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,18 +39,18 @@ public class StartController {
     @RequestMapping(value = {"/", "/index"})
     public String start(Model model) {
         List<Visibility> visibilities = new ArrayList<>();
-        //TODO: check if admin or regular user -> if admin: add Visibility.PRIVATE as well!
         visibilities.add(Visibility.PUBLIC);
-        //wenn noch zeit: TODO: add display of friends' private workouts?
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass() != String.class) {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(user.getAccountType().equals(AccountType.ADMIN)) {
+                visibilities.add(Visibility.PRIVATE);
+            }
+        }
         List<Workout> workouts = workoutService.getNewestWorkouts(visibilities);
         model.addAttribute("workouts", workouts);
-
-
 //        // Testing REST Functionality
 //        WorkoutDto workoutDto = testService.getWorkoutById((long)111);
 //        model.addAttribute("workoutDTO", workoutDto);
-
-
         return "index";
     }
 

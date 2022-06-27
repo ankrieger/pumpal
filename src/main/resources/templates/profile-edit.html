@@ -7,6 +7,9 @@
 <body>
 <div th:replace="partials/header :: navigation"/>
 
+<!--  Layout stark angelehnt an https://mdbootstrap.com/docs/standard/extended/profiles/#section-6-->
+
+
 <section class="h-100 pt-5 mt-5">
     <div class="container py-4 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -15,7 +18,7 @@
                     <div class="rounded-top d-flex flex-row" style="background-color: rgb(184,13,41); height:200px;">
                         <!--                Image, Button and modal section-->
                         <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                            <img src="../../images/undraw_male_avatar_323b.svg"
+                            <img src="../../images/undraw_male_avatar_white.svg"
                                  alt="Generic placeholder image" class="rounded-circle img-fluid img-thumbnail mt-4 mb-2"
                                  style="width: 150px; z-index: 1">
 
@@ -28,15 +31,6 @@
                     </div>
                     <div class="p-4 text-black" style="background-color: #f8f9fa;">
                         <div class="d-flex justify-content-end text-center py-1">
-<!--                            TODO: fix this display-->
-<!--                            <div>-->
-<!--                                <p class="mb-1 h5" th:text="${amountOfWorkouts} ?: '0'"></p>-->
-<!--                                <p class="small text-muted mb-0">Workouts</p>-->
-<!--                            </div>-->
-<!--                            <div class="px-3">-->
-<!--                                <p class="mb-1 h5" th:text="${amountOfFriends} ?: '0'"></p>-->
-<!--                                <p class="small text-muted mb-0">Friends</p>-->
-<!--                            </div>-->
                         </div>
                     </div>
                     <div class="card-body p-4 text-black">
@@ -106,7 +100,9 @@
                                         </div>
                                     </div>
 
+<!--                                    Button section-->
                                     <div class="d-flex justify-content-end pt-3">
+<!--                                        Buttons -->
                                         <button type="button" class="btn btn-outline-dark me-3"
                                                 data-bs-toggle="modal" data-bs-target="#cancelEdit" style="z-index: 1;">
                                             Cancel edit
@@ -119,7 +115,6 @@
                                                 data-bs-toggle="modal" data-bs-target="#saveChanges" style="z-index: 1;">
                                             Save form
                                         </button>
-
 
                                         <!-- Modals -->
                                         <div class="modal fade" id="cancelEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -177,10 +172,8 @@
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

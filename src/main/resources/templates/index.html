@@ -10,7 +10,7 @@
 
     <div class="pt-4 container">
 
-        <!-- Error alert -->
+        <!-- REST error alert -->
         <div th:if="${param.error}" class="pt-5 mt-5">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-
+<!--        Header, description and image section-->
         <div class="row pt-4">  <!--  style="background-color: #F08080" -->
             <div class="pt-5 mt-3 col-xl-6">
 
@@ -64,11 +64,15 @@
             </div>
             <div class="pt-5 mt-3 col-xl-6"><img th:src="@{images/undraw_personal_trainer_re_cnua.svg}" class="img-fluid"></div>
         </div>
+
+<!--        Collapse button section-->
         <div class="row pt-4">
             <button class="col-sm btn btn-danger rounded border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">what is pumpal?</button>
             <button class="col-sm btn btn-danger rounded border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">who is pumpal aiming at?</button>
             <button class="col-sm btn btn-danger rounded border border-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">why should i use pumpal?</button>
         </div>
+
+<!--        Collapse content-->
         <div class="row">
             <div class="col">
                 <div class="collapse multi-collapse" id="collapse1">
@@ -92,22 +96,22 @@
                 </div>
             </div>
         </div>
+
+<!--        Workout insight section-->
         <div class="row">
             <h3 class="px-4 pt-5 mt-3 pb-3">Newly added workouts:</h3> <!-- the five newest workouts in a table, maybe an own fragment? for reusability-->
             <div class="d-flex justify-content-md-end mb-5">
                 <a th:href="@{/workout/all}" class="mb-0 me-4">Show all</a>
             </div>
-        <div class="container row mb-4">
-            <div class="card">
-                <div class="card-body p-4">
-                    <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
+            <div class="container row mb-4">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    </div>
-
 
 </body>
 </html>

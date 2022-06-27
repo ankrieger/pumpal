@@ -7,17 +7,19 @@
 <body>
   <div th:replace="partials/header :: navigation"/>
 
+<!--  Layout stark angelehnt an https://mdbootstrap.com/docs/standard/extended/profiles/#section-6-->
+
   <section class="h-100 pt-5 mt-5">
     <div class="container py-4 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-xl-10">
           <div class="card">
-<!--              rgba(42,23,76,0.3) hellgrau-->
-            <div class="rounded-top d-flex flex-row" style="background-color: rgb(184,13,41); height:200px;">
+            <div class="rounded-top d-flex flex-row" style="background-color: #c01338; height:200px;">
 
 <!--                Image, Button and modal section-->
               <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                <img src="../../images/undraw_male_avatar_323b.svg"
+<!--                  generic picture-->
+                <img src="../../images/undraw_male_avatar_white.svg"
                      alt="Generic placeholder image" class="rounded-circle img-fluid img-thumbnail mt-4 mb-2"
                      style="width: 150px; z-index: 1">
 
@@ -27,48 +29,37 @@
                       Delete user
                   </button>
 
-
-                <!-- Regular User display  -->
+<!--                 Profile of logged in user based on role -->
 
                   <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'admin'}" class="btn btn-warning"
                         style="z-index: 1;" aria-disabled="true">
                       Admin
                   </button>
-
                   <a sec:authorize="hasAuthority('USER')" th:if="${#httpServletRequest.requestURI == '/profile'}" th:href="@{profile/edit}" role="button" class="btn btn-outline-dark"
                      style="z-index: 1;">
                             Edit profile
                   </a>
 
-                  <!--   Possible  Buttons  -->
+<!--                  Button Options, depending on Friendship Status/Role-->
 
-                  <!--     static modal, ask if you want to send it: no->close the modal; yes->friendship create inactive+redirect to this same page         -->
-                  <!--     th:unless="${#httpServletRequest.requestURI == '/profile'}"-->
                   <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'none'}" type="button" class="btn btn-outline-dark"
                             data-bs-toggle="modal" data-bs-target="#sendFriendReq" style="z-index: 1;">
                       Send Friend Request
                   </button>
-
-
                   <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'friendRequested'}" type="button" class="btn btn-outline-dark"
                                 data-bs-toggle="modal" data-bs-target="#requestedFriend" style="z-index: 1;">
                       Pending Friend Request
                   </button>
-
                   <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'friendRequesting'}" type="button" class="btn btn-outline-dark"
                                 data-bs-toggle="modal" data-bs-target="#requestingFriend" style="z-index: 1;">
                       Accept/Deny Friend Request
                   </button>
-
-
                   <button sec:authorize="hasAuthority('USER')" th:if="${friendShipStatus == 'friends'}" type="button" class="btn btn-outline-dark"
                                 data-bs-toggle="modal" data-bs-target="#removeFriend" style="z-index: 1;">
                       Remove Friend
                   </button>
 
-
-
-                  <!-- Possible Modals referenced by buttons -->
+                  <!--  Modals referenced by buttons -->
 
                   <div class="modal fade" id="sendFriendReq" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered">
@@ -175,10 +166,9 @@
                           </div>
                       </div>
                   </div>
-
-
               </div>
 
+<!--                Content section-->
               <div class="ms-3 text-white" style="margin-top: 130px;">
                 <h5 th:text="${user.firstName + ' ' + user.name}"></h5>
                 <p th:text="${user.email}"></p>
@@ -198,7 +188,6 @@
               </div>
             </div>
 
-
             <div class="card-body p-4 text-black">
               <div class="mb-5">
 <!--                <p class="lead fw-normal mb-1">About me</p>-->
@@ -209,14 +198,16 @@
                 </div>
               </div>
 
-
+<!--                Tab Section Header-->
               <div th:if="${user.accountType.name()=='USER'}" class="d-flex justify-content-between align-items-center mb-4">
                 <p class="lead fw-normal mb-0">Workouts and Friends</p>
               </div>
 
-                <!-- Tab Section-->
+<!--                 Actual Tab Section-->
               <ul th:if="${user.accountType.name()=='USER'}" class="nav nav-tabs" id="myTab" role="tablist">
-                <!-- Public Information-->
+
+<!--                 Public Information-->
+
                   <li class="nav-item" role="presentation">
                       <button class="nav-link active" href="#workouts" id="workout-tab" data-bs-toggle="tab" data-bs-target="#workoutsPanel"
                               type="button" role="tab" aria-controls="workouts" aria-selected="true">Workouts(<span th:text="${#lists.size(workouts)} ?: '0'"></span>)</button>
@@ -227,29 +218,29 @@
                               type="button" role="tab" aria-controls="friends" aria-selected="false">Friends(<span th:text="${#lists.size(friendsDto)} ?: '0'"></span>)</button>
                   </li>
 
-                <!-- Private Section, Only visibile when /profile invoked;-->
+<!--                 Privatere Section, nur unter bestimmten Bedingungen einsehbar-->
 
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends' || friendShipStatus == 'admin'}">
                       <button class="nav-link" href="#workouts-priv" id="workout-priv-tab" data-bs-toggle="tab" data-bs-target="#workoutPrivPanel"
                               type="button" role="tab" aria-controls="contact" aria-selected="false">Private Workouts(<span th:text="${#lists.size(privWorkouts)} ?: '0'"></span>)</button>
                   </li>
-
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
                       <button class="nav-link" href="#requests-out" id="friends-out-tab" data-bs-toggle="tab" data-bs-target="#friendsOutPanel"
                               type="button" role="tab" aria-controls="contact" aria-selected="false">Sent Friend Requests(<span th:text="${#lists.size(friendsOut)} ?: '0'"></span>)</button>
                   </li>
-
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile'}">
                       <button class="nav-link" href="#requests-in" id="friends-in-tab" data-bs-toggle="tab" data-bs-target="#friendsInPanel"
                               type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests(<span th:text="${#lists.size(friendsIn)} ?: '0'"></span>)</button>
                   </li>
-
                   <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends' || friendShipStatus == 'admin'}">
 <!--                      TODO: fix, dass jeder admin bei profilbesuch die privaten workouts sehen kann-->
                       <button class="nav-link" href="#saved-workouts" id="saved-workouts-tab" data-bs-toggle="tab" data-bs-target="#savedWorkoutsPanel"
                               type="button" role="tab" aria-controls="contact" aria-selected="false">Saved Workouts(<span th:text="${#lists.size(savedWorkouts)} ?: '0'"></span>)</button>
                   </li>
               </ul>
+
+<!--                Tab Inhalte-->
+
               <div th:if="${user.accountType.name()=='USER'}" class="tab-content mt-3" id="myTabContent">
                 <div class="tab-pane fade show active" id="workoutsPanel" role="tabpanel" aria-labelledby="workout-tab">
                   <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
@@ -270,16 +261,15 @@
                   <div class="tab-pane fade" id="savedWorkoutsPanel" role="tabpanel" aria-labelledby="friends-tab">
                       <div th:replace="partials/workout-table :: workout_table(workouts=${savedWorkouts})"/>
                   </div>
+              </div>
             </div>
-
           </div>
         </div>
       </div>
     </div>
-    </div>
   </section>
 
-<!--  URL and tab don't change when user is already on profile page but clickig on dropdown items-->
+<!--  TODO:URL and tab don't change when user is already on profile page but clickig on dropdown items-->
   <script>
       jQuery(document).ready(function ($) {
           let selectedTab = window.location.hash;

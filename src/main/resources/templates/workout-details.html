@@ -17,7 +17,8 @@
                 <div class="col col-xl-10">
                     <div class="card">
                         <div class="flex-row" style="background-color: #f8f9fa;">
-<!--                                col 1 like col-xl-9-->
+
+<!--                            Header section with delete/save/unsave button-->
                             <div class="ms-5 mt-4">
                                 <h2 th:text="${workout.title}"></h2>
                                 <div class="me-5" style = "display: flex; justify-content:flex-end">
@@ -37,6 +38,7 @@
                                 </div>
                             </div>
 
+<!--                            Button delete modal-->
                             <div class="modal fade" id="removeWorkout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -57,17 +59,12 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
+
+<!--                        Details section-->
                         <div class="card-body p-4">
                             <div class="row ms-3">
                                 <h4 class="mb-2 mt-3">Workout details</h4>
-
-                                <!-- div section with save functionality-->
-
-                                <!-- three sections: 1. pic and infos, 2. form, 3. infos and pic-->
                                 <div class="col-xl-6 mb-4 mt-3 px-3">
                                     <div class="row mb-5 mt-3">
                                         <div>
@@ -82,7 +79,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Thymeleaf Level enumeration dropdown list -->
                                     <div class="row mb-4">
                                         <div>
                                             <label for="level" class="col-sm-4">Level:</label>
@@ -90,8 +86,6 @@
                                         </div>
                                     </div>
 
-
-                                    <!-- Display Visibility Enum as Radio Group -->
                                     <div class="row mb-3">
                                         <div>
                                             <label for="visibility" class="col-sm-4">Visibility:</label>
@@ -103,13 +97,14 @@
                                     <img src="../../images/undraw_fitness_stats_sht6.svg" class="w-100 image-fluid image-thumbnail">
                                 </div>
                             </div>
+
+<!--                            Tab section-->
                             <div class="row">
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <!-- Public Information-->
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link active" href="#exercises" id="exercise-tab" data-bs-toggle="tab" data-bs-target="#exercisePanel" type="button" role="tab" aria-controls="workouts" aria-selected="true">Exercises(<span th:text="${#lists.size(workout.exercises)} ?: '0'"></span>)</button>
                                     </li>
-
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" href="#comments" id="comment-tab" data-bs-toggle="tab" data-bs-target="#commentPanel" type="button" role="tab" aria-controls="friends" aria-selected="false">Comments(<span th:text="${#lists.size(comments)} ?: '0'"></span>)</button> <!--(size(comments)) daneben in klammern-->
                                     </li>
@@ -117,13 +112,13 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" href="#saved-by" id="saved-tab" data-bs-toggle="tab" data-bs-target="#savedByPanel" type="button" role="tab" aria-controls="contact" aria-selected="false">User who saved this workout(<span th:text="${#lists.size(savingUsers)} ?: '0'"></span>)</button> <!-- anzahl wie viele gesaved haben-->
                                     </li>
-
                                 </ul>
+
+<!--                                Tab content with exercises, comments and user who saved this workout-->
                                 <div class="tab-content mt-3" id="myTabContent">
                                     <div class="tab-pane fade show active" id="exercisePanel" role="tabpanel" aria-labelledby="workout-tab">
                                         <div class="p-md-5">
                                             <h5>Exercises</h5>
-
                                             <table class="table table-striped table-hover mt-4">
                                                 <thead>
                                                 <tr>
@@ -164,8 +159,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>

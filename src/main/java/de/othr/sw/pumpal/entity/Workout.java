@@ -13,7 +13,7 @@ import java.util.*;
 public class Workout extends SingleIdEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Size(min = 3, max = 60, message = "Your workout's title must be between 3 and 60 characters long")
@@ -21,7 +21,6 @@ public class Workout extends SingleIdEntity<Long> {
     private String title;
 
     @Temporal(TemporalType.TIMESTAMP)
-//    @Column(nullable = false)
     private Date date;
 
     @ManyToOne
@@ -35,7 +34,6 @@ public class Workout extends SingleIdEntity<Long> {
     private Integer durationInMin;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
     private Visibility visibility;
 
 
@@ -43,8 +41,6 @@ public class Workout extends SingleIdEntity<Long> {
     @AttributeOverride(name = "description", column = @Column(name = "exercise_description"))
     @AttributeOverride(name = "id", column = @Column(name = "exercise_id"))
     private List<Exercise> exercises;
-
-    private String tagString;
 
 //    OrphanRemovel => abkoppeln der Kommentare von dem enstprechenden Workout führt zum löschen der Kommentare
     @OneToMany(mappedBy = "workout", orphanRemoval = true,  cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -56,47 +52,39 @@ public class Workout extends SingleIdEntity<Long> {
     @Enumerated(value = EnumType.STRING)
     private Level level;
 
-    @Transient
-    private List<String> tags;
-//    bei initialisierung: tags splitten und in ein Array packen
-
-
 
     public Workout() {
 
     }
 
-    public Workout(Long id, String title, Date date, User author, String description,
-                   Visibility visibility, List<Exercise> exercises, Level level, String tagString) {  //Tags noch rein: falls != 0 => Splice
-        this.id = id;
-        this.title = title;
-        this.date = date;
-        this.author = author;
-        this.description = description;
-        this.visibility = visibility;
-        this.exercises = exercises;
-        this.level = level;
-        this.tagString = (tagString != null && !tagString.isEmpty()) ? tagString : "";
-        this.tags = new ArrayList<String>(Arrays.asList(this.tagString.split(/*"\\s*,\\s*"*/";")));
-    }
-
-    public Workout(Long id, String title, Date date, User author, String description,
-                   Visibility visibility, List<Exercise> exercises, String tagString, Integer durationInMin,
-                   List<Comment> comments, Level level) {
-        this.id = id;
-        this.title = title;
-        this.date = date;
-        this.author = author;
-        this.description = description;
-        this.visibility = visibility;
-        this.exercises = exercises;
-        this.comments = comments;
-        this.level = level;
-        this.tagString = (tagString != null && !tagString.isEmpty()) ? tagString : "";
-        this.tags = new ArrayList<String>(Arrays.asList(this.tagString.split("\\s*,\\s*")));
-        this.durationInMin = durationInMin;
-
-    }
+//
+//    public Workout(Long id, String title, Date date, User author, String description,
+//                   Visibility visibility, List<Exercise> exercises, Level level) {
+//        this.id = id;
+//        this.title = title;
+//        this.date = date;
+//        this.author = author;
+//        this.description = description;
+//        this.visibility = visibility;
+//        this.exercises = exercises;
+//        this.level = level;
+//    }
+//
+//    public Workout(Long id, String title, Date date, User author, String description,
+//                   Visibility visibility, List<Exercise> exercises, Integer durationInMin,
+//                   List<Comment> comments, Level level) {
+//        this.id = id;
+//        this.title = title;
+//        this.date = date;
+//        this.author = author;
+//        this.description = description;
+//        this.visibility = visibility;
+//        this.exercises = exercises;
+//        this.comments = comments;
+//        this.level = level;
+//        this.durationInMin = durationInMin;
+//
+//    }
 
     public Long getId() {
         return id;
@@ -154,14 +142,6 @@ public class Workout extends SingleIdEntity<Long> {
         this.exercises = exercises;
     }
 
-    public String getTagString() {
-        return tagString;
-    }
-
-    public void setTagString(String tagString) {
-        this.tagString = tagString;
-    }
-
     public List<Comment> getComments() {
         return Collections.unmodifiableList(comments);
     }
@@ -194,14 +174,6 @@ public class Workout extends SingleIdEntity<Long> {
         this.level = level;
     }
 
-    public List<String> getTags() {
-        return tags;
-    }
-
-    // do I need this?
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
 
     @Override
     public Long getID() {
@@ -217,7 +189,6 @@ public class Workout extends SingleIdEntity<Long> {
 //                ", author=" + author +
                 ", description='" + description + '\'' +
 //                ", exercises=" + exercises +
-                ", tagString='" + tagString + '\'' +
                 ", durationInMin='" + durationInMin + '\'' +
 //                ", comments=" + comments +
                 ", level=" + level +

@@ -18,29 +18,17 @@ import javax.validation.constraints.*;
 public class User extends SingleIdEntity<String> implements UserDetails {
     @Id
     @Column(name = "email")
-//    @Email(message = "An email address requires an @")
-//    @NotEmpty(message = "Email cannot be empty")
     private String email;
 
-//    @Column(nullable = false)
-//    @Size(min = 5, message = "Your password must be at least 5 characters long")
-//    @NotEmpty(message = "Password cannot be empty")
     private String password;
 
     @Size(min = 2, max = 35, message = "Your surname must be between 2 and 35 characters long")
     @NotEmpty(message = "Name cannot be empty")
-//    @Column(nullable = false)
     private String name;
 
     @Size(min = 2, max = 35, message = "Your firstname must be between 2 and 35 characters long")
     @NotEmpty(message = "First name cannot be empty")
-//    @Column(nullable = false)
     private String firstName;
-
-//    //@Temporal(TemporalType.DATE)
-//    @DateTimeFormat(pattern = "dd.MM.yyyy")
-//    @Column(nullable = false)
-//    private Date dateOfBirth;
 
     @Embedded
     @Valid
@@ -63,15 +51,12 @@ public class User extends SingleIdEntity<String> implements UserDetails {
     )
     private List <Workout> savedWorkouts;
 
-    @OneToMany(mappedBy = "requestingUser", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY) //besseren namen
+    @OneToMany(mappedBy = "requestingUser", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Friendship> friendsRequested;  //isActive = False -> ausgehende Anfragen, True -> Freunde
 
     @OneToMany(mappedBy = "requestedUser", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Friendship> friendRequests;  //isActive = False -> eingehende anfragen, True -> Freunde
 
-//    @Transient
-//    private List<Friendship> friends;
-//    probably better to just use Repository methods to map depending on isActive boolean value
 
     private String description;
 
@@ -79,39 +64,39 @@ public class User extends SingleIdEntity<String> implements UserDetails {
     public User() {
     }
 
+//
+//    public User (AccountType accountType) {
+//        this.accountType = accountType;
+//    }
+//
+//    public User(String email,
+//                String password,
+//                String name,
+//                String firstName,
+//                AccountType accountType,
+//                Address address) {
+//        this.email = email;
+//        this.password = password;
+//        this.name = name;
+//        this.firstName = firstName;
+//        this.accountType = accountType;
+//        this.address = address;
+//    }
 
-    public User (AccountType accountType) {
-        this.accountType = accountType;
-    }
-
-    public User(String email,
-                String password,
-                String name,
-                String firstName,
-                AccountType accountType,
-                Address address) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.firstName = firstName;
-        this.accountType = accountType;
-        this.address = address;
-    }
-
-    public User(String email, String password, String name, String firstName,
-                Address address, AccountType accountType, List<Workout> workouts, List<Workout> savedWorkouts,
-                List<Friendship> friendsRequested, List<Friendship> friendRequests) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.firstName = firstName;
-        this.address = address;
-        this.accountType = accountType;
-        this.workouts = workouts;
-        this.savedWorkouts = savedWorkouts;
-        this.friendsRequested = friendsRequested;
-        this.friendRequests = friendRequests;
-    }
+//    public User(String email, String password, String name, String firstName,
+//                Address address, AccountType accountType, List<Workout> workouts, List<Workout> savedWorkouts,
+//                List<Friendship> friendsRequested, List<Friendship> friendRequests) {
+//        this.email = email;
+//        this.password = password;
+//        this.name = name;
+//        this.firstName = firstName;
+//        this.address = address;
+//        this.accountType = accountType;
+//        this.workouts = workouts;
+//        this.savedWorkouts = savedWorkouts;
+//        this.friendsRequested = friendsRequested;
+//        this.friendRequests = friendRequests;
+//    }
 
 
 

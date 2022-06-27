@@ -55,22 +55,14 @@ public class ProfileController {
 //                .filter(workout -> workout.getVisibility().equals(Visibility.PUBLIC))
 //                .collect(Collectors.toList());
 
-        //TODO: Variable isAuthor einführen
+        //TODO: Variable isAuthor einführen?
 
         if(user.getAccountType().equals(AccountType.USER)) {            //public workouts
             List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
-            //private workouts
             List<Workout> workoutsPrivate = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
-
-
-            //saved workouts
             List<Workout> workoutsSaved = workoutService.getSavedWorkoutsOfUser(user);
-
-            //active friendships
             List<User> friends = friendshipService.getAllFriendsOfUser(user);
-            // Incoming friend requests
             List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
-            //Outgoing friend requests
             List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
 
 
@@ -132,7 +124,6 @@ public class ProfileController {
         }
 
         String friendshipStatus;
-
         if(user.getAccountType().name().equals("USER")) {
             friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
         } else friendshipStatus = "admin";
@@ -176,7 +167,7 @@ public class ProfileController {
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    String doEditFriendship(@PathVariable("id") String id,
+    public String doEditFriendship(@PathVariable("id") String id,
                             @AuthenticationPrincipal User user_auth,
                             @RequestParam(value = "friendShipStatus") String friendShipStatus,
                             Model model) {

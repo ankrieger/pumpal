@@ -31,10 +31,10 @@ public class Comment extends SingleIdEntity<Long> {
 
     }
 
-    public Comment(User author, Workout workout) {
-        this.author = author;
-        this.workout = workout;
-    }
+//    public Comment(User author, Workout workout) {
+//        this.author = author;
+//        this.workout = workout;
+//    }
 
     public Long getId() {
         return id;

@@ -8,9 +8,6 @@
 <body>
     <div th:replace="partials/header :: navigation"/>
 
-<!--    &lt;!&ndash;Font Awesome (added because you use icons in your prepend/append)&ndash;&gt;-->
-<!--    <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />-->
-
     <!-- angelehnt an https://mdbootstrap.com/docs/standard/extended/registration/#section-4 -->
 
     <section class="h-100">
@@ -42,7 +39,6 @@
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="mb-4">
                                         <input type="email" th:field="*{email}" id="regEmail" class="form-control" placeholder="email@example.com"> <!-- required-->
@@ -98,7 +94,6 @@
 
                                     <p class="pt-5">Already have an account? <a href="/login" class="link-info">Login here</a></p>
                                 </form>
-
                             </div>
                         </div>
                     </div>
@@ -106,7 +101,6 @@
             </div>
         </div>
     </section>
-
     <script>
         document.getElementById('showPassword').onclick = function() {
             if ( this.checked ) {
@@ -116,6 +110,5 @@
             }
         };
     </script>
-
 </body>
 </html>

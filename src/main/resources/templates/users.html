@@ -9,8 +9,8 @@
 
     <div class="mt-5 py-4 px-4 d-flex justify-content-end" style="background-color: #f8f9fa;">
         <form class="d-flex" th:action="@{/profile/all}">
-            <input class="form-control ms-5 me-3" name="keyword" th:value="${keyword}" style="width: 400px;" type="search" placeholder="Search for first name, last name or email of user" aria-label="Search">
-            <button class="btn btn-outline-warning pe-5" type="submit">Search</button>
+            <input class="form-control ms-5 me-3" name="keyword" id="keyword" th:value="${keyword}" style="width: 400px;" type="search" placeholder="Search for first name, last name or email of user" aria-label="Search">
+            <button class="btn btn-outline-warning pe-5" id="searchBtn" type="submit">Search</button>
         </form>
     </div>
 
@@ -22,10 +22,10 @@
                     <div class="card">
                         <div class="card-body p-4">
                             <div th:replace="partials/user-table :: user_table(users=${users})"/>
+<!--                            Paginierung nach https://www.kindsonthegenius.com/part-2-how-to-implement-pagination-in-spring-boot-with-thymeleaf/ umgesetzt-->
                             <footer class="panel-footer pt-3">
                                 <nav aria-label="Page navigation example"  th:if="${totalPages > 0}">
                                     Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
-
                                     <ul class="pagination justify-content-start pt-3">
                                         <li class="page-item">
                                             <a  class="page-link" th:if="${currentPage > 1}" th:href="@{/profile/all/page/1(keyword=${keyword})}">First</a>
@@ -55,12 +55,6 @@
                                         </li>
                                     </ul>
                                 </nav>
-<!--                                Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]-->
-<!--                                &nbsp; &nbsp; - &nbsp;-->
-<!--                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">-->
-<!--                                        <a th:href="@{/profile/all/page/{i}(keyword=${keyword},i=${i})}">[[${i}]]</a>-->
-<!--                                        &nbsp; &nbsp;-->
-<!--                                    </span>-->
                             </footer>
                         </div>
                     </div>

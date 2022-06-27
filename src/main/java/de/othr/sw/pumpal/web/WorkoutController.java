@@ -65,7 +65,6 @@ public class WorkoutController {
         //user sehen hier nur öffentliche workouts; besser wäre es, die privaten der Freunde mitreinzunehmen
         visibilities.add(Visibility.PUBLIC);
 
-//        Page<Workout> page = workoutService.findWorkoutPage(visibilities, currentPage);
         Page<Workout> page = workoutService.findFilteredWorkoutPage(keyword, levels, visibilities, currentPage);
 
         int totalPages = page.getTotalPages();
@@ -152,7 +151,6 @@ public class WorkoutController {
                                     @RequestParam(value = "saved") boolean saved,
                                     Model model) {
         Workout workout = workoutService.getWorkoutById(id);
-        //funktionalität
         if (!saved) {
             //add user to savedBy and add workout to savedWorkouts
             userService.saveWorkoutForUser(workout, user);

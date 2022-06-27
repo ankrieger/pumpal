@@ -3,12 +3,6 @@
 
 <head th:replace="partials/header :: header(~{::title})">
     <title>Workouts</title>
-<!--    TODO: pagination leiste display fixen-->
-<!--    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>-->
-<!--    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>-->
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">-->
-<!--    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">-->
-
 </head>
 <body>
     <div th:replace="partials/header :: navigation"/>
@@ -24,8 +18,8 @@
                         th:text="${level}">
                 </option>
             </select>
-            <input class="form-control ms-5 me-3" name="keyword" th:value="${keyword}" style="width: 470px;" type="search" placeholder="Search for title, description or difficulty level" aria-label="Search">
-            <button class="btn btn-outline-warning pe-5" type="submit">Search</button>
+            <input class="form-control ms-5 me-3" name="keyword" id="keyword" th:value="${keyword}" style="width: 470px;" type="search" placeholder="Search for title, description or difficulty level" aria-label="Search">
+            <button class="btn btn-outline-warning pe-5" id="searchBtn" type="submit">Search</button>
         </form>
     </div>
 
@@ -37,11 +31,10 @@
                     <div class="card">
                         <div class="card-body p-4">
                             <div th:replace="partials/workout-table :: workout_table(workouts=${workouts})"/>
-
+<!--                           Paginierung nach https://www.kindsonthegenius.com/part-2-how-to-implement-pagination-in-spring-boot-with-thymeleaf/ umgesetzt-->
                             <footer class="panel-footer pt-3">
                                 <nav aria-label="Page navigation example" th:if="${totalPages > 0}">
                                     Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
-
                                     <ul class="pagination justify-content-start pt-3">
                                         <li class="page-item">
                                             <a  class="page-link" th:if="${currentPage > 1}" th:href="@{/workout/all/page/1(selectedlevel=${selectedlevel},keyword=${keyword})}">First</a>
@@ -71,15 +64,7 @@
                                         </li>
                                     </ul>
                                 </nav>
-
-<!--                                Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]-->
-<!--                                &nbsp; &nbsp; - &nbsp;-->
-<!--                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">-->
-<!--                                    <a th:href="@{/workout/all/page/{i}(selectedlevel=${selectedlevel},keyword=${keyword},i=${i})}">[[${i}]]</a>-->
-<!--                                      &nbsp;-->
-<!--                                </span>-->
                             </footer>
-
                         </div>
                     </div>
                 </div>

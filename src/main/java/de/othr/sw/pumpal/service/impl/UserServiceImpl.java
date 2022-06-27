@@ -7,6 +7,7 @@ import de.othr.sw.pumpal.service.WorkoutService;
 import de.othr.sw.pumpal.service.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -128,7 +129,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional( propagation = Propagation.REQUIRES_NEW)
+    @Transactional( propagation = Propagation.REQUIRED)
     public void removeWorkoutFromSavedWorkoutsFromUser(Workout workout, User user) {
         User userSave = userRepository.findById(user.getID()).get();
         List<Workout> savedWorkouts = new ArrayList<>(userSave.getSavedWorkouts());

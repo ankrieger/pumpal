@@ -20,12 +20,8 @@ public class PumpalApplication implements ApplicationRunner {
 
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private WorkoutService workoutService;
 
 	public static void main(String[] args) {
-//		Logger logger = LoggerFactory.getLogger(PumpalApplication.class);
-//		logger.info("Hello World");
 		SpringApplication.run(PumpalApplication.class, args);
 	}
 

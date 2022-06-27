@@ -30,14 +30,14 @@ public class Friendship extends SingleIdEntity<Long> {
     public Friendship() {
 
     }
-
-    public Friendship(Long id, User requestingUser, User requestedUser, Date date, boolean isActive) {
-        this.id = id;
-        this.requestingUser = requestingUser;
-        this.requestedUser = requestedUser;
-        this.date = date;
-        this.isActive = isActive;
-    }
+//
+//    public Friendship(Long id, User requestingUser, User requestedUser, Date date, boolean isActive) {
+//        this.id = id;
+//        this.requestingUser = requestingUser;
+//        this.requestedUser = requestedUser;
+//        this.date = date;
+//        this.isActive = isActive;
+//    }
 
     public Long getId() {
         return id;
