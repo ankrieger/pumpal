@@ -18,12 +18,8 @@ public class LoggingConfig {
     @Bean(name="customApplicationLogger")
     @Scope("prototype")
     @Primary
-//    @Qualifier("applicationLogger")
     public Logger createLogger(InjectionPoint injectionPoint) {
-                                            //injectionPoint.getMethodParameter().getContainingClass() ausprobieren
-        Class<?> loggerClass = injectionPoint.getMember().getDeclaringClass();
-        Logger logger = LoggerFactory.getLogger(loggerClass);
-        return logger;
+        return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
     }
 
     //logger for REST api

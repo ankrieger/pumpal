@@ -17,7 +17,6 @@
                        th:text="${comment.author.email}"></a>
                     <label th:text="${#dates.format(comment.date, 'dd-MM-yyyy HH:mm')}"></label>
 <!--                    ziemlich unelegant gelöst, auf die Schnelle aber kein besserer Weg eingefallen-->
-<!--                    TODO: Button Anordnung besser machen-->
                     <div th:if="${comment.author.email == user.email || workout.author.email == user.email || user.accountType.name() == 'ADMIN'}">
                         <form method="POST" th:action="@{/workout/{workoutId}/deleteComment/{commentId}(workoutId=${workout.id},commentId=${comment.id})}">
                             <button type="submit" class="btn btn-danger">X</button>

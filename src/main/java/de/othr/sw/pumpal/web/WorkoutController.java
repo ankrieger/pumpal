@@ -5,6 +5,8 @@ import de.othr.sw.pumpal.entity.*;
 import de.othr.sw.pumpal.service.CommentService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
+import de.othr.sw.pumpal.service.exception.WorkoutNotFoundException;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,6 +35,9 @@ public class WorkoutController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    Logger logger;
 
 
     // erstmaliges Laden
@@ -91,7 +96,7 @@ public class WorkoutController {
 
         workout.setExercises(exercises);
         workout.setVisibility(Visibility.PUBLIC);
-        model.addAttribute("workout", workout); //TODO: Vorbelegung probieren mit visibility!
+        model.addAttribute("workout", workout);
 
         return "create-workout";
     }
@@ -114,34 +119,37 @@ public class WorkoutController {
     }
 
 
-    //TODO: zugriff über adressleiste möglich! check ob user berechtigung hat das workout zu sehen!
     @RequestMapping(value = "/{id}/details", method = RequestMethod.GET)
     public String workoutDetails(@AuthenticationPrincipal User user,
                                  @PathVariable("id") Long id,
                                  Model model) {
-        Workout workout = workoutService.getWorkoutById(id);
+        try {
+            Workout workout = workoutService.getWorkoutById(id);
 
+            List<Comment> comments = commentService.getAllCommentsOfWorkout(workout);
+            List<User> savingUsers = userService.getAllUsersSavingWorkout(workout);
+            //maybe just one status variable?
+            boolean isAuthor = workout.getAuthor().equals(user);
+            boolean isSaved;
 
-        List<Comment> comments = commentService.getAllCommentsOfWorkout(workout);
-        List<User> savingUsers = userService.getAllUsersSavingWorkout(workout);
-        //maybe just one status variable?
-        boolean isAuthor = workout.getAuthor().equals(user);
-        boolean isSaved;
+            List<Workout> savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
 
-        List<Workout> savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
+            if(savedWorkouts.contains(workout)) {
+                isSaved = true;
+            } else isSaved = false;
 
-        if(savedWorkouts.contains(workout)) {
-            isSaved = true;
-        } else isSaved = false;
-
-        model.addAttribute("workout", workout);
-        model.addAttribute("newComment", new Comment());
-        model.addAttribute("comments", comments);
-        model.addAttribute("savingUsers", savingUsers);
-        model.addAttribute("isAuthor", isAuthor);
-        model.addAttribute("isSaved", isSaved);
-        model.addAttribute("user", user);
-        return "workout-details";
+            model.addAttribute("workout", workout);
+            model.addAttribute("newComment", new Comment());
+            model.addAttribute("comments", comments);
+            model.addAttribute("savingUsers", savingUsers);
+            model.addAttribute("isAuthor", isAuthor);
+            model.addAttribute("isSaved", isSaved);
+            model.addAttribute("user", user);
+            return "workout-details";
+        } catch (WorkoutNotFoundException exception) {
+            logger.error(exception.getMessage());
+        }
+        return "redirect:/index?error";
     }
 
 
@@ -150,23 +158,33 @@ public class WorkoutController {
                                     @PathVariable("id") Long id,
                                     @RequestParam(value = "saved") boolean saved,
                                     Model model) {
-        Workout workout = workoutService.getWorkoutById(id);
-        if (!saved) {
-            //add user to savedBy and add workout to savedWorkouts
-            userService.saveWorkoutForUser(workout, user);
-        } else {
-            //remove the relation
-            userService.removeWorkoutFromSavedWorkoutsFromUser(workout, user);
+        try {
+            Workout workout = workoutService.getWorkoutById(id);
+            if (!saved) {
+                //add user to savedBy and add workout to savedWorkouts
+                userService.saveWorkoutForUser(workout, user);
+            } else {
+                //remove the relation
+                userService.removeWorkoutFromSavedWorkoutsFromUser(workout, user);
+            }
+            return "redirect:/workout/" + id + "/details";
+        } catch (WorkoutNotFoundException exception) {
+            logger.error(exception.getMessage());
         }
-        return "redirect:/workout/"+id+"/details";
+        return "redirect:/index?error";
     }
 
     @RequestMapping(value = "/{id}/deleteWorkout", method = RequestMethod.POST)
     public String deleteWorkout(@PathVariable("id") Long id,
                                  Model model) {
-        Workout workout = workoutService.getWorkoutById(id);
-        workoutService.deleteWorkout(workout);
-        return "redirect:/index";
+        try {
+            Workout workout = workoutService.getWorkoutById(id);
+            workoutService.deleteWorkout(workout);
+            return "redirect:/index";
+        } catch (WorkoutNotFoundException exception) {
+            logger.error(exception.getMessage());
+        }
+        return "redirect:/index?error";
     }
 
     @RequestMapping(value = "/{id}/addComment", method = RequestMethod.POST)

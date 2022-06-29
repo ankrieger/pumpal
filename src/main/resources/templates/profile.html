@@ -141,24 +141,24 @@
                               </div>
 
                               <div class="modal fade" id="deleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                              <div class="modal-header">
-                                  <h5 class="modal-title">Delete user</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  <div class="modal-dialog modal-dialog-centered">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                              <h5 class="modal-title">Delete user</h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                              User <span style="font-weight: bold;" th:text="${user.email}"></span> and all her/his workouts and comments will be deleted. Continue?
+                                          </div>
+                                          <div class="modal-footer">
+                                              <form method="POST" th:action="@{/profile/{id}/deleteUser(id=${user.email})}">
+                                                  <button type="submit" class="btn btn-danger">Yes</button>
+                                              </form>
+                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                          </div>
+                                      </div>
+                                  </div>
                               </div>
-                              <div class="modal-body">
-                                  User <span style="font-weight: bold;" th:text="${user.email}"></span> and all his workouts will be deleted. Continue?
-                              </div>
-                              <div class="modal-footer"> <!-- friedns should be true -> send as parameter-->
-                                  <form method="POST" th:action="@{/profile/{id}/deleteUser(id=${user.email})}">
-                                      <button type="submit" class="btn btn-danger">Yes</button>
-                                  </form>
-                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
                           </div>
 
 <!--                Content section-->
@@ -184,7 +184,7 @@
                       <div class="card-body p-4 text-black">
                           <div class="mb-5">
                               <div class="p-4">
-                                  <p class="font-italic mb-1" th:text="${user.description} ?: 'There is no description.'"></p>
+                                  <p class="font-italic mb-1" th:text="${user.description} ?: 'There is no description yet.'"></p>
                                   <p class="font-italic mb-1"></p>
                                   <p class="font-italic mb-0"></p>
                               </div>
@@ -223,7 +223,6 @@
                                           type="button" role="tab" aria-controls="contact" aria-selected="false">Received Friend Requests(<span th:text="${#lists.size(friendsIn)} ?: '0'"></span>)</button>
                               </li>
                               <li class="nav-item" role="presentation" th:if="${#httpServletRequest.requestURI == '/profile' || friendShipStatus == 'friends' || friendShipStatus == 'isAdmin'}">
-<!--                      TODO: fix, dass jeder admin bei profilbesuch die privaten workouts sehen kann-->
                                   <button class="nav-link" href="#saved-workouts" id="saved-workouts-tab" data-bs-toggle="tab" data-bs-target="#savedWorkoutsPanel"
                                           type="button" role="tab" aria-controls="contact" aria-selected="false">Saved Workouts(<span th:text="${#lists.size(savedWorkouts)} ?: '0'"></span>)</button>
                               </li>
@@ -258,7 +257,6 @@
       </div>
   </section>
 
-<!--  TODO:URL and tab don't change when user is already on profile page and clickig on dropdown items-->
 <script>
     $(function(){
         var hash = document.location.hash;

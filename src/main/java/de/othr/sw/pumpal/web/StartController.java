@@ -28,8 +28,8 @@ public class StartController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private TestService testService;
+//    @Autowired
+//    private TestService testService;
 
     @Autowired
     private WorkoutService workoutService;
@@ -70,7 +70,7 @@ public class StartController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String register(Model model) {
-        model.addAttribute("user", new User()); //TODO:Vorbelegung probieren mit accountType!
+        model.addAttribute("user", new User());
         return "registration";
     }
 

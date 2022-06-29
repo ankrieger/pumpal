@@ -6,6 +6,7 @@ import de.othr.sw.pumpal.repository.WorkoutRepository;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import de.othr.sw.pumpal.service.exception.UserNotFoundException;
+import de.othr.sw.pumpal.service.exception.WorkoutNotFoundException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -75,7 +76,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public Workout getWorkoutById(Long workoutId) {
         return workoutRepository.findById(workoutId).orElseThrow(
-                () -> new UserNotFoundException("Workout with id " + workoutId + " not found")
+                () -> new WorkoutNotFoundException("Workout with id " + workoutId + " not found")
         );
     }
 
@@ -110,24 +111,5 @@ public class WorkoutServiceImpl implements WorkoutService {
         workoutRepository.delete(workout);
         logger.info("Deleted workout with id " + workout.getID());
     }
-
-
-
-
-
-
-
-
-//    @Override
-//    public List<Workout> getAllWorkoutsVisible(Collection<Visibility> visibilities) {
-//        return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities);
-//    }
-
-//    @Override
-//    public Page<Workout> findWorkoutPage(Collection<Visibility> visibilities, int pageNumber) {
-//        Pageable pageable = PageRequest.of(pageNumber - 1,10);
-//        return workoutRepository.findAllByVisibilityInOrderByDateDesc(visibilities, pageable);
-//    }
-
 
 }

@@ -27,7 +27,7 @@ public class PumpalSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return securityUtilities.passwordEncoder();
     }
     private static final String[] ALLOW_ACCESS_WITHOUT_AUTHENTICATION = {
-            "/css/**", "/images/**", "/js/**", "/", "/login", "/registration", "/restapi/**" };
+            "/images/**", "/js/**", "/", "/login", "/registration", "/restapi/**" };
 
 
     @Override
@@ -48,9 +48,9 @@ public class PumpalSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                //TODO: find out how how to configure success/error path of registration
                 .logoutSuccessUrl("/index?logout")
                 .deleteCookies("remember-me")
+                .deleteCookies("JSESSIONID")
                 .permitAll()
                 .and()
                 .rememberMe();

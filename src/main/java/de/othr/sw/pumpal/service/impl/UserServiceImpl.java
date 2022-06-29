@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(email).orElseThrow(
                 () -> new UserNotFoundException("User with email " + email + " not found")
         );
-
     }
 
     @Override
@@ -136,11 +135,9 @@ public class UserServiceImpl implements UserService {
                 savedWorkouts.remove(workout);
                 workout.removeUserSavedBy(userSave);
             }
-
         userSave.setSavedWorkouts(savedWorkouts);
         userRepository.save(userSave);
         logger.info("Removed workout with id " + workout.getID() + " for user " + user.getEmail() + " from saved workouts.");
-
         }
     }
 

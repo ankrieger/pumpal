@@ -10,10 +10,11 @@ import java.security.SecureRandom;
 
 @Configuration
 public class PumpalSecurityUtilities {
-    @Value("#{environment.user_password_salt}")
+//    @Value("#{environment.user_password_salt}")
+    //private String salt;
     //@Value("${application-config.user-password-salt}")
-    //private String salt = "Super-streng-geh€1m";
-    private String salt;
+
+    private String salt = "Super-streng-geh€1m";
 
     @Bean
     @Scope("singleton")

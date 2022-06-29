@@ -5,6 +5,8 @@ import de.othr.sw.pumpal.entity.dto.Friend;
 import de.othr.sw.pumpal.service.FriendshipService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
+import de.othr.sw.pumpal.service.exception.UserNotFoundException;
+import de.othr.sw.pumpal.service.exception.WorkoutNotFoundException;
 import de.othr.sw.pumpal.service.rest.TestService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,6 @@ public class ProfileController {
     @Autowired
     Logger logger;
 
-//    TODO: outsource get friendship/workout/size of those into separate functions for better readability
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String viewProfile(@AuthenticationPrincipal User user,
@@ -55,9 +56,7 @@ public class ProfileController {
 //                .filter(workout -> workout.getVisibility().equals(Visibility.PUBLIC))
 //                .collect(Collectors.toList());
 
-        //TODO: Variable isAuthor einführen?
-
-        if(user.getAccountType().equals(AccountType.USER)) {            //public workouts
+        if(user.getAccountType().equals(AccountType.USER)) {
             List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
             List<Workout> workoutsPrivate = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
             List<Workout> workoutsSaved = workoutService.getSavedWorkoutsOfUser(user);
@@ -65,17 +64,17 @@ public class ProfileController {
             List<User> friendsIn = friendshipService.getAllIncomingFriendRequestsOfUser(user);
             List<User> friendsOut = friendshipService.getAllOutgoingFriendRequestsOfUser(user);
 
-
             //REST Test:
+            //generell echt schlechte idee die ganze profil seite down zu nehmen, wenn
+            //rest ss down ist; ist zu spät aufgefallen um größere änderungen vorzunehmen
+            //dient hier also eher der exemplarischen veranschauung
             try {
                 List<Friend> friendsRest = testService.getFriendsOfUserRest(user.getID());
                 model.addAttribute("friendsDto", friendsRest);
             } catch (HttpClientErrorException e) {
                 logger.error(e.getMessage());
-                return "redirect:/index?error";
+                return "redirect:/index?restError";
             }
-
-
             model.addAttribute("workouts", workoutsPublic);
             model.addAttribute("privWorkouts", workoutsPrivate);
             model.addAttribute("savedWorkouts", workoutsSaved);
@@ -91,8 +90,8 @@ public class ProfileController {
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editProfile(@AuthenticationPrincipal User user,
                               Model model) {
-
         model.addAttribute("user", user);
+
         return "profile-edit";
     }
 
@@ -104,7 +103,6 @@ public class ProfileController {
         if (result.hasErrors()) {
             return "profile-edit";
         }
-
         userService.updateUser(user, newUser);
 
         return "redirect:/profile";
@@ -114,57 +112,53 @@ public class ProfileController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String viewOtherProfile(@PathVariable("id") String id,
                                    Model model) {
+        try {
+            User user = userService.getUserByEmail(id);
+            User user_auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            //wenn auf eigenem Profil
+            if (user.getEmail().equals(user_auth.getEmail())) {
+                return "redirect:/profile";
+            }
 
-        User user = userService.getUserByEmail(id);
-        User user_auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        //wenn auf Profil mit eigener ID
-        if (user.getEmail().equals(user_auth.getEmail())) {
-            return "redirect:/profile";
-        }
-
-        String friendshipStatus;
-        if(user.getAccountType().name().equals("USER")) {
-            friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
-        } else friendshipStatus = "admin"; //User auf admin profil gelandet
-
-        if(user_auth.getAccountType().name().equals("ADMIN")) friendshipStatus = "isAdmin";
+            String friendshipStatus;
+            if (user.getAccountType().name().equals("USER")) {
+                friendshipStatus = friendshipService.getStatusOfFriendship(user, user_auth);
+            } else friendshipStatus = "admin"; //User auf admin profil gelandet
+            if (user_auth.getAccountType().name().equals("ADMIN")) friendshipStatus = "isAdmin";
 
 //        List<User> friends = friendshipService.getAllFriendsOfUser(user);
-        List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC,user);
+            List<Workout> workoutsPublic = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PUBLIC, user);
+            //zusätzlich private Workouts darstellen, falls Freundschaft besteht oder Admin Profil besucht
+            List<Workout> privateWorkouts = new ArrayList<>();
+            List<Workout> savedWorkouts = new ArrayList<>();
+            if (friendshipStatus.matches("friends|admin|isAdmin")) {
+                privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
+                savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
+            }
 
-        //zusätzlich private Workouts darstellen, falls Freundschaft besteht oder Admin Profil besucht
-        List<Workout> privateWorkouts = new ArrayList<>();
-        List<Workout> savedWorkouts = new ArrayList<>();
+            //REST Test:
+            try {
+                List<Friend> friendsRest = testService.getFriendsOfUserRest(user.getID());
+                model.addAttribute("friendsDto", friendsRest);
+            } catch (HttpClientErrorException e) {
+                logger.error(e.getMessage());
+                return "redirect:/index?restError";
+            }
 
-        if (friendshipStatus.matches("friends|admin|isAdmin")) {
-            privateWorkouts = workoutService.getAllWorkoutsOfUserByVisibility(Visibility.PRIVATE, user);
-            savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
-        }
-
-        //REST Test:
-        //generell echt schlechte idee die ganze profil seite down zu nehmen, wenn
-        //rest ss down ist; ist zu spät aufgefallen um größere änderungen vorzunehmen
-        //dient hier also eher der exemplarischen veranschauung
-        try {
-            List<Friend> friendsRest = testService.getFriendsOfUserRest(user.getID());
-            model.addAttribute("friendsDto", friendsRest);
-        } catch (HttpClientErrorException e) {
-            logger.error(e.getMessage());
-            return "redirect:/index?error";
-        }
-
-        //absichtlich Anzahl aller Workouts statt nur privater; möglicherweise Anreiz zur Anfrage,
-        //wenn die Zahl deutlich höher ausfällt als einsehbare Workouts
-
-        model.addAttribute("user", user);
-        model.addAttribute("friendShipStatus", friendshipStatus);
+            //absichtlich Anzahl aller Workouts statt nur privater; möglicherweise Anreiz zur Anfrage,
+            //wenn die Zahl deutlich höher ausfällt als einsehbare Workouts
+            model.addAttribute("user", user);
+            model.addAttribute("friendShipStatus", friendshipStatus);
 //        model.addAttribute("friends", friends);
-        model.addAttribute("workouts", workoutsPublic);
-        model.addAttribute("privWorkouts", privateWorkouts);
-        model.addAttribute("savedWorkouts", savedWorkouts);
+            model.addAttribute("workouts", workoutsPublic);
+            model.addAttribute("privWorkouts", privateWorkouts);
+            model.addAttribute("savedWorkouts", savedWorkouts);
 
-        return "profile";
+            return "profile";
+        } catch (UserNotFoundException exception) {
+            logger.error(exception.getMessage());
+        }
+        return "redirect:/index?error";
     }
 
 
@@ -173,30 +167,39 @@ public class ProfileController {
                             @AuthenticationPrincipal User user_auth,
                             @RequestParam(value = "friendShipStatus") String friendShipStatus,
                             Model model) {
+        try {
+            User user = userService.getUserByEmail(id);
+            Friendship friendship;
 
+            if (friendShipStatus.equals("requesting")) {
+                friendship = friendshipService.sendFriendRequest(user_auth, user);
+            } else if (friendShipStatus.matches("removed|withdrawn|denied")) {
+                friendship = friendshipService.getFriendshipOfUsers(user_auth, user);
+                friendshipService.deleteFriendship(friendship);
+            } else if (friendShipStatus.equals("accepted")) {
+                friendship = friendshipService.getFriendshipOfUsers(user_auth, user);
+                friendshipService.acceptFriendRequest(friendship);
+            }
 
-        User user = userService.getUserByEmail(id);
-        Friendship friendship;
-
-        if (friendShipStatus.equals("requesting")) {
-            friendship = friendshipService.sendFriendRequest(user_auth, user);
-        } else if (friendShipStatus.matches("removed|withdrawn|denied")) {
-            friendship = friendshipService.getFriendshipOfUsers(user_auth, user);
-            friendshipService.deleteFriendship(friendship);
-        } else if (friendShipStatus.equals("accepted")) {
-            friendship = friendshipService.getFriendshipOfUsers(user_auth, user);
-            friendshipService.acceptFriendRequest(friendship);
+            return viewOtherProfile(id, model);
+        } catch (UserNotFoundException exception) {
+            logger.error(exception.getMessage());
         }
-
-        return viewOtherProfile(id, model);
+        return "redirect:/index?error";
     }
 
 
     @RequestMapping(value = "/{id}/deleteUser", method = RequestMethod.POST)
     public String deleteUser(@PathVariable("id") String id) {
-        User user = userService.getUserByEmail(id);
-        userService.deleteUser(user);
-        return "redirect:/index";
+        try {
+            User user = userService.getUserByEmail(id);
+            userService.deleteUser(user);
+
+            return "redirect:/index";
+        } catch (UserNotFoundException exception) {
+            logger.error(exception.getMessage());
+        }
+        return "redirect:/index?error";
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -213,7 +216,6 @@ public class ProfileController {
         Page<User> page = userService.findFilteredUser(keyword, currentPage);
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();
-
         List<User> users = page.getContent();
 
         model.addAttribute("currentPage", currentPage);

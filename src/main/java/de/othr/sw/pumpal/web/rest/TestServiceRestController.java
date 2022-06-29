@@ -41,7 +41,6 @@ public class TestServiceRestController {
 
     @RequestMapping(value = "restapi/users/{email}/friends", method = RequestMethod.GET)
     public List<Friend> getFriendsOfUser(@PathVariable("email") String email) {
-        //TODO: catch try blabla REST
         User user = userService.getUserByEmail(email);
         List<User> friends = friendshipService.getAllFriendsOfUser(user);
 
