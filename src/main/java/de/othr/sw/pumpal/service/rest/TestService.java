@@ -33,7 +33,7 @@ public class TestService {
 
 //        "http://localhost:8080/restapi/users/{id}/friends"                     -> OTH server
 //        "http://im-codd.oth-regensburg.de:8804/restapi/users/{id}/friends"     -> Home
-        ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:8080/restapi/users/{id}/friends", List.class, id);
+        ResponseEntity<List> response = restTemplate.getForEntity("http://im-codd.oth-regensburg.de:8804/restapi/users/{id}/friends", List.class, id);
         List<Friend> friends = response.getBody();
 
         logger.info("Friends of user " + id + " have been received via REST API");
@@ -41,7 +41,7 @@ public class TestService {
 }
 
     public WorkoutDto getWorkoutById(Long id) {
-        WorkoutDto workoutDto = restTemplate.getForObject("http://localhost:8080/restapi/workouts/{id}", WorkoutDto.class, id);
+        WorkoutDto workoutDto = restTemplate.getForObject("http://im-codd.oth-regensburg.de:8804/restapi/workouts/{id}", WorkoutDto.class, id);
 
         logger.info("WorkoutDto with ID " + id + " has been received via REST API");
         return workoutDto;
