@@ -3,6 +3,7 @@ package de.othr.sw.pumpal.web;
 
 import de.othr.sw.pumpal.entity.*;
 import de.othr.sw.pumpal.service.CommentService;
+import de.othr.sw.pumpal.service.FriendshipService;
 import de.othr.sw.pumpal.service.UserService;
 import de.othr.sw.pumpal.service.WorkoutService;
 import de.othr.sw.pumpal.service.exception.WorkoutNotFoundException;
@@ -35,6 +36,9 @@ public class WorkoutController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private FriendshipService friendshipService;
 
     @Autowired
     Logger logger;
@@ -125,27 +129,33 @@ public class WorkoutController {
                                  Model model) {
         try {
             Workout workout = workoutService.getWorkoutById(id);
+            //wenn workout public -> einsehbar; wenn nicht muss user admin/freund/autor sein!!
+            if (workout.getVisibility().equals(Visibility.PUBLIC)
+                || (user.getAccountType().equals(AccountType.ADMIN) || workout.getAuthor().equals(user)
+                   || friendshipService.getStatusOfFriendship(user,workout.getAuthor()).equals("friends"))) {
 
-            List<Comment> comments = commentService.getAllCommentsOfWorkout(workout);
-            List<User> savingUsers = userService.getAllUsersSavingWorkout(workout);
-            //maybe just one status variable?
-            boolean isAuthor = workout.getAuthor().equals(user);
-            boolean isSaved;
+                    List<Comment> comments = commentService.getAllCommentsOfWorkout(workout);
+                    List<User> savingUsers = userService.getAllUsersSavingWorkout(workout);
+                    //maybe just one status variable?
+                    boolean isAuthor = workout.getAuthor().equals(user);
+                    boolean isSaved;
 
-            List<Workout> savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
+                    List<Workout> savedWorkouts = workoutService.getSavedWorkoutsOfUser(user);
 
-            if(savedWorkouts.contains(workout)) {
-                isSaved = true;
-            } else isSaved = false;
+                    if(savedWorkouts.contains(workout)) {
+                        isSaved = true;
+                    } else isSaved = false;
 
-            model.addAttribute("workout", workout);
-            model.addAttribute("newComment", new Comment());
-            model.addAttribute("comments", comments);
-            model.addAttribute("savingUsers", savingUsers);
-            model.addAttribute("isAuthor", isAuthor);
-            model.addAttribute("isSaved", isSaved);
-            model.addAttribute("user", user);
-            return "workout-details";
+                    model.addAttribute("workout", workout);
+                    model.addAttribute("newComment", new Comment());
+                    model.addAttribute("comments", comments);
+                    model.addAttribute("savingUsers", savingUsers);
+                    model.addAttribute("isAuthor", isAuthor);
+                    model.addAttribute("isSaved", isSaved);
+                    model.addAttribute("user", user);
+                    return "workout-details";
+                } else return "redirect:/index?accessError";
+            //check: if visiting user 1. is admin 2. is author 3. is friend
         } catch (WorkoutNotFoundException exception) {
             logger.error(exception.getMessage());
         }

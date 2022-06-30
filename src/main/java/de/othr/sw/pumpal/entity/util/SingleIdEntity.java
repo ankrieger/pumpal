@@ -3,6 +3,8 @@ package de.othr.sw.pumpal.entity.util;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
+//https://gitlab.oth-regensburg.de/jod39747/sw_easybib/-/blob/master/src/main/java/de/othr/sw/easybib/entity/util/SingleIdEntity.java
+
 @MappedSuperclass
 public abstract class SingleIdEntity<K extends Comparable> implements Serializable, Comparable<SingleIdEntity> {
 

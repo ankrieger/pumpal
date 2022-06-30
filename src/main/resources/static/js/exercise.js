@@ -1,4 +1,5 @@
-$(document).ready(function () {
+//  an https://stackoverflow.com/questions/69909255/how-to-bind-a-dynamic-child-list-using-thymeleaf-and-jquery angelehnt
+    $(document).ready(function () {
     let max_fields = 30;
     let index = 1;
 

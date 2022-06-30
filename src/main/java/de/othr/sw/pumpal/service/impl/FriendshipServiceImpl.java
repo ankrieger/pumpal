@@ -2,8 +2,11 @@ package de.othr.sw.pumpal.service.impl;
 
 import de.othr.sw.pumpal.entity.Friendship;
 import de.othr.sw.pumpal.entity.User;
+import de.othr.sw.pumpal.entity.Visibility;
+import de.othr.sw.pumpal.entity.Workout;
 import de.othr.sw.pumpal.repository.FriendshipRepository;
 import de.othr.sw.pumpal.service.FriendshipService;
+import de.othr.sw.pumpal.service.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +19,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FriendshipServiceImpl implements FriendshipService {
 
     @Autowired
     private FriendshipRepository friendshipRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     Logger logger;
@@ -97,6 +104,21 @@ public class FriendshipServiceImpl implements FriendshipService {
     public void deleteFriendship(Friendship friendship) {
         Optional<Friendship> friendshipDelete = friendshipRepository.findById(friendship.getId());
         friendshipDelete.ifPresent(friendshipDel -> {
+            if(friendshipDel.isActive()) {
+                //check for each private workout of each user, if its saved by the other one
+                List<Workout> savedWorkoutsRequesting =  friendship.getRequesting().getSavedWorkouts().stream()
+                        .filter(workout -> workout.getVisibility().equals(Visibility.PRIVATE) && workout.getAuthor().equals(friendship.getRequested()))
+                        .collect(Collectors.toList());
+                if(!savedWorkoutsRequesting.isEmpty()) {
+                    savedWorkoutsRequesting.forEach(workout -> userService.removeWorkoutFromSavedWorkoutsFromUser(workout, friendship.getRequesting()));
+                }
+                List<Workout> savedWorkoutsRequested = friendship.getRequested().getSavedWorkouts().stream()
+                        .filter(workout -> workout.getVisibility().equals(Visibility.PRIVATE) && workout.getAuthor().equals(friendship.getRequesting()))
+                        .collect(Collectors.toList());
+                if(!savedWorkoutsRequested.isEmpty()) {
+                    savedWorkoutsRequested.forEach(workout -> userService.removeWorkoutFromSavedWorkoutsFromUser(workout, friendship.getRequested()));
+                }
+            }
             friendshipRepository.delete(friendship);
             logger.info("Friendship was removed.");
         });
