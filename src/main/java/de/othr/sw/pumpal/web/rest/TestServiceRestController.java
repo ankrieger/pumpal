@@ -39,6 +39,7 @@ public class TestServiceRestController {
     Logger logger;
 
 
+    //TODO: hier auch exception abfangen? oder reicht  Controller Advice?
     @RequestMapping(value = "restapi/users/{email}/friends", method = RequestMethod.GET)
     public List<Friend> getFriendsOfUser(@PathVariable("email") String email) {
         User user = userService.getUserByEmail(email);

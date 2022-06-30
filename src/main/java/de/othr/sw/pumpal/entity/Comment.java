@@ -12,7 +12,7 @@ public class Comment extends SingleIdEntity<Long> {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "email", name="user_id")
+    @JoinColumn(referencedColumnName = "email", name="user_id", nullable = false)
     private User author;
 
     @Column(nullable = false)
@@ -23,18 +23,13 @@ public class Comment extends SingleIdEntity<Long> {
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "id", name="workout_id")
+    @JoinColumn(referencedColumnName = "id", name="workout_id", nullable = false)
     private Workout workout;
 
 
     public Comment() {
 
     }
-
-//    public Comment(User author, Workout workout) {
-//        this.author = author;
-//        this.workout = workout;
-//    }
 
     public Long getId() {
         return id;

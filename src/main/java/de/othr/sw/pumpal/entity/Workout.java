@@ -27,7 +27,7 @@ public class Workout extends SingleIdEntity<Long> {
     @JoinColumn(referencedColumnName = "email", name="user_id"  /*FetchType eager?*/)
     private User author;
 
-    @Size(min = 2, max = 350, message = "Your workout's description must be between 2 and 350 characters long")
+    @Size(min = 2, max = 250, message = "Your workout's description must be between 2 and 250 characters long")
     @NotEmpty(message = "Workout description cannot be empty")
     private String description;
 

@@ -172,7 +172,7 @@ public class ProfileController {
             Friendship friendship;
 
             if (friendShipStatus.equals("requesting")) {
-                friendship = friendshipService.sendFriendRequest(user_auth, user);
+                friendshipService.sendFriendRequest(user_auth, user);
             } else if (friendShipStatus.matches("removed|withdrawn|denied")) {
                 friendship = friendshipService.getFriendshipOfUsers(user_auth, user);
                 friendshipService.deleteFriendship(friendship);

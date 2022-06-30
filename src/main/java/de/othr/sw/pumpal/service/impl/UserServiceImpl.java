@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -86,10 +87,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void deleteUser(User user) {
-        User userToDelete = userRepository.findById(user.getID()).get();
-        removeAllSavingUsersFromUsersWorkouts(userToDelete);
-        userRepository.delete(userToDelete);
-        logger.info("Deleted user with id " + user.getEmail());
+        Optional<User> userDelete = userRepository.findById(user.getID());
+        userDelete.ifPresent(user1 -> {
+            removeAllSavingUsersFromUsersWorkouts(user1);
+            userRepository.delete(user1);
+            logger.info("Deleted user with id " + user.getEmail());
+        });
     }
 
     @Override
@@ -101,60 +104,74 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsersSavingWorkout(Workout workout) {
-        logger.info("Got all users saving workout with id " + workout.getID());
-        return userRepository.getAllUsersSavingWorkoutWithId(workout.getId());
+        if(workout!=null) {
+            logger.info("Got all users saving workout with id " + workout.getID());
+            return userRepository.getAllUsersSavingWorkoutWithId(workout.getId());
+        }
+        return null;
     }
 
 
 
+    //TODO: versuche user!=null rauszuhauen; sollte mit ifPresent ja abgedeckt sein?
     @Override
     @Transactional( propagation = Propagation.REQUIRED)
     public void removeAllSavingUsersFromUsersWorkouts(User user) {
-        User userToDelete = userRepository.findById(user.getID()).get();
-        List<Workout> workouts = new ArrayList<>(userToDelete.getWorkouts());
-        if(user!=null && workouts!=null) {
-            for(Workout workout:workouts) {
-                List<User> savingUsers = new ArrayList<>(workout.getSavedBy());
-                if(savingUsers!=null) {
-                    for(User userSaved: savingUsers) {
-                        removeWorkoutFromSavedWorkoutsFromUser(workout,userSaved);
+        Optional<User> userSave = userRepository.findById(user.getID());
+//        User userToDelete = userRepository.findById(user.getID()).get();
+        userSave.ifPresent(user1 -> {
+            List<Workout> workouts = new ArrayList<>(user1.getWorkouts());
+            if(user!=null && workouts!=null) {
+                for(Workout workout:workouts) {
+                    List<User> savingUsers = new ArrayList<>(workout.getSavedBy());
+                    if(savingUsers!=null) {
+                        for(User userSaved: savingUsers) {
+                            removeWorkoutFromSavedWorkoutsFromUser(workout,userSaved);
+                        }
                     }
                 }
             }
-        }
-        logger.info("Removed all user saving references to workouts from user " + user.getEmail());
+            logger.info("Removed all user saving references to workouts from user " + user.getEmail());
+        });
     }
 
     @Override
     @Transactional( propagation = Propagation.REQUIRED)
     public void removeWorkoutFromSavedWorkoutsFromUser(Workout workout, User user) {
-        User userSave = userRepository.findById(user.getID()).get();
-        List<Workout> savedWorkouts = new ArrayList<>(userSave.getSavedWorkouts());
-        if(user!=null && workout!=null && savedWorkouts!=null){
-            if(savedWorkouts.contains(workout)) {
-                savedWorkouts.remove(workout);
-                workout.removeUserSavedBy(userSave);
+        Optional<User> userSave = userRepository.findById(user.getID());
+//        User userSave = userRepository.findById(user.getID()).get();
+        userSave.ifPresent(user1 -> {
+            List<Workout> savedWorkouts = new ArrayList<>(user1.getSavedWorkouts());
+            if(user!=null && workout!=null && savedWorkouts!=null){
+                if(savedWorkouts.contains(workout)) {
+                    savedWorkouts.remove(workout);
+                    workout.removeUserSavedBy(user1);
+                }
+                user1.setSavedWorkouts(savedWorkouts);
+                userRepository.save(user1);
+                logger.info("Removed workout with id " + workout.getID() + " for user " + user.getEmail() + " from saved workouts.");
             }
-        userSave.setSavedWorkouts(savedWorkouts);
-        userRepository.save(userSave);
-        logger.info("Removed workout with id " + workout.getID() + " for user " + user.getEmail() + " from saved workouts.");
-        }
+        });
     }
 
     @Override
     @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void saveWorkoutForUser(Workout workout, User user) {
-        User userSave = userRepository.findById(user.getID()).get();
-        List<Workout> savedWorkouts = new ArrayList<>(userSave.getSavedWorkouts());
-        if(user!=null && workout!=null){
-            if(!savedWorkouts.contains(workout)) {
-                savedWorkouts.add(workout);
-                workout.addUserSavedBy(userSave);
+        Optional<User> userSave = userRepository.findById(user.getID());
+//        User userSave = userRepository.findById(user.getID()).get();
+        userSave.ifPresent(user1 -> {
+            List<Workout> savedWorkouts = new ArrayList<>(user1.getSavedWorkouts());
+            if(user!=null && workout!=null){
+                if(!savedWorkouts.contains(workout)) {
+                    savedWorkouts.add(workout);
+                    workout.addUserSavedBy(user1);
+                }
             }
-        }
-        userSave.setSavedWorkouts(savedWorkouts);
-        userRepository.save(userSave);
-        logger.info("Saved workout with id " + workout.getID() + " for user " + user.getEmail());
+            user1.setSavedWorkouts(savedWorkouts);
+            userRepository.save(user1);
+            logger.info("Saved workout with id " + workout.getID() + " for user " + user.getEmail());
+        });
+
     }
 
 }

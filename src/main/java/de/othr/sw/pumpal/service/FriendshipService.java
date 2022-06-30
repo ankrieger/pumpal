@@ -8,19 +8,19 @@ import java.util.List;
 public interface FriendshipService {
 
     //ausbessern in Komponentendia: getFriendsOfUser steht da bisher
-    List<User> getAllFriendsOfUser(User user); //userId statt User objekt?
+    List<User> getAllFriendsOfUser(User user);
 
-    List<User> getAllIncomingFriendRequestsOfUser(User user);  //maybe noch so anzahl an ... damit dann "Nachrichtenbutton" konstruieren kann?
+    List<User> getAllIncomingFriendRequestsOfUser(User user);
 
     List<User> getAllOutgoingFriendRequestsOfUser(User user);
 
     String getStatusOfFriendship(User requesting, User requested);
 
-    Friendship sendFriendRequest(User requesting, User requested); //create inactive Friendship,  maybe auch eine Funktion für Anfrage zurückziehen?
+    void sendFriendRequest(User requesting, User requested);
 
-    void acceptFriendRequest(Friendship friendship); //isActive auf True setzen
+    void acceptFriendRequest(Friendship friendship);
 
-    void deleteFriendship(Friendship friendship); //remove Friendship
+    void deleteFriendship(Friendship friendship);
 
     Friendship getFriendshipOfUsers(User requesting, User requested);
 

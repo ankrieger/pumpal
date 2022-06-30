@@ -46,7 +46,6 @@ public class WorkoutServiceImpl implements WorkoutService {
             logger.info("Got workouts of user " + user.getEmail());
             return workoutRepository.findAllByAuthorAndVisibility(user, visibility);
         }
-        logger.info("There are no workouts yet by user " + user.getEmail());
         return null;
     }
 
@@ -68,8 +67,11 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<Workout> getSavedWorkoutsOfUser(User user) {
-        logger.info("Got saved workouts from user " + user.getEmail());
-        return workoutRepository.getSavedWorkoutsOfUserWithEmail(user.getEmail());
+        if(user!=null) {
+            logger.info("Got saved workouts from user " + user.getEmail());
+            return workoutRepository.getSavedWorkoutsOfUserWithEmail(user.getEmail());
+        }
+        return null;
     }
 
 
@@ -83,33 +85,38 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     @Transactional( propagation = Propagation.REQUIRES_NEW)
-    public Workout createWorkout(Workout workout, User user) {
-        workout.setAuthor(user);
-        workout.setDate(Timestamp.valueOf(LocalDateTime.now()));
+    public void createWorkout(Workout workout, User user) {
+        if(user!=null && workout!=null) {
+            workout.setAuthor(user);
+            workout.setDate(Timestamp.valueOf(LocalDateTime.now()));
 
-        int index =  1;
-        for (Exercise exercise : workout.getExercises()) {
-            if (exercise.getDescription().isBlank()) continue;
-            exercise.setId(index++);
+            int index =  1;
+            for (Exercise exercise : workout.getExercises()) {
+                if (exercise.getDescription().isBlank()) continue;
+                exercise.setId(index++);
+            }
+            workoutRepository.save(workout);
+            logger.info("Created workout.");
         }
-        logger.info("Created workout.");
-        return workoutRepository.save(workout);
     }
 
     @Override
     @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void deleteWorkout(Workout workout) {
-////        alle savedWorkout Referenzen entfernen!
-        if(workout.getSavedBy()!=null) {
-            if(workout.getSavedBy().size()>=1) {
-                List<User> savedBy = new ArrayList<>(workout.getSavedBy());
-                for(User user : savedBy) {
-                    userService.removeWorkoutFromSavedWorkoutsFromUser(workout, user);
+        Optional<Workout> workoutDelete = workoutRepository.findById(workout.getId());
+        workoutDelete.ifPresent(workout1 -> {
+            ////        alle savedWorkout Referenzen entfernen!
+            if(workout1.getSavedBy()!=null) {
+                if(workout1.getSavedBy().size()>=1) {
+                    List<User> savedBy = new ArrayList<>(workout1.getSavedBy());
+                    for(User user : savedBy) {
+                        userService.removeWorkoutFromSavedWorkoutsFromUser(workout1, user);
+                    }
                 }
             }
-        }
-        workoutRepository.delete(workout);
-        logger.info("Deleted workout with id " + workout.getID());
+            workoutRepository.delete(workout);
+            logger.info("Deleted workout with id " + workout.getID());
+        });
     }
 
 }

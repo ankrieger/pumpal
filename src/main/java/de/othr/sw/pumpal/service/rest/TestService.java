@@ -24,6 +24,7 @@ public class TestService {
 
 
     //exemplarische Darstellung, wie ich REST Methoden nutzen würde (anhand eigener Beispiele)
+    //Nutzung der FriendsOfUser Methode im Profile Controller
 
     public List<Friend> getFriendsOfUserRest(String id) {
 

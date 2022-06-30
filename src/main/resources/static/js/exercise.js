@@ -9,26 +9,26 @@ $(document).ready(function () {
             let newRow = jQuery('<div class="exercise row mb-5">' +
                 ' <div class="mb-3">' +
                 ' Exercise description*:' +
-                ' <input name="exercises[' + index + '].description" type="text" class="form-control form-control"/>' +
+                ' <input name="exercises[' + index + '].description" type="text" class="form-control" maxlength="150"/>' +
                 ' </div>' +
                 ' <div class="mb-3">' +
                 '  Weight(in kg):' +
-                ' <input name="exercises[' + index + '].weight" type="number" step="1" min="0"' +
-                ' class="form-control form-control"/>' +
+                ' <input name="exercises[' + index + '].weight" type="number" step="1" min="0" maxlength="3"' +
+                ' class="form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +
                 '  Reps:' +
-                ' <input name="exercises[' + index + '].sets" type="number" step="1" min="0"' +
-                ' class="form-control form-control"/>' +
+                ' <input name="exercises[' + index + '].sets" type="number" step="1" min="0" maxlength="2"' +
+                ' class="form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +
                 '  Sets:' +
-                ' <input name="exercises[' + index + '].reps" type="number" step="1" min="0"' +
-                ' class="form-control form-control"/>' +
+                ' <input name="exercises[' + index + '].reps" type="number" step="1" min="0" maxlength="2"' +
+                ' class="form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +
                 ' Additional note:' +
-                ' <input name="exercises[' + index + '].note" type="text" class="form-control form-control"/>' +
+                ' <input name="exercises[' + index + '].note" type="text" class="form-control" maxlength="200"/> ' +
                 ' </div>'+
                 '</div>');
 
