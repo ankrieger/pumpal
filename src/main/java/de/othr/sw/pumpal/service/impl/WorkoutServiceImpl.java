@@ -104,13 +104,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void deleteWorkout(Workout workout) {
         Optional<Workout> workoutDelete = workoutRepository.findById(workout.getId());
-        workoutDelete.ifPresent(workout1 -> {
+        workoutDelete.ifPresent(workoutDel -> {
             ////        alle savedWorkout Referenzen entfernen!
-            if(workout1.getSavedBy()!=null) {
-                if(workout1.getSavedBy().size()>=1) {
-                    List<User> savedBy = new ArrayList<>(workout1.getSavedBy());
+            if(workoutDel.getSavedBy()!=null) {
+                if(workoutDel.getSavedBy().size()>=1) {
+                    List<User> savedBy = new ArrayList<>(workoutDel.getSavedBy());
                     for(User user : savedBy) {
-                        userService.removeWorkoutFromSavedWorkoutsFromUser(workout1, user);
+                        userService.removeWorkoutFromSavedWorkoutsFromUser(workoutDel, user);
                     }
                 }
             }

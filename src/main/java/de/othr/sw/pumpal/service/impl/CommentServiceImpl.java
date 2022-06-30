@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void deleteCommentById(Long commentId) {
         Optional<Comment> comment = commentRepository.findById(commentId);
-        comment.ifPresent(comment1 -> {
+        comment.ifPresent(commentDel -> {
             commentRepository.deleteById(commentId);
             logger.info("Comment was deleted.");
         });

@@ -14,16 +14,19 @@ $(document).ready(function () {
                 ' <div class="mb-3">' +
                 '  Weight(in kg):' +
                 ' <input name="exercises[' + index + '].weight" type="number" step="1" min="0" maxlength="3"' +
+                ' oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"' +
                 ' class="form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +
                 '  Reps:' +
                 ' <input name="exercises[' + index + '].sets" type="number" step="1" min="0" maxlength="2"' +
+                ' oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"' +
                 ' class="form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +
                 '  Sets:' +
                 ' <input name="exercises[' + index + '].reps" type="number" step="1" min="0" maxlength="2"' +
+                ' oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"' +
                 ' class="form-control"/>' +
                 '</div>' +
                 ' <div class="mb-3">' +

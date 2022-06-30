@@ -88,9 +88,9 @@ public class UserServiceImpl implements UserService {
     @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void deleteUser(User user) {
         Optional<User> userDelete = userRepository.findById(user.getID());
-        userDelete.ifPresent(user1 -> {
-            removeAllSavingUsersFromUsersWorkouts(user1);
-            userRepository.delete(user1);
+        userDelete.ifPresent(userDel -> {
+            removeAllSavingUsersFromUsersWorkouts(userDel);
+            userRepository.delete(userDel);
             logger.info("Deleted user with id " + user.getEmail());
         });
     }
@@ -119,8 +119,8 @@ public class UserServiceImpl implements UserService {
     public void removeAllSavingUsersFromUsersWorkouts(User user) {
         Optional<User> userSave = userRepository.findById(user.getID());
 //        User userToDelete = userRepository.findById(user.getID()).get();
-        userSave.ifPresent(user1 -> {
-            List<Workout> workouts = new ArrayList<>(user1.getWorkouts());
+        userSave.ifPresent(uSave -> {
+            List<Workout> workouts = new ArrayList<>(uSave.getWorkouts());
             if(user!=null && workouts!=null) {
                 for(Workout workout:workouts) {
                     List<User> savingUsers = new ArrayList<>(workout.getSavedBy());
@@ -140,15 +140,15 @@ public class UserServiceImpl implements UserService {
     public void removeWorkoutFromSavedWorkoutsFromUser(Workout workout, User user) {
         Optional<User> userSave = userRepository.findById(user.getID());
 //        User userSave = userRepository.findById(user.getID()).get();
-        userSave.ifPresent(user1 -> {
-            List<Workout> savedWorkouts = new ArrayList<>(user1.getSavedWorkouts());
+        userSave.ifPresent(uSave -> {
+            List<Workout> savedWorkouts = new ArrayList<>(uSave.getSavedWorkouts());
             if(user!=null && workout!=null && savedWorkouts!=null){
                 if(savedWorkouts.contains(workout)) {
                     savedWorkouts.remove(workout);
-                    workout.removeUserSavedBy(user1);
+                    workout.removeUserSavedBy(uSave);
                 }
-                user1.setSavedWorkouts(savedWorkouts);
-                userRepository.save(user1);
+                uSave.setSavedWorkouts(savedWorkouts);
+                userRepository.save(uSave);
                 logger.info("Removed workout with id " + workout.getID() + " for user " + user.getEmail() + " from saved workouts.");
             }
         });
@@ -159,16 +159,16 @@ public class UserServiceImpl implements UserService {
     public void saveWorkoutForUser(Workout workout, User user) {
         Optional<User> userSave = userRepository.findById(user.getID());
 //        User userSave = userRepository.findById(user.getID()).get();
-        userSave.ifPresent(user1 -> {
-            List<Workout> savedWorkouts = new ArrayList<>(user1.getSavedWorkouts());
+        userSave.ifPresent(uSave -> {
+            List<Workout> savedWorkouts = new ArrayList<>(uSave.getSavedWorkouts());
             if(user!=null && workout!=null){
                 if(!savedWorkouts.contains(workout)) {
                     savedWorkouts.add(workout);
-                    workout.addUserSavedBy(user1);
+                    workout.addUserSavedBy(uSave);
                 }
             }
-            user1.setSavedWorkouts(savedWorkouts);
-            userRepository.save(user1);
+            uSave.setSavedWorkouts(savedWorkouts);
+            userRepository.save(uSave);
             logger.info("Saved workout with id " + workout.getID() + " for user " + user.getEmail());
         });
 

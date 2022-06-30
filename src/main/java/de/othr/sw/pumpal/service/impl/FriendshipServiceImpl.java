@@ -85,7 +85,7 @@ public class FriendshipServiceImpl implements FriendshipService {
     @Transactional( propagation = Propagation.REQUIRES_NEW)
     public void acceptFriendRequest(Friendship friendship) {
         Optional<Friendship> friendshipUpdate = friendshipRepository.findById(friendship.getId());
-        friendshipUpdate.ifPresent(friendship1 -> {
+        friendshipUpdate.ifPresent(friendsUpdate -> {
             friendship.setActive(true);
             friendshipRepository.save(friendship);
             logger.info("Friendship was accepted.");
@@ -96,7 +96,7 @@ public class FriendshipServiceImpl implements FriendshipService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteFriendship(Friendship friendship) {
         Optional<Friendship> friendshipDelete = friendshipRepository.findById(friendship.getId());
-        friendshipDelete.ifPresent(friendship1 -> {
+        friendshipDelete.ifPresent(friendshipDel -> {
             friendshipRepository.delete(friendship);
             logger.info("Friendship was removed.");
         });
