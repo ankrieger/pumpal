@@ -10,11 +10,11 @@
 
 
 
-Pumpal gives user the opportunity to keep track of their workouts, share those with friends, get inspired by others workouts and save them for later.
+Pumpal gives users the opportunity to keep track of their workouts, share those with friends, get inspired by others workouts and save them for later.
 
 Pumpal supports sportive people in connecting with other like-minded people by enabling friendships, offering comment sections to each workout and making it possible to filter public workouts by different criterias(intensity level, search terms,..). 
 
-In the following are images uploaded, which showcase the application's general structure in the form of Class-, Component- and Usecasediagrams. Additionally, there is a PDF provided, that gives further and more detailed information regarding the individual Usecases.
+In the following are images uploaded, which showcase the application's general structure in the form of Class-, Component- and Usecasediagrams. Additionally, there is a PDF provided, that gives further and more detailed information regarding the individual Usecases in German.
 
 
 ## Diagrams
