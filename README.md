@@ -1,5 +1,5 @@
 # pumpal - workout tracker application
-#### This is a Java Spring Boot web application using Bootstrap and Thymeleaf for sharing and tracking workouts. The data is persisted in a relational MySQL database system making usage of ORM. This project was made for my SoftwareEngineering module at OTH.
+#### This is a semi-responsive Java Spring Boot web application using Bootstrap and Thymeleaf for sharing and tracking workouts. The data is persisted in a relational MySQL database system making usage of ORM. This project was made for my SoftwareEngineering module at OTH.
 
 
 Pumpal gives user the opportunity to keep track of their workouts, share those with friends, get inspired by others workouts and save them for later, and much more.
