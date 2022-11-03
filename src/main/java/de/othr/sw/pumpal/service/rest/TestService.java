@@ -41,7 +41,7 @@ public class TestService {
 }
 
     public WorkoutDto getWorkoutById(Long id) {
-        WorkoutDto workoutDto = restTemplate.getForObject("http://localhost:8080/restapi/users/{id}/friends", WorkoutDto.class, id);
+        WorkoutDto workoutDto = restTemplate.getForObject("http://localhost:8080/restapi/workouts/{id}", WorkoutDto.class, id);
 
         logger.info("WorkoutDto with ID " + id + " has been received via REST API");
         return workoutDto;
